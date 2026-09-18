@@ -723,7 +723,7 @@ function cardDetailScreen(id){
   let h=hd(c.name,true)+`<div class="sm" style="margin:-6px 20px 10px">${ownL(c.owner)}${c.status==="closed"?", closed":""}</div>`;
   const row=(l,v,go)=>go?btn(go,`<span class="sm" style="flex:1">${l}</span><span style="font-size:15px">${v}</span>${ic("chevronRight",18)}`,"rw tap"):`<div class="rw"><span class="sm" style="flex:1">${l}</span><span style="font-size:15px;text-align:right">${v}</span></div>`;
   h+=`<div class="tc">`;
-  h+=row("Earns",`<span class="dot" style="display:inline-block;${dotc(hueFor(pr&&pr.short_name))};margin-right:6px"></span>${esc(pr?pr.name:"")}`,"prog:"+c.program_id);
+  h+=row("Earns",`<span class="dot" style="display:inline-block;${dotc(hueFor(pr&&pr.short_name))};margin-right:6px"></span>${esc(pr?pr.name:"")}`);
   h+=row("Points",pt?fmt(pt.balance):"None",pt?`editpot:${c.pot_id}`:null);
   const editable=c.status==="open";
   h+=row("Nickname",esc(c.name),editable?`editcf:${c.id}:n`:null);
