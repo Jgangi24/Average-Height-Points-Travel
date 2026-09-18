@@ -34,14 +34,14 @@ h1,h2,h3,.serif{font-family:Georgia,"Iowan Old Style","Times New Roman",serif}
 #topbar{flex:none}
 #scr{flex:1 1 auto;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch}
 #tabs{flex:none}
-.topbar{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--paper-2);border-bottom:1px solid var(--line)}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;background:var(--paper-2);border-bottom:1px solid var(--line)}
 .brand{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--ink-soft);letter-spacing:.01em}
 .bellwrap{position:relative;padding:4px}
 .bellwrap .dot{position:absolute;top:1px;right:1px;min-width:15px;height:15px;padding:0 3px;border-radius:8px;background:var(--danger);color:#fff;font-size:10px;line-height:15px;text-align:center;font-weight:600}
 .tap{cursor:pointer}
 .tap:focus-visible,.bk:focus-visible,.tb:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .bk{display:inline-flex;align-items:center;gap:4px;color:var(--accent);font-size:15px;cursor:pointer;padding:4px 0;background:none;border:none;font-family:inherit}
-.rw{display:flex;align-items:center;gap:12px;padding:12px 16px;border-top:1px solid var(--line)}
+.rw{display:flex;align-items:center;gap:12px;padding:12px 20px;border-top:1px solid var(--line)}
 .rw.tap:active{background:var(--paper)}
 .sm{font-size:13px;color:var(--ink-soft);line-height:1.5}
 .dot{width:10px;height:10px;border-radius:50%;flex:none}
@@ -51,9 +51,9 @@ h1,h2,h3,.serif{font-family:Georgia,"Iowan Old Style","Times New Roman",serif}
 .tabs{display:flex;border-top:1px solid var(--line);background:var(--paper-2)}
 .tb{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 0 13px;font-size:11.5px;color:var(--ink-soft);cursor:pointer;background:none;border:none;font-family:inherit}
 .tb.on{color:var(--accent)}
-.tc{margin:0 16px 14px;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--paper-2)}
-.sec{display:flex;align-items:center;justify-content:space-between;font-size:14.5px;font-weight:600;color:var(--ink);margin:18px 16px 8px;text-transform:none}
-.ttl{margin:6px 16px 12px;font-size:23px;font-weight:600;font-family:Georgia,"Iowan Old Style","Times New Roman",serif}
+.tc{margin:0 20px 14px;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--paper-2)}
+.sec{display:flex;align-items:center;justify-content:space-between;font-size:14.5px;font-weight:600;color:var(--ink);margin:18px 20px 8px;text-transform:none}
+.ttl{margin:6px 20px 12px;font-size:23px;font-weight:600;font-family:Georgia,"Iowan Old Style","Times New Roman",serif}
 .num{font-family:Georgia,"Iowan Old Style","Times New Roman",serif}
 .pill{padding:6px 14px;border-radius:999px;font-size:13px;border:1px solid var(--line-strong);color:var(--ink-soft);background:none;font-family:inherit;cursor:pointer}
 .pill.on{background:var(--paper-2);color:var(--accent);border-color:var(--accent);font-weight:600}
@@ -62,7 +62,7 @@ h1,h2,h3,.serif{font-family:Georgia,"Iowan Old Style","Times New Roman",serif}
 .lb{display:block;font-size:13px;color:var(--ink-soft);margin-bottom:6px}
 input,select,textarea{font-family:inherit;font-size:15px;padding:9px 10px;border:1px solid var(--line-strong);border-radius:10px;background:var(--paper-2);color:var(--ink)}
 textarea{width:100%;resize:vertical;min-height:64px}
-.foldsec{margin:0 16px 12px;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--paper-2)}
+.foldsec{margin:0 20px 12px;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--paper-2)}
 .foldhd{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;cursor:pointer}
 .foldhd .chv{transition:transform .15s ease}
 .foldhd.open .chv{transform:rotate(180deg)}
@@ -105,7 +105,7 @@ body{overflow:hidden}
   .ph.app-shell #topbar{grid-area:topbar}
   .ph.app-shell #scr{grid-area:main;max-width:860px;margin:0 auto;width:100%;padding-bottom:12px}
   .ph.app-shell #tabs{grid-area:tabsrow}
-  .ph.app-shell .tabs{flex-direction:row;justify-content:space-between;max-width:860px;margin:0 auto;border-top:none;border-bottom:1px solid var(--line);padding:10px 16px;gap:6px;align-items:center}
+  .ph.app-shell .tabs{flex-direction:row;justify-content:space-between;max-width:860px;margin:0 auto;border-top:none;border-bottom:1px solid var(--line);padding:10px 20px;gap:6px;align-items:center}
   .ph.app-shell .tb{flex:none;flex-direction:row;justify-content:center;gap:8px;padding:8px 18px;border-radius:999px;font-size:14px}
   .ph.app-shell .tb.on{background:var(--accent-wash)}
   .trips-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
@@ -458,16 +458,16 @@ const ownL=o=>o==="Both"?"Jess and Abby":o;
 const num=v=>String(v==null?"":v).replace(/[$,\s]/g,"");
 function ordinal(n){n=parseInt(n,10);const s=["th","st","nd","rd"],v=n%100;return n+(s[(v-20)%10]||s[v]||s[0])}
 const btn=(go,inner,cls,st,extra)=>`<div class="${cls||"tap"}" role="button" tabindex="0" data-go="${go}" style="${st||""}" ${extra||""}>${inner}</div>`;
-const hd=(t,back)=>(back?`<div style="padding:6px 16px 0">${btn("back",ic("chevronLeft",17)+' Back',"bk")}</div>`:`<div style="height:10px"></div>`)+`<div class="ttl">${esc(t)}</div>`;
-const box=(bg,fg,txt)=>`<div style="margin:0 16px 14px;padding:10px 12px;border-radius:var(--radius);background:var(${bg});color:var(${fg});font-size:13px;line-height:1.5">${txt}</div>`;
+const hd=(t,back)=>(back?`<div style="padding:6px 20px 0">${btn("back",ic("chevronLeft",17)+' Back',"bk")}</div>`:`<div style="height:10px"></div>`)+`<div class="ttl">${esc(t)}</div>`;
+const box=(bg,fg,txt)=>`<div style="margin:0 20px 14px;padding:10px 12px;border-radius:var(--radius);background:var(${bg});color:var(${fg});font-size:13px;line-height:1.5">${txt}</div>`;
 const errH=k=>`<div id="er-${k}" style="font-size:13px;color:var(--danger);margin-top:4px;${S.err[k]?"":"display:none"}">${esc(S.err[k]||"")}</div>`;
-const fld=(k,label,val,attrs)=>`<div style="margin:0 16px 14px"><label class="lb" for="f-${k}">${esc(label)}</label><input id="f-${k}" name="${k}" value="${esc(val)}" ${attrs||""} style="width:100%">${errH(k)}</div>`;
-const pills=(cur)=>`<div style="margin:0 16px 14px"><div class="lb">Belongs to</div><div style="display:flex;gap:8px">${["Jess","Abby","Both"].map(o=>btn("fo:"+o,o==="Both"?"Both of you":o,"tap pill"+(cur===o?" on":""))).join("")}</div></div>`;
+const fld=(k,label,val,attrs)=>`<div style="margin:0 20px 14px"><label class="lb" for="f-${k}">${esc(label)}</label><input id="f-${k}" name="${k}" value="${esc(val)}" ${attrs||""} style="width:100%">${errH(k)}</div>`;
+const pills=(cur)=>`<div style="margin:0 20px 14px"><div class="lb">Belongs to</div><div style="display:flex;gap:8px">${["Jess","Abby","Both"].map(o=>btn("fo:"+o,o==="Both"?"Both of you":o,"tap pill"+(cur===o?" on":""))).join("")}</div></div>`;
 function daysAgoText(iso){const d=Math.floor((Date.now()-new Date(iso).getTime())/86400000);if(d<=0)return "Updated today";if(d===1)return "Updated 1 day ago";return "Updated "+d+" days ago"}
 function feeStr(c){if(c.annual_fee==null)return "Fee not entered";if(c.annual_fee===0)return "No annual fee";return `$${fmt(c.annual_fee)} fee${c.fee_month?" in "+MON[c.fee_month]:""}`}
 function dueStr(c){if(c.bill_due_day==null)return null;return `Monthly statement balance due on the <strong>${ordinal(c.bill_due_day)}</strong>`}
 function feeLine(c){const f=feeStr(c),d=dueStr(c);return d?`${f} &nbsp;||&nbsp; ${d}`:f}
-function monthSelect(f){return `<div style="margin:0 16px 14px"><label class="lb" for="f-mo">Fee posts in (optional)</label><select id="f-mo" name="mo" style="width:100%"><option value="">Not sure yet</option>${MON.slice(1).map((m,i)=>`<option value="${i+1}"${String(f.mo)===String(i+1)?" selected":""}>${m}</option>`).join("")}</select></div>`}
+function monthSelect(f){return `<div style="margin:0 20px 14px"><label class="lb" for="f-mo">Fee posts in (optional)</label><select id="f-mo" name="mo" style="width:100%"><option value="">Not sure yet</option>${MON.slice(1).map((m,i)=>`<option value="${i+1}"${String(f.mo)===String(i+1)?" selected":""}>${m}</option>`).join("")}</select></div>`}
 function potLabel(p){const pr=program(p.program_id);return `${ownL(p.owner)}'s ${esc(p.label)} ${esc(pr?pr.unit:"points")}`}
 const CADSUF={monthly:"/mo",quarterly:"/qtr",semiannual:"/half-yr",annual:"/yr"};
 const bar=p=>`<div class="bar"><span style="width:${p}%;background:${p>=100?"var(--success)":"var(--warning)"}"></span></div>`;
@@ -612,9 +612,9 @@ function topbarH(){
 function pointsScreen(){
   let h=hd("Your points");
   const latest=S.data.pots.reduce((m,p)=>p.updated_at>m?p.updated_at:m,"");
-  h+=`<div style="margin:0 16px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px"><span class="sm">${latest?daysAgoText(latest):"Not updated yet"}</span>${btn("update","Update balances","tap b2","font-size:14px;padding:6px 12px;width:auto")}</div>`;
+  h+=`<div style="margin:0 20px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px"><span class="sm">${latest?daysAgoText(latest):"Not updated yet"}</span>${btn("update","Update balances","tap b2","font-size:14px;padding:6px 12px;width:auto")}</div>`;
   const totalValue=S.data.pots.reduce((s,p)=>{const pr=program(p.program_id);return s+estValue(p.balance,pr?pr.short_name:null)},0);
-  if(totalValue>0)h+=`<p class="sm" style="margin:-6px 16px 14px">Rough value of everything below: <strong style="color:var(--ink)">$${fmt(totalValue)}</strong></p>`;
+  if(totalValue>0)h+=`<p class="sm" style="margin:-6px 20px 14px">Rough value of everything below: <strong style="color:var(--ink)">$${fmt(totalValue)}</strong></p>`;
   h+=`<div class="sec">Balances</div><div class="tc">`;
   const progs=orderedPrograms().filter(pr=>S.data.pots.some(p=>p.program_id===pr.id));
   if(!progs.length)h+=`<div class="rw"><span class="sm">No balances yet.</span></div>`;
@@ -629,7 +629,7 @@ function pointsScreen(){
     h+=btn("prog:"+pr.id,`<span class="dot" style="${dotc(hue)}"></span><div style="flex:1;min-width:0"><div style="font-size:15px">${esc(pr.name)}</div><div class="sm">${split||"0"}</div></div><div style="text-align:right"><div style="font-size:17px;font-weight:600">${fmt(a+j+bo)}</div>${val>0?`<div class="sm">≈$${fmt(val)}</div>`:""}</div>${ic("chevronRight",18)}`,"rw tap");
   });
   h+=btn("addacct",`${ic("plus",18)}<span style="font-size:15px;color:var(--accent)">Add an account without a card</span>`,"rw tap")+`</div>`;
-  h+=`<p class="sm" style="margin:8px 16px 20px">Tap a program to see which cards feed it. Dollar values are rough industry estimates (checked September 2026), not a guarantee — actual value depends a lot on how you redeem.</p>`;
+  h+=`<p class="sm" style="margin:8px 20px 20px">Tap a program to see which cards feed it. Dollar values are rough industry estimates (checked September 2026), not a guarantee — actual value depends a lot on how you redeem.</p>`;
   return h;
 }
 function progScreen(id){
@@ -637,7 +637,7 @@ function progScreen(id){
   const here=S.data.pots.filter(p=>p.program_id===id);
   const total=here.reduce((s,p)=>s+p.balance,0);
   let h=hd(pr.name,true);
-  h+=`<div style="margin:0 16px 8px"><div class="num" style="font-size:30px;font-weight:600">${fmt(total)}</div><div class="sm">${esc(pr.unit)} in ${here.length} ${here.length===1?"place":"places"}</div></div>`;
+  h+=`<div style="margin:0 20px 8px"><div class="num" style="font-size:30px;font-weight:600">${fmt(total)}</div><div class="sm">${esc(pr.unit)} in ${here.length} ${here.length===1?"place":"places"}</div></div>`;
   h+=`<div class="sec">Where the ${esc(pr.unit)} live</div><div class="tc">`;
   if(!here.length)h+=`<div class="rw"><span class="sm">No pots yet.</span></div>`;
   here.forEach(p=>{h+=`<div class="rw"><div style="flex:1;min-width:0"><div style="font-size:15px">${potLabel(p)}</div></div><div style="font-size:15px">${fmt(p.balance)}</div></div>`});
@@ -646,18 +646,18 @@ function progScreen(id){
 }
 function acctScreen(){
   const f=S.form;
-  let h=hd("Add an account",true)+`<p class="sm" style="margin:-4px 16px 14px">For points in an airline or hotel account with no card attached, like points you've moved to British Airways.</p>`;
+  let h=hd("Add an account",true)+`<p class="sm" style="margin:-4px 20px 14px">For points in an airline or hotel account with no card attached, like points you've moved to British Airways.</p>`;
   const progOptions=orderedPrograms().map(p=>`<option value="${p.id}"${f.p===p.id?" selected":""}>${esc(p.name)}</option>`).join("");
-  h+=`<div style="margin:0 16px 14px"><label class="lb" for="f-p">Program</label><select id="f-p" name="p" style="width:100%"><option value="new"${f.p==="new"?" selected":""}>A new program</option>${progOptions}</select></div>`;
+  h+=`<div style="margin:0 20px 14px"><label class="lb" for="f-p">Program</label><select id="f-p" name="p" style="width:100%"><option value="new"${f.p==="new"?" selected":""}>A new program</option>${progOptions}</select></div>`;
   if(f.p==="new")h+=fld("np","Program name",f.np,`placeholder="British Airways Avios"`);
   h+=pills(f.o);
   h+=fld("nb","Current balance",f.nb,`inputmode="numeric" placeholder="25000"`);
-  h+=`<div style="display:flex;gap:8px;margin:18px 16px 20px;border-top:1px solid var(--line);padding-top:16px">${btn("saveacct","Add account","tap b1","flex:1")}${btn("back","Cancel","tap b2","flex:1")}</div>`;
+  h+=`<div style="display:flex;gap:8px;margin:18px 20px 20px;border-top:1px solid var(--line);padding-top:16px">${btn("saveacct","Add account","tap b1","flex:1")}${btn("back","Cancel","tap b2","flex:1")}</div>`;
   return h;
 }
 function updScreen(){
   let h=hd("Update balances",true);
-  h+=`<p class="sm" style="margin:-4px 16px 12px">Type what each bank or hotel app shows. Saving updates both phones.</p>`;
+  h+=`<p class="sm" style="margin:-4px 20px 12px">Type what each bank or hotel app shows. Saving updates both phones.</p>`;
   const progs=orderedPrograms().filter(pr=>S.data.pots.some(p=>p.program_id===pr.id));
   const ownerRank=o=>o==="Jess"?0:o==="Abby"?1:2;
   if(!progs.length)h+=`<div class="tc"><div class="rw"><span class="sm">No pots yet.</span></div></div>`;
@@ -670,13 +670,13 @@ function updScreen(){
     });
     h+=`</div>`;
   });
-  h+=`<div style="display:flex;gap:8px;margin:16px 16px 20px">${btn("save","Save balances","tap b1","flex:1")}${btn("back","Cancel","tap b2","flex:1")}</div>`;
+  h+=`<div style="display:flex;gap:8px;margin:16px 20px 20px">${btn("save","Save balances","tap b1","flex:1")}${btn("back","Cancel","tap b2","flex:1")}</div>`;
   return h;
 }
 /* ---------- cards tab ---------- */
 function cardsScreen(){
   let h=hd("Your cards");
-  h+=`<div style="display:flex;gap:8px;align-items:center;margin:0 16px 4px">${[["all","All"],["Abby","Abby"],["Jess","Jess"]].map(([f,l])=>btn("f:"+f,l,"tap pill"+(S.f===f?" on":""))).join("")}<span style="flex:1"></span>${btn("addcard",ic("plus",15)+' Add card',"tap b1","font-size:14px;padding:6px 12px;width:auto;display:inline-flex;align-items:center;gap:5px")}</div>`;
+  h+=`<div style="display:flex;gap:8px;align-items:center;margin:0 20px 4px">${[["all","All"],["Abby","Abby"],["Jess","Jess"]].map(([f,l])=>btn("f:"+f,l,"tap pill"+(S.f===f?" on":""))).join("")}<span style="flex:1"></span>${btn("addcard",ic("plus",15)+' Add card',"tap b1","font-size:14px;padding:6px 12px;width:auto;display:inline-flex;align-items:center;gap:5px")}</div>`;
   const vis=c=>S.f==="all"||c.owner===S.f||c.owner==="Both";
   const open=S.data.cards.filter(c=>c.status==="open"&&vis(c));
   const closed=S.data.cards.filter(c=>c.status==="closed"&&vis(c));
@@ -688,7 +688,7 @@ function cardsScreen(){
   else up.forEach(({c})=>{h+=`<div class="rw"><div style="width:36px;flex:none;font-size:13px;color:var(--ink-soft)">${MON[c.fee_month].slice(0,3)}</div><div style="flex:1;min-width:0">${btn("card:"+c.id,`<div style="font-size:15px">${ownL(c.owner)}'s ${esc(c.name)}</div>`,"tap")}</div><div style="font-size:15px;font-weight:600">$${fmt(c.annual_fee)}</div>${btn("cal:"+c.id,ic("calendarPlus",19)+'<span class="sr-only">Add to calendar</span>',"tap","color:var(--accent);padding:2px")}</div>`});
   h+=`<div class="rw" style="background:var(--accent-wash);border-top:1px solid var(--line-strong)"><span style="font-size:15px;color:var(--accent)">Yearly fees${S.f==="all"?" for the household":", "+S.f+" and shared"}</span><span class="num" style="flex:1;text-align:right;font-size:15px;font-weight:600;color:var(--accent)">$${fmt(total)}</span></div>`;
   h+=`</div>`;
-  h+=`<p class="sm" style="margin:-6px 16px 8px">${missing?missing+(missing>1?" cards need":" card needs")+" a fee entered. ":""}Enter fees from your statements.</p>`;
+  h+=`<p class="sm" style="margin:-6px 20px 8px">${missing?missing+(missing>1?" cards need":" card needs")+" a fee entered. ":""}Enter fees from your statements.</p>`;
   h+=`<div class="sec">Open cards</div><div class="tc">`;
   if(!open.length)h+=`<div class="rw"><span class="sm">No cards yet.</span></div>`;
   open.forEach(c=>{const pr=program(c.program_id),hue=hueFor(pr&&pr.short_name);
@@ -699,14 +699,14 @@ function cardsScreen(){
       h+=btn("card:"+c.id,`${ic("archive",20)}<div style="flex:1;min-width:0"><div style="font-size:15px;color:var(--ink-soft)">${esc(c.name)}</div><div class="sm">${ownL(c.owner)}, closed ${closedLabel}</div></div>`,"rw tap");});
     h+=`</div>`;
   }
-  h+=`<p class="sm" style="margin:6px 16px 20px">The app keeps nicknames only, never card numbers or logins.</p>`;
+  h+=`<p class="sm" style="margin:6px 20px 20px">The app keeps nicknames only, never card numbers or logins.</p>`;
   return h;
 }
 function cardDetailScreen(id){
   const c=card(id);if(!c)return hd("Card not found",true);
   const pr=program(c.program_id),pt=pot(c.pot_id);
   const others=S.data.cards.filter(x=>x.pot_id===c.pot_id&&x.id!==c.id&&x.status==="open");
-  let h=hd(c.name,true)+`<div class="sm" style="margin:-6px 16px 10px">${ownL(c.owner)}${c.status==="closed"?", closed":""}</div>`;
+  let h=hd(c.name,true)+`<div class="sm" style="margin:-6px 20px 10px">${ownL(c.owner)}${c.status==="closed"?", closed":""}</div>`;
   const row=(l,v,go)=>go?btn(go,`<span class="sm" style="flex:1">${l}</span><span style="font-size:15px">${v}</span>${ic("chevronRight",18)}`,"rw tap"):`<div class="rw"><span class="sm" style="flex:1">${l}</span><span style="font-size:15px;text-align:right">${v}</span></div>`;
   h+=`<div class="tc">`;
   h+=row("Earns",`<span class="dot" style="display:inline-block;${dotc(hueFor(pr&&pr.short_name))};margin-right:6px"></span>${esc(pr?pr.name:"")}`,"prog:"+c.program_id);
@@ -715,7 +715,7 @@ function cardDetailScreen(id){
   h+=row("Fee posts in",c.fee_month?MON[c.fee_month]:"Not entered");
   h+=row("Bill due",c.bill_due_day?"The "+ordinal(c.bill_due_day):"Not entered");
   h+=`</div>`;
-  if(c.annual_fee>0&&c.status==="open")h+=`<div class="sec">Before the next fee, the plan is to</div><div style="display:flex;gap:8px;flex-wrap:wrap;margin:0 16px 4px">${["Keep","Downgrade","Cancel"].map(d=>btn(`dec:${c.id}:${d}`,d,"tap pill"+(c.decision_note===d?" on":""))).join("")}</div>`;
+  if(c.annual_fee>0&&c.status==="open")h+=`<div class="sec">Before the next fee, the plan is to</div><div style="display:flex;gap:8px;flex-wrap:wrap;margin:0 20px 4px">${["Keep","Downgrade","Cancel"].map(d=>btn(`dec:${c.id}:${d}`,d,"tap pill"+(c.decision_note===d?" on":""))).join("")}</div>`;
   const cardPerks=S.data.perks.filter(p=>p.card_id===c.id);
   h+=`<div class="sec">Perks</div><div class="tc">`;
   if(!cardPerks.length)h+=`<div class="rw"><span class="sm">No perks added yet.</span></div>`;
@@ -724,16 +724,16 @@ function cardDetailScreen(id){
   h+=`</div>`;
   if(cardPerks.length&&c.annual_fee>0){
     const cap=cardCapturedThisYear(c.id),pct=Math.min(100,Math.round(cap/c.annual_fee*100));
-    h+=`<div style="margin:12px 16px 0;padding:12px 14px;background:var(--paper-2);border-radius:12px"><div class="sm" style="margin-bottom:6px">Captured toward the annual fee</div><div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px"><span class="num" style="font-size:18px;font-weight:600">$${fmt(cap)} of $${fmt(c.annual_fee)}</span><span class="sm">${pct}%</span></div>${bar(pct)}</div>`;
+    h+=`<div style="margin:12px 20px 0;padding:12px 14px;background:var(--paper-2);border-radius:12px"><div class="sm" style="margin-bottom:6px">Captured toward the annual fee</div><div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px"><span class="num" style="font-size:18px;font-weight:600">$${fmt(cap)} of $${fmt(c.annual_fee)}</span><span class="sm">${pct}%</span></div>${bar(pct)}</div>`;
   }
   if(c.status==="open"){
-    h+=`<div style="margin:20px 16px 0">${btn("editcard:"+c.id,"Edit card","tap b2")}</div>`;
+    h+=`<div style="margin:20px 20px 0">${btn("editcard:"+c.id,"Edit card","tap b2")}</div>`;
     const calBtns=[];
     if(c.annual_fee>0&&c.fee_month)calBtns.push(btn("cal:"+c.id,ic("calendarPlus",16)+' Add fee to calendar',"tap b2","flex:1;display:inline-flex;align-items:center;justify-content:center;gap:6px"));
     if(c.bill_due_day)calBtns.push(btn("caldue:"+c.id,ic("calendarPlus",16)+' Add due date to calendar',"tap b2","flex:1;display:inline-flex;align-items:center;justify-content:center;gap:6px"));
-    if(calBtns.length)h+=`<div style="display:flex;gap:8px;margin:10px 16px 0">${calBtns.join("")}</div>`;
-    h+=`<div style="margin:12px 16px 20px">${btn("close:"+c.id,"Close or delete card","tap b2","color:var(--danger);border-color:var(--danger)")}</div>`;
-  }else h+=`<p class="sm" style="margin:14px 16px 20px">Kept as a record. Some banks limit sign-up bonuses based on cards you've had before.</p>`;
+    if(calBtns.length)h+=`<div style="display:flex;gap:8px;margin:10px 20px 0">${calBtns.join("")}</div>`;
+    h+=`<div style="margin:12px 20px 20px">${btn("close:"+c.id,"Close or delete card","tap b2","color:var(--danger);border-color:var(--danger)")}</div>`;
+  }else h+=`<p class="sm" style="margin:14px 20px 20px">Kept as a record. Some banks limit sign-up bonuses based on cards you've had before.</p>`;
   return h;
 }
 function closeCardScreen(id){
@@ -756,7 +756,7 @@ function cardFormScreen(){
   h+=pills(f.o);
   if(isNew){
     const progOptions=orderedPrograms().map(p=>`<option value="${p.id}"${f.p===p.id?" selected":""}>${esc(p.name)}</option>`).join("");
-    h+=`<div style="margin:0 16px 14px"><label class="lb" for="f-p">Earns</label><select id="f-p" name="p" style="width:100%">${progOptions}<option value="new"${f.p==="new"?" selected":""}>A new program</option></select></div>`;
+    h+=`<div style="margin:0 20px 14px"><label class="lb" for="f-p">Earns</label><select id="f-p" name="p" style="width:100%">${progOptions}<option value="new"${f.p==="new"?" selected":""}>A new program</option></select></div>`;
     if(f.p==="new"){
       h+=fld("np","Program name",f.np,`placeholder="World of Hyatt"`);
       h+=fld("nb","Starting balance",f.nb,`inputmode="numeric" placeholder="0"`);
@@ -764,17 +764,17 @@ function cardFormScreen(){
       const prSel=program(f.p);
       const pots=potsFor(f.p);
       const potOptions=pots.map(p=>`<option value="${p.id}"${f.pot===p.id?" selected":""}>${ownL(p.owner)}'s ${esc(p.label)} (${fmt(p.balance)} ${esc(prSel?prSel.unit:"points")})</option>`).join("");
-      h+=`<div style="margin:0 16px 14px"><label class="lb" for="f-pot">Points pot</label><select id="f-pot" name="pot" style="width:100%"><option value="new"${f.pot==="new"?" selected":""}>Start a new pot for this card</option>${potOptions}</select><div class="sm" style="margin-top:6px">${f.pot==="new"?"Gets its own balance, starting at 0.":"Joins the existing balance in that pot."}</div>${errH("pot")}</div>`;
+      h+=`<div style="margin:0 20px 14px"><label class="lb" for="f-pot">Points pot</label><select id="f-pot" name="pot" style="width:100%"><option value="new"${f.pot==="new"?" selected":""}>Start a new pot for this card</option>${potOptions}</select><div class="sm" style="margin-top:6px">${f.pot==="new"?"Gets its own balance, starting at 0.":"Joins the existing balance in that pot."}</div>${errH("pot")}</div>`;
       if(f.pot==="new")h+=fld("nb","Starting balance",f.nb,`inputmode="numeric" placeholder="0"`);
     }
   }else{
     const c=card(id),pr=program(c.program_id);
-    h+=`<div style="margin:0 16px 14px"><div class="lb">Earns</div><div style="font-size:15px">${esc(pr?pr.name:"")}</div><div class="sm">To switch programs, close this card and add a new one.</div></div>`;
+    h+=`<div style="margin:0 20px 14px"><div class="lb">Earns</div><div style="font-size:15px">${esc(pr?pr.name:"")}</div><div class="sm">To switch programs, close this card and add a new one.</div></div>`;
   }
   h+=fld("fee","Annual fee in dollars (optional)",f.fee,`inputmode="numeric" placeholder="95"`);
   h+=monthSelect(f);
   h+=fld("due","Bill due day of month, 1-31 (optional)",f.due,`inputmode="numeric" placeholder="15"`);
-  h+=`<div style="display:flex;gap:8px;margin:18px 16px 20px;border-top:1px solid var(--line);padding-top:16px">${btn("savecard",isNew?"Add card":"Save changes","tap b1","flex:1")}${btn("back","Cancel","tap b2","flex:1")}</div>`;
+  h+=`<div style="display:flex;gap:8px;margin:18px 20px 20px;border-top:1px solid var(--line);padding-top:16px">${btn("savecard",isNew?"Add card":"Save changes","tap b1","flex:1")}${btn("back","Cancel","tap b2","flex:1")}</div>`;
   return h;
 }
 /* ---------- perks tab ---------- */
@@ -795,7 +795,7 @@ function perkRow(pk){
 function perksScreen(){
   let h=hd("Perks");
   const tot=redeemedTotals();
-  h+=`<div style="margin:0 16px 14px;display:flex;gap:8px">
+  h+=`<div style="margin:0 20px 14px;display:flex;gap:8px">
 <div style="flex:1;padding:12px 14px;background:var(--paper-2);border-radius:12px"><div class="sm">Redeemed this month</div><div class="num" style="font-size:19px;font-weight:600">$${fmt(tot.month)}</div></div>
 <div style="flex:1;padding:12px 14px;background:var(--paper-2);border-radius:12px"><div class="sm">Redeemed ${new Date().getFullYear()}</div><div class="num" style="font-size:19px;font-weight:600">$${fmt(tot.year)}</div></div>
 </div>`;
@@ -807,25 +807,25 @@ function perksScreen(){
   h+=`<div class="foldsec">${foldHead("open","Redeem soon",open.length)}<div style="${S.folds.open?"":"display:none"}">${open.length?open.map(perkRow).join(""):empty}</div></div>`;
   h+=`<div class="foldsec">${foldHead("done","Redeemed",done.length)}<div style="${S.folds.done?"":"display:none"}">${done.length?done.map(perkRow).join(""):empty}</div></div>`;
   h+=`<div class="foldsec">${foldHead("upcoming","Upcoming redeemables",upc.length)}<div style="${S.folds.upcoming?"":"display:none"}">${upc.length?upc.map(perkRow).join(""):empty}</div></div>`;
-  h+=`<p class="sm" style="margin:14px 16px 20px">Tap a section to expand it, tap a perk for its history, or add perks from a card's page.</p>`;
+  h+=`<p class="sm" style="margin:14px 20px 20px">Tap a section to expand it, tap a perk for its history, or add perks from a card's page.</p>`;
   return h;
 }
 function perkDetailScreen(id){
   const pk=S.data.perks.find(x=>x.id===id);if(!pk)return hd("Perk not found",true);
   const c=card(pk.card_id),status=perkStatus(pk);
-  let h=hd(pk.name,true)+`<div class="sm" style="margin:-6px 16px 10px">${ownL(c?c.owner:"")}'s ${esc(c?c.name:"")} · $${fmt(pk.value)}${CADSUF[pk.cadence]||""}</div>`;
+  let h=hd(pk.name,true)+`<div class="sm" style="margin:-6px 20px 10px">${ownL(c?c.owner:"")}'s ${esc(c?c.name:"")} · $${fmt(pk.value)}${CADSUF[pk.cadence]||""}</div>`;
   if(pk.note)h+=box("--paper-2","--ink-soft",esc(pk.note));
   if(status==="open"){
-    h+=`<div style="margin:0 16px 14px">${btn("toggleperk:"+pk.id,ic("check",16)+" Mark redeemed today ("+fmtDate(todayStr())+")","tap b1","display:inline-flex;align-items:center;gap:6px;width:auto")}</div>`;
+    h+=`<div style="margin:0 20px 14px">${btn("toggleperk:"+pk.id,ic("check",16)+" Mark redeemed today ("+fmtDate(todayStr())+")","tap b1","display:inline-flex;align-items:center;gap:6px;width:auto")}</div>`;
   }else if(status==="done"){
     const red=currentRedemption(pk);
-    h+=`<div style="margin:0 16px 14px">${fld("redate","Redeemed on (edit to backdate)",fmtDate(red.redeemed_on),`placeholder="Sept 10, 2026"`)}${btn("saveredate:"+pk.id,"Save date","tap b2","width:auto;padding:8px 14px")}<div style="margin-top:10px">${btn("undoperk:"+pk.id,"Undo — mark not redeemed","tap","font-size:13px;color:var(--danger)")}</div></div>`;
+    h+=`<div style="margin:0 20px 14px">${fld("redate","Redeemed on (edit to backdate)",fmtDate(red.redeemed_on),`placeholder="Sept 10, 2026"`)}${btn("saveredate:"+pk.id,"Save date","tap b2","width:auto;padding:8px 14px")}<div style="margin-top:10px">${btn("undoperk:"+pk.id,"Undo — mark not redeemed","tap","font-size:13px;color:var(--danger)")}</div></div>`;
   }
   h+=`<div class="sec">History</div>`;
   const rows=redemptionsFor(pk.id);
-  if(!rows.length)h+=`<p class="sm" style="margin:0 16px 12px">No past periods logged yet.</p>`;
+  if(!rows.length)h+=`<p class="sm" style="margin:0 20px 12px">No past periods logged yet.</p>`;
   rows.forEach(r=>{h+=`<div class="rw"><span style="flex:1;font-size:15px">${fmtDate(r.redeemed_on)}</span><span style="color:var(--success)">${ic("check",18)}</span></div>`});
-  h+=`<div style="margin:16px 16px 20px">${btn("editperk:"+pk.id,"Edit perk","tap b2")}</div>`;
+  h+=`<div style="margin:16px 20px 20px">${btn("editperk:"+pk.id,"Edit perk","tap b2")}</div>`;
   return h;
 }
 function perkFormScreen(){
@@ -833,12 +833,12 @@ function perkFormScreen(){
   let h=hd(isNew?"Add a perk":"Edit perk",true);
   h+=fld("name","Perk name",f.name,`placeholder="Uber Cash"`);
   h+=fld("value","Dollar value",f.value,`inputmode="numeric" placeholder="15"`);
-  h+=`<div style="margin:0 16px 14px"><label class="lb" for="f-cad">How often it renews</label><select id="f-cad" name="cad" style="width:100%">${["monthly","quarterly","semiannual","annual"].map(cc=>`<option value="${cc}"${f.cad===cc?" selected":""}>${cc[0].toUpperCase()+cc.slice(1)}</option>`).join("")}</select></div>`;
+  h+=`<div style="margin:0 20px 14px"><label class="lb" for="f-cad">How often it renews</label><select id="f-cad" name="cad" style="width:100%">${["monthly","quarterly","semiannual","annual"].map(cc=>`<option value="${cc}"${f.cad===cc?" selected":""}>${cc[0].toUpperCase()+cc.slice(1)}</option>`).join("")}</select></div>`;
   h+=fld("windowEnd","Current period closes on (optional)",f.windowEnd,`placeholder="Oct 31, 2026"`);
   h+=fld("startsOn","Opens on, if not usable yet (optional)",f.startsOn,`placeholder="Oct 1, 2026"`);
-  h+=`<div style="margin:0 16px 14px"><label class="lb" for="f-note">Note (optional)</label><input id="f-note" name="note" value="${esc(f.note)}" style="width:100%"></div>`;
-  h+=`<div style="display:flex;gap:8px;margin:18px 16px 20px;border-top:1px solid var(--line);padding-top:16px">${btn("saveperk",isNew?"Add perk":"Save changes","tap b1","flex:1")}${btn("back","Cancel","tap b2","flex:1")}</div>`;
-  if(!isNew)h+=`<div style="margin:0 16px 20px">${btn("delperk:"+id,"Delete perk","tap b2","color:var(--danger);border-color:var(--danger)")}</div>`;
+  h+=`<div style="margin:0 20px 14px"><label class="lb" for="f-note">Note (optional)</label><input id="f-note" name="note" value="${esc(f.note)}" style="width:100%"></div>`;
+  h+=`<div style="display:flex;gap:8px;margin:18px 20px 20px;border-top:1px solid var(--line);padding-top:16px">${btn("saveperk",isNew?"Add perk":"Save changes","tap b1","flex:1")}${btn("back","Cancel","tap b2","flex:1")}</div>`;
+  if(!isNew)h+=`<div style="margin:0 20px 20px">${btn("delperk:"+id,"Delete perk","tap b2","color:var(--danger);border-color:var(--danger)")}</div>`;
   return h;
 }
 async function savePerk(){
@@ -881,34 +881,34 @@ function tripsScreen(){
   let h=hd("Trips")+`<div class="trips-grid">`;
   orderedTrips().forEach(t=>{
     const fl=legFor(t.id,"flights"),ho=legFor(t.id,"hotel");
-    h+=`<div class="tc tap" role="button" tabindex="0" data-go="trip:${t.id}"><div style="padding:14px 16px 12px;display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:19px;font-weight:600">${esc(t.destination)}</div><div class="sm">${esc(t.subtitle||"")}, 4 travelers from Boston</div></div>${ic("chevronRight",18)}</div><div style="display:flex;align-items:center"><span style="width:14px;height:14px;margin-left:-7px;border-radius:50%;background:var(--paper);border:1px solid var(--line);flex:none"></span><span style="flex:1;border-top:1.5px dashed var(--line-strong);margin:0 4px"></span><span style="width:14px;height:14px;margin-right:-7px;border-radius:50%;background:var(--paper);border:1px solid var(--line);flex:none"></span></div><div style="padding:12px 16px 14px;display:grid;gap:10px">`+
+    h+=`<div class="tc tap" role="button" tabindex="0" data-go="trip:${t.id}"><div style="padding:14px 20px 12px;display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:19px;font-weight:600">${esc(t.destination)}</div><div class="sm">${esc(t.subtitle||"")}, 4 travelers from Boston</div></div>${ic("chevronRight",18)}</div><div style="display:flex;align-items:center"><span style="width:14px;height:14px;margin-left:-7px;border-radius:50%;background:var(--paper);border:1px solid var(--line);flex:none"></span><span style="flex:1;border-top:1.5px dashed var(--line-strong);margin:0 4px"></span><span style="width:14px;height:14px;margin-right:-7px;border-radius:50%;background:var(--paper);border:1px solid var(--line);flex:none"></span></div><div style="padding:12px 20px 14px;display:grid;gap:10px">`+
       [["Flights",fl],["Hotel",ho]].map(([l,leg])=>{
         if(!leg)return `<div class="sm">${l} not set up yet.</div>`;
         const c=legCov(leg);
         return `<div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px"><span>${l}<span style="color:var(--ink-muted)">, ${leg.real_points!=null?"real price":"estimate"}</span></span><span style="color:${c.pct>=100?"var(--success)":"var(--warning)"}">${c.pct>=100?"Covered":c.pct+"% covered"}</span></div>${bar(c.pct)}</div>`;
       }).join("")+`</div></div>`;
   });
-  h+=`</div><p class="sm" style="margin:4px 16px 20px">Bars are rough for now and don't yet apply transfer ratios. Each bar shows what you could cover if you put everything you have toward that one trip — not what's left after also covering the other two. There are always 3 trip slots — edit a trip to swap in a new destination.</p>`;
+  h+=`</div><p class="sm" style="margin:4px 20px 20px">Bars are rough for now and don't yet apply transfer ratios. Each bar shows what you could cover if you put everything you have toward that one trip — not what's left after also covering the other two. There are always 3 trip slots — edit a trip to swap in a new destination.</p>`;
   return h;
 }
 function tripDetailScreen(id){
   const t=S.data.trips.find(x=>x.id===id);if(!t)return hd("Trip not found",true);
   let h=hd(t.destination,true);
-  h+=`<div class="sm" style="margin:-6px 16px 4px">${esc(t.subtitle||"")}, from Boston</div>`;
-  h+=`<div style="margin:6px 16px 4px">${btn("edittrip:"+id,ic("pencil",15)+" Edit this trip","tap","font-size:13px;color:var(--accent);display:inline-flex;align-items:center;gap:5px")}</div>`;
-  h+=`<div class="sec">Travelers</div><div style="margin:0 16px">`+TRAVELERS.map(x=>`<span class="chip" style="background:var(--paper-2);color:var(--ink);border:1px solid var(--line)">${esc(x)}</span>`).join("")+`</div>`;
+  h+=`<div class="sm" style="margin:-6px 20px 4px">${esc(t.subtitle||"")}, from Boston</div>`;
+  h+=`<div style="margin:6px 20px 4px">${btn("edittrip:"+id,ic("pencil",15)+" Edit this trip","tap","font-size:13px;color:var(--accent);display:inline-flex;align-items:center;gap:5px")}</div>`;
+  h+=`<div class="sec">Travelers</div><div style="margin:0 20px">`+TRAVELERS.map(x=>`<span class="chip" style="background:var(--paper-2);color:var(--ink);border:1px solid var(--line)">${esc(x)}</span>`).join("")+`</div>`;
   [["flights","Flights"],["hotel","Hotel"]].forEach(([kind,l])=>{
     const leg=legFor(id,kind);
-    if(!leg){h+=`<div class="sec">${l}</div><p class="sm" style="margin:0 16px 12px">Not set up yet. Edit this trip to add it.</p>`;return;}
+    if(!leg){h+=`<div class="sec">${l}</div><p class="sm" style="margin:0 20px 12px">Not set up yet. Edit this trip to add it.</p>`;return;}
     const c=legCov(leg);
     const tag=leg.real_points!=null?`<span class="chip" style="background:var(--success-bg);color:var(--success);margin:8px 0 0">Real price from ${esc(leg.real_source||"")}${leg.real_price_date?", checked "+fmtDate(leg.real_price_date):""}</span>`:`<span class="chip" style="background:var(--paper-2);color:var(--ink-soft);border:1px solid var(--line);margin:8px 0 0">Estimate</span>`;
     const progs=leg.source_program_ids.map(program).filter(Boolean);
-    h+=`<div class="sec">${l}</div><div style="margin:0 16px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper-2)"><div style="display:flex;justify-content:space-between;gap:8px"><div><div style="font-size:15px">${esc(leg.description)}</div><div class="sm">${leg.real_points!=null?fmt(c.n)+" points":"About "+fmt(c.n)+" points"}</div>${tag}</div>${ic(kind==="flights"?"plane":"card",20)}</div><div style="margin:12px 0 6px">${bar(c.pct)}</div><div class="sm">${fmt(Math.min(c.have,c.n))} of ${fmt(c.n)} covered by your ${progs.map(p=>esc(p.short_name)).join(", ")||"none yet"} ${progs.length>1?"balances":"balance"}</div>${btn(`price:${id}:${kind}`,leg.real_points!=null?"Update price":"Enter real price","tap b2","font-size:14px;padding:7px 12px;display:inline-block;margin-top:10px;width:auto")}<div class="sm" style="margin:14px 0 4px">Ways to pay</div>`+
+    h+=`<div class="sec">${l}</div><div style="margin:0 20px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper-2)"><div style="display:flex;justify-content:space-between;gap:8px"><div><div style="font-size:15px">${esc(leg.description)}</div><div class="sm">${leg.real_points!=null?fmt(c.n)+" points":"About "+fmt(c.n)+" points"}</div>${tag}</div>${ic(kind==="flights"?"plane":"card",20)}</div><div style="margin:12px 0 6px">${bar(c.pct)}</div><div class="sm">${fmt(Math.min(c.have,c.n))} of ${fmt(c.n)} covered by your ${progs.map(p=>esc(p.short_name)).join(", ")||"none yet"} ${progs.length>1?"balances":"balance"}</div>${btn(`price:${id}:${kind}`,leg.real_points!=null?"Update price":"Enter real price","tap b2","font-size:14px;padding:7px 12px;display:inline-block;margin-top:10px;width:auto")}<div class="sm" style="margin:14px 0 4px">Ways to pay</div>`+
       waysToPay(kind==="flights"?"air":"hot",progs).map(([nm,srcShorts])=>`<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;padding:8px 0;border-top:1px solid var(--line);font-size:14px"><span style="flex:1;min-width:0">${esc(nm)}</span><span style="text-align:right;max-width:55%">${srcShorts.map(s=>ttag(s,"margin:0 0 4px 4px")).join("")}</span></div>`).join("")+`</div>`;
   });
   h+=`<div class="sec">Good to know for a family of 4</div>`+(t.notes||[]).map(n=>`<div class="rw" style="align-items:flex-start">${ic("info",18)}<span style="font-size:14px;line-height:1.5">${esc(n)}</span></div>`).join("");
   const lk="flex:1;text-align:center;font-size:14px;padding:10px 8px;border:1px solid var(--line-strong);border-radius:var(--radius);color:var(--ink);text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:5px";
-  h+=`<div style="display:flex;gap:8px;margin:14px 16px 20px;border-top:1px solid var(--line);padding-top:14px"><a href="https://www.point.me" target="_blank" rel="noopener" style="${lk}">Search point.me ${ic("extLink",15)}</a><a href="https://seats.aero" target="_blank" rel="noopener" style="${lk}">Search seats.aero ${ic("extLink",15)}</a></div>`;
+  h+=`<div style="display:flex;gap:8px;margin:14px 20px 20px;border-top:1px solid var(--line);padding-top:14px"><a href="https://www.point.me" target="_blank" rel="noopener" style="${lk}">Search point.me ${ic("extLink",15)}</a><a href="https://seats.aero" target="_blank" rel="noopener" style="${lk}">Search seats.aero ${ic("extLink",15)}</a></div>`;
   return h;
 }
 function tripFormScreen(){
@@ -916,38 +916,38 @@ function tripFormScreen(){
   let h=hd("Edit trip",true);
   h+=fld("n","Destination",f.n,`placeholder="Rome"`);
   h+=fld("sub","Subtitle",f.sub,`placeholder="7 nights"`);
-  h+=`<div style="margin:0 16px 14px"><label class="lb" for="f-notes">Good-to-know notes (one per line)</label><textarea id="f-notes" name="notes">${esc(f.notes)}</textarea></div>`;
+  h+=`<div style="margin:0 20px 14px"><label class="lb" for="f-notes">Good-to-know notes (one per line)</label><textarea id="f-notes" name="notes">${esc(f.notes)}</textarea></div>`;
   h+=`<div class="sec" style="margin-top:6px">Flights</div>`;
   h+=fld("fd","Description",f.fd,`placeholder="Boston to Rome, 4 round-trip seats"`);
   h+=fld("fneed","Points needed (estimate)",f.fneed,`inputmode="numeric" placeholder="240000"`);
-  h+=`<div style="margin:0 16px 14px"><div class="lb">Programs that can pay for flights</div>${multiPills("fsrc",f.fsrc)}${errH("fsrc")}</div>`;
+  h+=`<div style="margin:0 20px 14px"><div class="lb">Programs that can pay for flights</div>${multiPills("fsrc",f.fsrc)}${errH("fsrc")}</div>`;
   h+=`<div class="sec">Hotel</div>`;
   h+=fld("hd","Description",f.hd,`placeholder="7 nights, 1 family room"`);
   h+=fld("hneed","Points needed (estimate)",f.hneed,`inputmode="numeric" placeholder="200000"`);
-  h+=`<div style="margin:0 16px 14px"><div class="lb">Programs that can pay for the hotel</div>${multiPills("hsrc",f.hsrc)}${errH("hsrc")}</div>`;
-  h+=`<p class="sm" style="margin:0 16px 14px">Ways to pay is worked out automatically from the programs you pick here — no rebuild needed to swap in a new destination.</p>`;
-  h+=`<div style="display:flex;gap:8px;margin:18px 16px 20px;border-top:1px solid var(--line);padding-top:16px">${btn("savetrip","Save trip","tap b1","flex:1")}${btn("back","Cancel","tap b2","flex:1")}</div>`;
+  h+=`<div style="margin:0 20px 14px"><div class="lb">Programs that can pay for the hotel</div>${multiPills("hsrc",f.hsrc)}${errH("hsrc")}</div>`;
+  h+=`<p class="sm" style="margin:0 20px 14px">Ways to pay is worked out automatically from the programs you pick here — no rebuild needed to swap in a new destination.</p>`;
+  h+=`<div style="display:flex;gap:8px;margin:18px 20px 20px;border-top:1px solid var(--line);padding-top:16px">${btn("savetrip","Save trip","tap b1","flex:1")}${btn("back","Cancel","tap b2","flex:1")}</div>`;
   return h;
 }
 function priceFormScreen(){
   const v=stackTop(),tripId=v[1],kind=v[2],t=S.data.trips.find(x=>x.id===tripId),leg=legFor(tripId,kind),f=S.form;
-  let h=hd("Real price",true)+`<p class="sm" style="margin:-4px 16px 14px">${esc(t?t.destination:"")} ${kind==="flights"?"flights":"hotel"}: ${esc(leg?leg.description:"")}</p>`;
+  let h=hd("Real price",true)+`<p class="sm" style="margin:-4px 20px 14px">${esc(t?t.destination:"")} ${kind==="flights"?"flights":"hotel"}: ${esc(leg?leg.description:"")}</p>`;
   h+=fld("pts",kind==="hotel"?"Total points for the whole stay":"Total points for all 4 travelers",f.pts,`inputmode="numeric" placeholder="312000"`);
-  h+=`<div style="margin:0 16px 14px"><label class="lb" for="f-src">Where you found it</label><select id="f-src" name="src" style="width:100%">${["seats.aero","point.me","Airline website","Hotel website or app"].map(s=>`<option${f.src===s?" selected":""}>${s}</option>`).join("")}</select></div>`;
-  h+=`<p class="sm" style="margin:0 16px 14px">Today's date is saved with the price, since award prices change daily.</p>`;
-  h+=`<div style="display:flex;gap:8px;margin:18px 16px 0;border-top:1px solid var(--line);padding-top:16px">${btn("saveprice","Save price","tap b1","flex:1")}${btn("back","Cancel","tap b2","flex:1")}</div>`;
-  h+=(leg&&leg.real_points!=null)?`<div style="margin:14px 16px 20px">${btn("clearprice","Go back to the estimate","tap","font-size:14px;color:var(--accent);display:inline-block")}</div>`:`<div style="height:20px"></div>`;
+  h+=`<div style="margin:0 20px 14px"><label class="lb" for="f-src">Where you found it</label><select id="f-src" name="src" style="width:100%">${["seats.aero","point.me","Airline website","Hotel website or app"].map(s=>`<option${f.src===s?" selected":""}>${s}</option>`).join("")}</select></div>`;
+  h+=`<p class="sm" style="margin:0 20px 14px">Today's date is saved with the price, since award prices change daily.</p>`;
+  h+=`<div style="display:flex;gap:8px;margin:18px 20px 0;border-top:1px solid var(--line);padding-top:16px">${btn("saveprice","Save price","tap b1","flex:1")}${btn("back","Cancel","tap b2","flex:1")}</div>`;
+  h+=(leg&&leg.real_points!=null)?`<div style="margin:14px 20px 20px">${btn("clearprice","Go back to the estimate","tap","font-size:14px;color:var(--accent);display:inline-block")}</div>`:`<div style="height:20px"></div>`;
   return h;
 }
 function alertsScreen(){
   let h=hd("Notifications",true);
-  if(!S.data.alerts.length)h+=`<p class="sm" style="margin:0 16px 20px">Nothing to flag right now. New program-rule alerts will show up here.</p>`;
+  if(!S.data.alerts.length)h+=`<p class="sm" style="margin:0 20px 20px">Nothing to flag right now. New program-rule alerts will show up here.</p>`;
   S.data.alerts.forEach(al=>{
     const pr=al.program_id?program(al.program_id):null;
     const chipHtml=pr?btn("progFromAlert:"+pr.id,esc(pr.short_name),"tap chip",tint(hueFor(pr.short_name))+";margin:0"):"";
-    h+=`<div style="margin:0 16px 12px;border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:var(--paper-2)"><div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px">${chipHtml}${btn("dismissalert:"+al.id,ic("x",16)+'<span class="sr-only">Dismiss</span>',"tap","color:var(--ink-muted);padding:2px 4px;margin-left:auto")}</div><div style="font-size:15px;font-weight:600;line-height:1.4">${esc(al.title)}</div><div class="sm" style="margin-top:4px">${esc(al.description)}</div><div class="sm" style="margin-top:6px;color:var(--ink-muted)">${al.affects?"Affects "+esc(al.affects)+". ":""}${al.expires_on?"Disappears after "+fmtDate(al.expires_on)+".":""}</div></div>`;
+    h+=`<div style="margin:0 20px 12px;border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:var(--paper-2)"><div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px">${chipHtml}${btn("dismissalert:"+al.id,ic("x",16)+'<span class="sr-only">Dismiss</span>',"tap","color:var(--ink-muted);padding:2px 4px;margin-left:auto")}</div><div style="font-size:15px;font-weight:600;line-height:1.4">${esc(al.title)}</div><div class="sm" style="margin-top:4px">${esc(al.description)}</div><div class="sm" style="margin-top:6px;color:var(--ink-muted)">${al.affects?"Affects "+esc(al.affects)+". ":""}${al.expires_on?"Disappears after "+fmtDate(al.expires_on)+".":""}</div></div>`;
   });
-  h+=`<p class="sm" style="margin:8px 16px 20px">Checked manually — during your monthly balance update, ask Claude to look for anything new.</p>`;
+  h+=`<p class="sm" style="margin:8px 20px 20px">Checked manually — during your monthly balance update, ask Claude to look for anything new.</p>`;
   return h;
 }
 /* ---------- save actions ---------- */
@@ -1068,7 +1068,7 @@ function render(){
     h=S.tab==="points"?pointsScreen():S.tab==="cards"?cardsScreen():S.tab==="perks"?perksScreen():tripsScreen();
   }
   const errBanner=S.loadError?box("--danger-bg","--danger","Couldn't load data: "+esc(S.loadError)):"";
-  const toastBanner=S.toast?`<div style="margin:12px 16px 0;padding:10px 12px;border-radius:var(--radius);background:var(--success-bg);color:var(--success);font-size:14px;display:flex;align-items:center;gap:6px">${ic("check",16)} ${esc(S.toast)}</div>`:"";
+  const toastBanner=S.toast?`<div style="margin:12px 20px 0;padding:10px 12px;border-radius:var(--radius);background:var(--success-bg);color:var(--success);font-size:14px;display:flex;align-items:center;gap:6px">${ic("check",16)} ${esc(S.toast)}</div>`:"";
   scr.innerHTML=errBanner+toastBanner+h;
   scr.scrollTop=0;
   tabsEl.innerHTML=[["points","coins","Points"],["cards","card","Cards"],["perks","tag","Perks"],["trips","plane","Trips"]].map(([k,i,l])=>`<button type="button" class="tb${S.tab===k?" on":""}" data-go="tab:${k}">${ic(i,21)}${l}</button>`).join("");
