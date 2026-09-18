@@ -566,7 +566,6 @@ const program=id=>S.data.programs.find(p=>p.id===id);
 const pot=id=>S.data.pots.find(p=>p.id===id);
 const card=id=>S.data.cards.find(c=>c.id===id);
 const potsFor=programId=>S.data.pots.filter(p=>p.program_id===programId);
-const cardsForPot=potId=>S.data.cards.filter(c=>c.pot_id===potId&&c.status==="open");
 function orderedPrograms(){const rank=s=>{const i=PROGRAM_ORDER.indexOf(s);return i===-1?999:i};return [...S.data.programs].sort((a,b)=>rank(a.short_name)-rank(b.short_name))}
 /* ---------- data ---------- */
 async function loadData(){
@@ -645,7 +644,7 @@ function pointsScreen(){
     h+=btn("prog:"+pr.id,`<span class="dot" style="${dotc(hue)}"></span><div style="flex:1;min-width:0"><div style="font-size:15px">${esc(pr.name)}</div><div class="sm">${split||"0"}</div></div><div style="text-align:right"><div style="font-size:17px;font-weight:600">${fmt(a+j+bo)}</div>${val>0?`<div class="sm">≈$${fmt(val)}</div>`:""}</div>${ic("chevronRight",18)}`,"rw tap");
   });
   h+=btn("addacct",`${ic("plus",18)}<span style="font-size:15px;color:var(--accent)">Add an account without a card</span>`,"rw tap")+`</div>`;
-  h+=`<p class="sm" style="margin:8px 20px 20px">Tap a program to see which cards feed it, or update a card's balance from its page on the Cards tab. Dollar values are rough industry estimates (checked September 2026), not a guarantee — actual value depends a lot on how you redeem.</p>`;
+  h+=`<p class="sm" style="margin:8px 20px 20px">Tap a program to see which cards feed it. Balances are updated from the Cards tab. Dollar values are rough industry estimates (checked September 2026), not a guarantee — actual value depends a lot on how you redeem.</p>`;
   return h;
 }
 function progScreen(id){
@@ -656,19 +655,16 @@ function progScreen(id){
   h+=`<div style="margin:0 20px 8px"><div class="num" style="font-size:30px;font-weight:600">${fmt(total)}</div><div class="sm">${esc(pr.unit)} in ${here.length} ${here.length===1?"place":"places"}</div></div>`;
   h+=`<div class="sec">Where the ${esc(pr.unit)} live</div><div class="tc">`;
   if(!here.length)h+=`<div class="rw"><span class="sm">No pots yet.</span></div>`;
-  here.forEach(p=>{
-    const standalone=!cardsForPot(p.id).length;
-    if(standalone)h+=btn("editpot:"+p.id,`<div style="flex:1;min-width:0"><div style="font-size:15px">${potLabel(p)}</div></div><div style="font-size:15px">${fmt(p.balance)}</div>${ic("chevronRight",18)}`,"rw tap");
-    else h+=`<div class="rw"><div style="flex:1;min-width:0"><div style="font-size:15px">${potLabel(p)}</div></div><div style="font-size:15px">${fmt(p.balance)}</div></div>`;
-  });
+  here.forEach(p=>{h+=`<div class="rw"><div style="flex:1;min-width:0"><div style="font-size:15px">${potLabel(p)}</div></div><div style="font-size:15px">${fmt(p.balance)}</div></div>`});
   h+=`</div>`;
-  if(here.some(p=>!cardsForPot(p.id).length))h+=`<p class="sm" style="margin:8px 20px 20px">Tap a standalone account to update its balance. Cards' balances are updated from their own page on the Cards tab.</p>`;
   return h;
 }
 function potEditScreen(id){
   const p=pot(id);if(!p)return hd("Not found",true);
   const pr=program(p.program_id),f=S.form;
+  const feeding=S.data.cards.filter(x=>x.pot_id===id&&x.status==="open");
   let h=hd(potLabel(p),true);
+  if(feeding.length)h+=`<p class="sm" style="margin:-4px 20px 14px">${feeding.length>1?"Shared by "+feeding.map(x=>esc(x.name)).join(" and "):"Feeds "+esc(feeding[0].name)}.</p>`;
   h+=fld("bal","Balance",f.bal,`inputmode="numeric" placeholder="25000"`);
   h+=`<div style="display:flex;gap:8px;margin:18px 20px 20px;border-top:1px solid var(--line);padding-top:16px">${btn("savepotbal","Save balance","tap b1","flex:1")}${btn("back","Cancel","tap b2","flex:1")}</div>`;
   return h;
@@ -710,6 +706,12 @@ function cardsScreen(){
       h+=btn("card:"+c.id,`${ic("archive",20)}<div style="flex:1;min-width:0"><div style="font-size:15px;color:var(--ink-soft)">${esc(c.name)}</div><div class="sm">${ownL(c.owner)}, closed ${closedLabel}</div></div>`,"rw tap");});
     h+=`</div>`;
   }
+  const standalone=S.data.pots.filter(p=>!S.data.cards.some(x=>x.pot_id===p.id)&&(S.f==="all"||p.owner===S.f||p.owner==="Both"));
+  if(standalone.length){h+=`<div class="sec">Accounts without a card</div><div class="tc">`;
+    standalone.forEach(p=>{const spr=program(p.program_id),hue=hueFor(spr&&spr.short_name);
+      h+=btn("editpot:"+p.id,`<span class="dot" style="${dotc(hue)}"></span><div style="flex:1;min-width:0"><div style="font-size:15px">${potLabel(p)}</div></div><div style="font-size:15px">${fmt(p.balance)}</div>${ic("chevronRight",18)}`,"rw tap");});
+    h+=`</div>`;
+  }
   h+=`<p class="sm" style="margin:6px 20px 20px">The app keeps nicknames only, never card numbers or logins.</p>`;
   return h;
 }
@@ -721,7 +723,7 @@ function cardDetailScreen(id){
   const row=(l,v,go)=>go?btn(go,`<span class="sm" style="flex:1">${l}</span><span style="font-size:15px">${v}</span>${ic("chevronRight",18)}`,"rw tap"):`<div class="rw"><span class="sm" style="flex:1">${l}</span><span style="font-size:15px;text-align:right">${v}</span></div>`;
   h+=`<div class="tc">`;
   h+=row("Earns",`<span class="dot" style="display:inline-block;${dotc(hueFor(pr&&pr.short_name))};margin-right:6px"></span>${esc(pr?pr.name:"")}`,"prog:"+c.program_id);
-  h+=row(others.length?"Shared pot":"In this pot",pt?fmt(pt.balance):"None");
+  h+=row(others.length?"Shared pot":"In this pot",pt?fmt(pt.balance):"None",pt?"editpot:"+c.pot_id:null);
   h+=row("Annual fee",c.annual_fee==null?"Not entered":c.annual_fee===0?"None":"$"+fmt(c.annual_fee));
   h+=row("Fee posts in",c.fee_month?MON[c.fee_month]:"Not entered");
   h+=row("Bill due",c.bill_due_day?"The "+ordinal(c.bill_due_day):"Not entered");
@@ -783,9 +785,7 @@ function cardFormScreen(){
     }
   }else{
     const c=card(id),pr=program(c.program_id);
-    const shared=S.data.cards.filter(x=>x.pot_id===c.pot_id&&x.id!==c.id&&x.status==="open");
     h+=`<div style="margin:0 20px 14px"><div class="lb">Earns</div><div style="font-size:15px">${esc(pr?pr.name:"")}</div><div class="sm">To switch programs, close this card and add a new one.</div></div>`;
-    h+=fld("bal",shared.length?`Balance (shared with ${shared.map(x=>esc(x.name)).join(", ")})`:"Balance",f.bal,`inputmode="numeric" placeholder="25000"`);
   }
   h+=fld("fee","Annual fee in dollars (optional)",f.fee,`inputmode="numeric" placeholder="95"`);
   h+=monthSelect(f);
@@ -975,8 +975,6 @@ async function saveCard(){
   if(feeRaw&&!/^\d+$/.test(feeRaw))S.err.fee="Enter a whole dollar amount, like 95";
   const dueRaw=num(f.due);
   if(dueRaw&&(!/^\d+$/.test(dueRaw)||+dueRaw<1||+dueRaw>31))S.err.due="Enter a day between 1 and 31";
-  const balRaw=num(f.bal||"");
-  if(id&&!/^\d+$/.test(balRaw))S.err.bal="Enter a whole number, like 25000";
   if(!id){
     if(f.p==="new"&&!(f.np||"").trim())S.err.np="Enter the program name, like World of Hyatt";
     if((f.p==="new"||f.pot==="new")&&!/^\d+$/.test(num(f.nb||"0")))S.err.nb="Enter a whole number, like 0 or 25000";
@@ -989,9 +987,6 @@ async function saveCard(){
   if(id){
     const {error}=await sb.from("cards").update({name,owner:f.o,annual_fee:feeV,fee_month:moV,bill_due_day:dueV}).eq("id",id);
     if(error){S.err.n=error.message;render();return}
-    const c=card(id);
-    const {error:balErr}=await sb.from("points_pots").update({balance:parseInt(balRaw,10),updated_at:new Date().toISOString()}).eq("id",c.pot_id);
-    if(balErr){S.err.bal=balErr.message;render();return}
     await loadData();S.stack.pop();S.toast="Changes saved";render();return;
   }
   let programId=f.p;
@@ -1104,7 +1099,7 @@ async function go(a,b,c){
   if(a==="close"){S.stack.push(["close",b]);render();return}
   if(a==="back"){S.stack.pop();S.err={};render();return}
   if(a==="addcard"){const defProg=orderedPrograms()[0];S.form={n:"",o:"Jess",p:defProg?defProg.id:"new",pot:"new",np:"",nb:"",fee:"",mo:"",due:""};S.err={};S.stack.push(["cardform",null]);render();return}
-  if(a==="editcard"){const x=card(b);const pt=pot(x.pot_id);S.form={n:x.name,o:x.owner,fee:x.annual_fee==null?"":String(x.annual_fee),mo:x.fee_month?String(x.fee_month):"",due:x.bill_due_day?String(x.bill_due_day):"",bal:pt?String(pt.balance):""};S.err={};S.stack.push(["cardform",b]);render();return}
+  if(a==="editcard"){const x=card(b);S.form={n:x.name,o:x.owner,fee:x.annual_fee==null?"":String(x.annual_fee),mo:x.fee_month?String(x.fee_month):"",due:x.bill_due_day?String(x.bill_due_day):""};S.err={};S.stack.push(["cardform",b]);render();return}
   if(a==="savecard"){await saveCard();return}
   if(a==="addacct"){const defProg=orderedPrograms()[0];S.form={p:defProg?defProg.id:"new",np:"",o:"Jess",nb:""};S.err={};S.stack.push(["acct"]);render();return}
   if(a==="saveacct"){await saveAcct();return}
