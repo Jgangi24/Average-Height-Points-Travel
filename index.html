@@ -720,13 +720,11 @@ function cardsScreen(){
 function cardDetailScreen(id){
   const c=card(id);if(!c)return hd("Card not found",true);
   const pr=program(c.program_id),pt=pot(c.pot_id);
-  const others=S.data.cards.filter(x=>x.pot_id===c.pot_id&&x.id!==c.id&&x.status==="open");
   let h=hd(c.name,true)+`<div class="sm" style="margin:-6px 20px 10px">${ownL(c.owner)}${c.status==="closed"?", closed":""}</div>`;
   const row=(l,v,go)=>go?btn(go,`<span class="sm" style="flex:1">${l}</span><span style="font-size:15px">${v}</span>${ic("chevronRight",18)}`,"rw tap"):`<div class="rw"><span class="sm" style="flex:1">${l}</span><span style="font-size:15px;text-align:right">${v}</span></div>`;
   h+=`<div class="tc">`;
   h+=row("Earns",`<span class="dot" style="display:inline-block;${dotc(hueFor(pr&&pr.short_name))};margin-right:6px"></span>${esc(pr?pr.name:"")}`,"prog:"+c.program_id);
-  h+=row(others.length?"Shared pot":"In this pot",pt?fmt(pt.balance):"None");
-  if(pt)h+=row("Update points/miles","",`editpot:${c.pot_id}`);
+  h+=row("Points",pt?fmt(pt.balance):"None",pt?`editpot:${c.pot_id}`:null);
   const editable=c.status==="open";
   h+=row("Nickname",esc(c.name),editable?`editcf:${c.id}:n`:null);
   h+=row("Belongs to",ownL(c.owner),editable?`editcf:${c.id}:o`:null);
@@ -761,9 +759,9 @@ function closeCardScreen(id){
   const c=card(id),pr=program(c.program_id),pt=pot(c.pot_id);
   const others=S.data.cards.filter(x=>x.pot_id===c.pot_id&&x.id!==c.id&&x.status==="open");
   let h=hd("Close "+c.name,true);
-  if(others.length)h+=box("--paper-2","--ink-soft",`Your ${esc(pr?pr.short_name:"")} points stay put. ${esc(others[0].name)} still feeds the same pot.`);
-  else if(pt&&pt.balance>0)h+=box("--warning-bg","--warning",`This pot holds ${fmt(pt.balance)} ${esc(pr?pr.unit:"points")}. Move them elsewhere first, or they may be hard to use once this card closes.`);
-  else h+=box("--paper-2","--ink-soft","No points are left in this pot.");
+  if(others.length)h+=box("--paper-2","--ink-soft",`Your ${esc(pr?pr.short_name:"")} points stay put. ${esc(others[0].name)} still holds the same balance.`);
+  else if(pt&&pt.balance>0)h+=box("--warning-bg","--warning",`There are still ${fmt(pt.balance)} ${esc(pr?pr.unit:"points")} here. Move them elsewhere first, or they may be hard to use once this card closes.`);
+  else h+=box("--paper-2","--ink-soft","No points are left here.");
   h+=`<div class="sec">Choose one</div><div class="tc" style="margin-bottom:20px">`;
   h+=btn("closecard:"+id,`${ic("archive",20)}<div style="flex:1"><div style="font-size:15px">Move to closed cards</div><div class="sm">Keeps a record of when you had it. Some banks limit sign-up bonuses based on past cards.</div></div>`,"rw tap");
   h+=btn("delcard:"+id,`<span style="color:var(--danger)">${ic("trash",20)}</span><div style="flex:1"><div style="font-size:15px;color:var(--danger)">Delete completely</div><div class="sm">Removes it with no record. Best for cards added by mistake.</div></div>`,"rw tap");
@@ -784,7 +782,7 @@ function cardFormScreen(){
     const prSel=program(f.p);
     const pots=potsFor(f.p);
     const potOptions=pots.map(p=>`<option value="${p.id}"${f.pot===p.id?" selected":""}>${ownL(p.owner)}'s ${esc(p.label)} (${fmt(p.balance)} ${esc(prSel?prSel.unit:"points")})</option>`).join("");
-    h+=`<div style="margin:0 20px 14px"><label class="lb" for="f-pot">Points pot</label><select id="f-pot" name="pot" style="width:100%"><option value="new"${f.pot==="new"?" selected":""}>Start a new pot for this card</option>${potOptions}</select><div class="sm" style="margin-top:6px">${f.pot==="new"?"Gets its own balance, starting at 0.":"Joins the existing balance in that pot."}</div>${errH("pot")}</div>`;
+    h+=`<div style="margin:0 20px 14px"><label class="lb" for="f-pot">Points balance</label><select id="f-pot" name="pot" style="width:100%"><option value="new"${f.pot==="new"?" selected":""}>Start a fresh balance for this card</option>${potOptions}</select><div class="sm" style="margin-top:6px">${f.pot==="new"?"Gets its own balance, starting at 0.":"Joins that existing balance."}</div>${errH("pot")}</div>`;
     if(f.pot==="new")h+=fld("nb","Starting balance",f.nb,`inputmode="numeric" placeholder="0"`);
   }
   h+=fld("fee","Annual fee in dollars (optional)",f.fee,`inputmode="numeric" placeholder="95"`);
