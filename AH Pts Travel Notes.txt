@@ -15,3 +15,7 @@ Round 2
 
 Round 3
 - Screenshot 1, Cards >> Amex Gold: I'm fine with the "shared pot" row, but it should not be editable. Please add a separate editable row only for the points/miles for the specific card being edited. It should function the same way as shown in screenshot 2 (universal add)
+
+Round 4
+- From the Cards >> Card screen, I'm wondering why we have the "Edit card" button? Wouldn't it be easier to edit everything through the caret in "earns" and "update balance"? Please let me know your thoughts before editing
+- Also, please change the language "Update balance" to "Update points/miles"
