@@ -725,9 +725,12 @@ function cardDetailScreen(id){
   h+=row("Earns",`<span class="dot" style="display:inline-block;${dotc(hueFor(pr&&pr.short_name))};margin-right:6px"></span>${esc(pr?pr.name:"")}`,"prog:"+c.program_id);
   h+=row(others.length?"Shared pot":"In this pot",pt?fmt(pt.balance):"None");
   if(pt)h+=row("Update points/miles","",`editpot:${c.pot_id}`);
-  h+=row("Annual fee",c.annual_fee==null?"Not entered":c.annual_fee===0?"None":"$"+fmt(c.annual_fee));
-  h+=row("Fee posts in",c.fee_month?MON[c.fee_month]:"Not entered");
-  h+=row("Bill due",c.bill_due_day?"The "+ordinal(c.bill_due_day):"Not entered");
+  const editable=c.status==="open";
+  h+=row("Nickname",esc(c.name),editable?`editcf:${c.id}:n`:null);
+  h+=row("Belongs to",ownL(c.owner),editable?`editcf:${c.id}:o`:null);
+  h+=row("Annual fee",c.annual_fee==null?"Not entered":c.annual_fee===0?"None":"$"+fmt(c.annual_fee),editable?`editcf:${c.id}:fee`:null);
+  h+=row("Fee posts in",c.fee_month?MON[c.fee_month]:"Not entered",editable?`editcf:${c.id}:mo`:null);
+  h+=row("Bill due",c.bill_due_day?"The "+ordinal(c.bill_due_day):"Not entered",editable?`editcf:${c.id}:due`:null);
   h+=`</div>`;
   if(c.annual_fee>0&&c.status==="open")h+=`<div class="sec">Before the next fee, the plan is to</div><div style="display:flex;gap:8px;flex-wrap:wrap;margin:0 20px 4px">${["Keep","Downgrade","Cancel"].map(d=>btn(`dec:${c.id}:${d}`,d,"tap pill"+(c.decision_note===d?" on":""))).join("")}</div>`;
   const cardPerks=S.data.perks.filter(p=>p.card_id===c.id);
@@ -741,7 +744,6 @@ function cardDetailScreen(id){
     h+=`<div style="margin:12px 20px 0;padding:12px 14px;background:var(--paper-2);border-radius:12px"><div class="sm" style="margin-bottom:6px">Captured toward the annual fee</div><div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px"><span class="num" style="font-size:18px;font-weight:600">$${fmt(cap)} of $${fmt(c.annual_fee)}</span><span class="sm">${pct}%</span></div>${bar(pct)}</div>`;
   }
   if(c.status==="open"){
-    h+=`<div style="margin:20px 20px 0">${btn("editcard:"+c.id,"Edit card","tap b2")}</div>`;
     const calBtns=[];
     if(c.annual_fee>0&&c.fee_month)calBtns.push(btn("cal:"+c.id,ic("calendarPlus",16)+' Add fee to calendar',"tap b2","flex:1;display:inline-flex;align-items:center;justify-content:center;gap:6px"));
     if(c.bill_due_day)calBtns.push(btn("caldue:"+c.id,ic("calendarPlus",16)+' Add due date to calendar',"tap b2","flex:1;display:inline-flex;align-items:center;justify-content:center;gap:6px"));
@@ -767,31 +769,38 @@ function closeCardScreen(id){
   return h;
 }
 function cardFormScreen(){
-  const id=stackTop()[1],f=S.form,isNew=!id;
-  let h=hd(isNew?"Add a card":"Edit card",true);
+  const f=S.form;
+  let h=hd("Add a card",true);
   h+=fld("n","Nickname",f.n,`placeholder="Abby's Hyatt card"`);
   h+=pills(f.o);
-  if(isNew){
-    const progOptions=orderedPrograms().map(p=>`<option value="${p.id}"${f.p===p.id?" selected":""}>${esc(p.name)}</option>`).join("");
-    h+=`<div style="margin:0 20px 14px"><label class="lb" for="f-p">Earns</label><select id="f-p" name="p" style="width:100%">${progOptions}<option value="new"${f.p==="new"?" selected":""}>A new program</option></select></div>`;
-    if(f.p==="new"){
-      h+=fld("np","Program name",f.np,`placeholder="World of Hyatt"`);
-      h+=fld("nb","Starting balance",f.nb,`inputmode="numeric" placeholder="0"`);
-    }else if(f.p){
-      const prSel=program(f.p);
-      const pots=potsFor(f.p);
-      const potOptions=pots.map(p=>`<option value="${p.id}"${f.pot===p.id?" selected":""}>${ownL(p.owner)}'s ${esc(p.label)} (${fmt(p.balance)} ${esc(prSel?prSel.unit:"points")})</option>`).join("");
-      h+=`<div style="margin:0 20px 14px"><label class="lb" for="f-pot">Points pot</label><select id="f-pot" name="pot" style="width:100%"><option value="new"${f.pot==="new"?" selected":""}>Start a new pot for this card</option>${potOptions}</select><div class="sm" style="margin-top:6px">${f.pot==="new"?"Gets its own balance, starting at 0.":"Joins the existing balance in that pot."}</div>${errH("pot")}</div>`;
-      if(f.pot==="new")h+=fld("nb","Starting balance",f.nb,`inputmode="numeric" placeholder="0"`);
-    }
-  }else{
-    const c=card(id),pr=program(c.program_id);
-    h+=`<div style="margin:0 20px 14px"><div class="lb">Earns</div><div style="font-size:15px">${esc(pr?pr.name:"")}</div><div class="sm">To switch programs, close this card and add a new one.</div></div>`;
+  const progOptions=orderedPrograms().map(p=>`<option value="${p.id}"${f.p===p.id?" selected":""}>${esc(p.name)}</option>`).join("");
+  h+=`<div style="margin:0 20px 14px"><label class="lb" for="f-p">Earns</label><select id="f-p" name="p" style="width:100%">${progOptions}<option value="new"${f.p==="new"?" selected":""}>A new program</option></select></div>`;
+  if(f.p==="new"){
+    h+=fld("np","Program name",f.np,`placeholder="World of Hyatt"`);
+    h+=fld("nb","Starting balance",f.nb,`inputmode="numeric" placeholder="0"`);
+  }else if(f.p){
+    const prSel=program(f.p);
+    const pots=potsFor(f.p);
+    const potOptions=pots.map(p=>`<option value="${p.id}"${f.pot===p.id?" selected":""}>${ownL(p.owner)}'s ${esc(p.label)} (${fmt(p.balance)} ${esc(prSel?prSel.unit:"points")})</option>`).join("");
+    h+=`<div style="margin:0 20px 14px"><label class="lb" for="f-pot">Points pot</label><select id="f-pot" name="pot" style="width:100%"><option value="new"${f.pot==="new"?" selected":""}>Start a new pot for this card</option>${potOptions}</select><div class="sm" style="margin-top:6px">${f.pot==="new"?"Gets its own balance, starting at 0.":"Joins the existing balance in that pot."}</div>${errH("pot")}</div>`;
+    if(f.pot==="new")h+=fld("nb","Starting balance",f.nb,`inputmode="numeric" placeholder="0"`);
   }
   h+=fld("fee","Annual fee in dollars (optional)",f.fee,`inputmode="numeric" placeholder="95"`);
   h+=monthSelect(f);
   h+=fld("due","Bill due day of month, 1-31 (optional)",f.due,`inputmode="numeric" placeholder="15"`);
-  h+=`<div style="display:flex;gap:8px;margin:18px 20px 20px;border-top:1px solid var(--line);padding-top:16px">${btn("savecard",isNew?"Add card":"Save changes","tap b1","flex:1")}${btn("back","Cancel","tap b2","flex:1")}</div>`;
+  h+=`<div style="display:flex;gap:8px;margin:18px 20px 20px;border-top:1px solid var(--line);padding-top:16px">${btn("savecard","Add card","tap b1","flex:1")}${btn("back","Cancel","tap b2","flex:1")}</div>`;
+  return h;
+}
+function cardFieldScreen(){
+  const v=stackTop(),id=v[1],field=v[2],f=S.form;
+  const TITLES={n:"Nickname",o:"Belongs to",fee:"Annual fee",mo:"Fee posts in",due:"Bill due day"};
+  let h=hd(TITLES[field]||"Edit",true);
+  if(field==="n")h+=`<div style="margin:0 20px 14px"><input id="f-n" name="n" value="${esc(f.n)}" placeholder="Abby's Hyatt card" style="width:100%">${errH("n")}</div>`;
+  else if(field==="o")h+=`<div style="margin:0 20px 14px;display:flex;gap:8px">${["Jess","Abby","Both"].map(o=>btn("fo:"+o,o==="Both"?"Both of you":o,"tap pill"+(f.o===o?" on":""))).join("")}</div>`;
+  else if(field==="fee")h+=fld("fee","Annual fee in dollars",f.fee,`inputmode="numeric" placeholder="95"`);
+  else if(field==="mo")h+=`<div style="margin:0 20px 14px"><select id="f-mo" name="mo" style="width:100%"><option value="">Not sure yet</option>${MON.slice(1).map((m,i)=>`<option value="${i+1}"${String(f.mo)===String(i+1)?" selected":""}>${m}</option>`).join("")}</select></div>`;
+  else if(field==="due")h+=fld("due","Bill due day of month, 1-31",f.due,`inputmode="numeric" placeholder="15"`);
+  h+=`<div style="display:flex;gap:8px;margin:18px 20px 20px;border-top:1px solid var(--line);padding-top:16px">${btn("savecf","Save","tap b1","flex:1")}${btn("back","Cancel","tap b2","flex:1")}</div>`;
   return h;
 }
 /* ---------- perks tab ---------- */
@@ -969,27 +978,20 @@ function alertsScreen(){
 }
 /* ---------- save actions ---------- */
 async function saveCard(){
-  const f=S.form,id=stackTop()[1];S.err={};
+  const f=S.form;S.err={};
   const name=(f.n||"").trim();
   if(!name)S.err.n="Enter a nickname, like Abby's Hyatt card";
   const feeRaw=num(f.fee);
   if(feeRaw&&!/^\d+$/.test(feeRaw))S.err.fee="Enter a whole dollar amount, like 95";
   const dueRaw=num(f.due);
   if(dueRaw&&(!/^\d+$/.test(dueRaw)||+dueRaw<1||+dueRaw>31))S.err.due="Enter a day between 1 and 31";
-  if(!id){
-    if(f.p==="new"&&!(f.np||"").trim())S.err.np="Enter the program name, like World of Hyatt";
-    if((f.p==="new"||f.pot==="new")&&!/^\d+$/.test(num(f.nb||"0")))S.err.nb="Enter a whole number, like 0 or 25000";
-    if(f.p&&f.p!=="new"&&!f.pot)S.err.pot="Choose a pot for this card";
-  }
+  if(f.p==="new"&&!(f.np||"").trim())S.err.np="Enter the program name, like World of Hyatt";
+  if((f.p==="new"||f.pot==="new")&&!/^\d+$/.test(num(f.nb||"0")))S.err.nb="Enter a whole number, like 0 or 25000";
+  if(f.p&&f.p!=="new"&&!f.pot)S.err.pot="Choose a pot for this card";
   if(Object.keys(S.err).length){render();return}
   const feeV=feeRaw===""?null:parseInt(feeRaw,10);
   const moV=f.mo?parseInt(f.mo,10):null;
   const dueV=dueRaw===""?null:parseInt(dueRaw,10);
-  if(id){
-    const {error}=await sb.from("cards").update({name,owner:f.o,annual_fee:feeV,fee_month:moV,bill_due_day:dueV}).eq("id",id);
-    if(error){S.err.n=error.message;render();return}
-    await loadData();S.stack.pop();S.toast="Changes saved";render();return;
-  }
   let programId=f.p;
   if(programId==="new"){
     const {data:np,error}=await sb.from("programs").insert({name:f.np.trim(),short_name:f.np.trim(),unit:"points"}).select().single();
@@ -1006,6 +1008,30 @@ async function saveCard(){
   const {error:cardErr}=await sb.from("cards").insert({name,owner:f.o,program_id:programId,pot_id:potId,annual_fee:feeV,fee_month:moV,bill_due_day:dueV});
   if(cardErr){S.err.n=cardErr.message;render();return}
   await loadData();S.stack=[];S.tab="cards";S.toast="Card added";render();
+}
+async function saveCardField(){
+  const v=stackTop(),id=v[1],field=v[2],f=S.form;S.err={};
+  let patch;
+  if(field==="n"){
+    const name=(f.n||"").trim();
+    if(!name){S.err.n="Enter a nickname, like Abby's Hyatt card";render();return}
+    patch={name};
+  }else if(field==="o"){
+    patch={owner:f.o};
+  }else if(field==="fee"){
+    const feeRaw=num(f.fee);
+    if(feeRaw&&!/^\d+$/.test(feeRaw)){S.err.fee="Enter a whole dollar amount, like 95";render();return}
+    patch={annual_fee:feeRaw===""?null:parseInt(feeRaw,10)};
+  }else if(field==="mo"){
+    patch={fee_month:f.mo?parseInt(f.mo,10):null};
+  }else if(field==="due"){
+    const dueRaw=num(f.due);
+    if(dueRaw&&(!/^\d+$/.test(dueRaw)||+dueRaw<1||+dueRaw>31)){S.err.due="Enter a day between 1 and 31";render();return}
+    patch={bill_due_day:dueRaw===""?null:parseInt(dueRaw,10)};
+  }
+  const {error}=await sb.from("cards").update(patch).eq("id",id);
+  if(error){S.err[field]=error.message;render();return}
+  await loadData();S.stack.pop();S.toast="Saved";render();
 }
 async function saveAcct(){
   const f=S.form;S.err={};
@@ -1076,7 +1102,7 @@ function render(){
   topbar.style.display="flex";tabsEl.style.display="flex";topbar.innerHTML=topbarH();
   const v=stackTop();let h;
   if(v){const t=v[0];
-    h=t==="prog"?progScreen(v[1]):t==="card"?cardDetailScreen(v[1]):t==="close"?closeCardScreen(v[1]):t==="cardform"?cardFormScreen():t==="acct"?acctScreen():t==="potedit"?potEditScreen(v[1]):t==="alerts"?alertsScreen():t==="perk"?perkDetailScreen(v[1]):t==="perkform"?perkFormScreen():t==="trip"?tripDetailScreen(v[1]):t==="edittrip"?tripFormScreen():t==="price"?priceFormScreen():"";
+    h=t==="prog"?progScreen(v[1]):t==="card"?cardDetailScreen(v[1]):t==="close"?closeCardScreen(v[1]):t==="cardform"?cardFormScreen():t==="cfedit"?cardFieldScreen():t==="acct"?acctScreen():t==="potedit"?potEditScreen(v[1]):t==="alerts"?alertsScreen():t==="perk"?perkDetailScreen(v[1]):t==="perkform"?perkFormScreen():t==="trip"?tripDetailScreen(v[1]):t==="edittrip"?tripFormScreen():t==="price"?priceFormScreen():"";
   }else{
     h=S.tab==="points"?pointsScreen():S.tab==="cards"?cardsScreen():S.tab==="perks"?perksScreen():tripsScreen();
   }
@@ -1099,9 +1125,18 @@ async function go(a,b,c){
   if(a==="card"){S.stack.push(["card",b]);render();return}
   if(a==="close"){S.stack.push(["close",b]);render();return}
   if(a==="back"){S.stack.pop();S.err={};render();return}
-  if(a==="addcard"){const defProg=orderedPrograms()[0];S.form={n:"",o:"Jess",p:defProg?defProg.id:"new",pot:"new",np:"",nb:"",fee:"",mo:"",due:""};S.err={};S.stack.push(["cardform",null]);render();return}
-  if(a==="editcard"){const x=card(b);S.form={n:x.name,o:x.owner,fee:x.annual_fee==null?"":String(x.annual_fee),mo:x.fee_month?String(x.fee_month):"",due:x.bill_due_day?String(x.bill_due_day):""};S.err={};S.stack.push(["cardform",b]);render();return}
+  if(a==="addcard"){const defProg=orderedPrograms()[0];S.form={n:"",o:"Jess",p:defProg?defProg.id:"new",pot:"new",np:"",nb:"",fee:"",mo:"",due:""};S.err={};S.stack.push(["cardform"]);render();return}
   if(a==="savecard"){await saveCard();return}
+  if(a==="editcf"){
+    const x=card(b),f={};
+    if(c==="n")f.n=x.name;
+    else if(c==="o")f.o=x.owner;
+    else if(c==="fee")f.fee=x.annual_fee==null?"":String(x.annual_fee);
+    else if(c==="mo")f.mo=x.fee_month?String(x.fee_month):"";
+    else if(c==="due")f.due=x.bill_due_day?String(x.bill_due_day):"";
+    S.form=f;S.err={};S.stack.push(["cfedit",b,c]);render();return;
+  }
+  if(a==="savecf"){await saveCardField();return}
   if(a==="addacct"){const defProg=orderedPrograms()[0];S.form={p:defProg?defProg.id:"new",np:"",o:"Jess",nb:""};S.err={};S.stack.push(["acct"]);render();return}
   if(a==="saveacct"){await saveAcct();return}
   if(a==="editpot"){const p=pot(b);S.form={bal:String(p.balance)};S.err={};S.stack.push(["potedit",b]);render();return}
