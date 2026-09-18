@@ -97,8 +97,8 @@ body{overflow:hidden}
 @media (max-width:879px){
   .ph{position:relative}
   #scr{padding-bottom:96px}
-  #tabs{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);z-index:5}
-  .tabs{width:fit-content;margin:0;padding:0 8px;gap:2px;border:none;border-radius:26px;overflow:hidden;background:rgba(239,237,231,.55);backdrop-filter:blur(10px) saturate(180%);-webkit-backdrop-filter:blur(10px) saturate(180%);box-shadow:0 14px 32px -18px rgba(28,39,51,.35)}
+  #tabs{position:absolute;left:50%;bottom:28px;transform:translateX(-50%);z-index:5}
+  .tabs{width:fit-content;margin:0;padding:0 8px;gap:2px;border:none;border-radius:26px;overflow:hidden;background:rgba(250,249,247,.7);backdrop-filter:blur(10px) saturate(180%);-webkit-backdrop-filter:blur(10px) saturate(180%);box-shadow:0 14px 32px -18px rgba(28,39,51,.35)}
   .tabs .tb{flex:none;padding:9px 24px 13px}
 }
 /* Wide-screen shell: instead of the phone frame stretching edge to edge,
@@ -431,7 +431,7 @@ const SPLASH_FRAMES = [
 ];
 function splashScreen(){
   const frames=SPLASH_FRAMES.map((svg,n)=>`<div class="frame f${n}">${svg}</div>`).join("");
-  return `<div class="tap" role="button" tabindex="0" data-go="open" aria-label="Open the app" style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--paper-2);padding:24px;box-sizing:border-box">
+  return `<div class="tap" role="button" tabindex="0" data-go="open" aria-label="Open the app" style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--paper);padding:24px;box-sizing:border-box">
 <div style="position:relative;width:220px;height:422px">${frames}</div>
 <div class="wm" style="text-align:center;margin-top:18px">
 <div style="font-size:16px;color:var(--ink-soft)">Points &amp; Travel</div>
