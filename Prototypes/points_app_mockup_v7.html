@@ -1,0 +1,851 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Average Height — Points &amp; Travel (mockup)</title>
+<style>
+:root{
+  --paper:#EFEDE7; --paper-2:#FFFFFF; --ink:#1E2733; --ink-soft:#5B6169; --ink-muted:#9A9690;
+  --line:#DAD6CC; --line-strong:#C7C2B4;
+  --accent:#C1592E; --on-accent:#FFFCF6; --accent-wash:#F3E2D9;
+  --success:#2F6F4E; --success-bg:#E1EBE3;
+  --warning:#96731D; --warning-bg:#F1E8D2;
+  --danger:#A23238; --danger-bg:#F3E0DF;
+  --radius:12px; --radius-lg:22px;
+  --tint-blue-bg:#DCE4EE;   --tint-blue-fg:#2C4D73;
+  --tint-aqua-bg:#DCEBE8;   --tint-aqua-fg:#1F7A72;
+  --tint-gold-bg:#F1E8D2;   --tint-gold-fg:#8A6A1E;
+  --tint-violet-bg:#E7E0EE; --tint-violet-fg:#6B4C93;
+  --tint-magenta-bg:#EFE0E8; --tint-magenta-fg:#95396A;
+  --tint-green-bg:#E1E9DC;  --tint-green-fg:#4A7A3E;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink)}
+h1,h2,h3,.serif{font-family:Georgia,"Iowan Old Style","Times New Roman",serif}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.wrap{max-width:460px;margin:0 auto;padding:28px 14px 48px}
+.ph{max-width:390px;height:844px;margin:0 auto;background:var(--paper);border:1px solid var(--line-strong);border-radius:32px;overflow:hidden;box-shadow:0 18px 40px -20px rgba(28,43,57,.35);display:flex;flex-direction:column}
+#topbar{flex:none}
+#scr{flex:1 1 auto;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch}
+#tabs{flex:none}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--paper-2);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--ink-soft);letter-spacing:.01em}
+.bellwrap{position:relative;padding:4px}
+.bellwrap .dot{position:absolute;top:1px;right:1px;min-width:15px;height:15px;padding:0 3px;border-radius:8px;background:var(--danger);color:#fff;font-size:10px;line-height:15px;text-align:center;font-weight:600}
+.tap{cursor:pointer}
+.tap:focus-visible,.bk:focus-visible,.tb:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.bk{display:inline-flex;align-items:center;gap:4px;color:var(--accent);font-size:15px;cursor:pointer;padding:4px 0;background:none;border:none;font-family:inherit}
+.rw{display:flex;align-items:center;gap:12px;padding:12px 16px;border-top:1px solid var(--line)}
+.rw.tap:active,.tc:active{background:var(--paper)}
+.sm{font-size:13px;color:var(--ink-soft);line-height:1.5}
+.dot{width:10px;height:10px;border-radius:50%;flex:none}
+.bar{height:6px;border-radius:3px;background:var(--line);overflow:hidden}
+.bar>span{display:block;height:100%}
+.chip{display:inline-flex;align-items:center;gap:4px;font-size:12px;padding:3px 9px;border-radius:999px;margin:0 6px 6px 0}
+.tabs{display:flex;border-top:1px solid var(--line);background:var(--paper-2)}
+.tb{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 0 13px;font-size:11.5px;color:var(--ink-soft);cursor:pointer;background:none;border:none;font-family:inherit}
+.tb.on{color:var(--accent)}
+.tc{margin:0 16px 14px;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--paper-2)}
+.sec{display:flex;align-items:center;justify-content:space-between;font-size:12.5px;color:var(--ink-soft);margin:18px 16px 8px;text-transform:none}
+.ttl{margin:6px 16px 12px;font-size:23px;font-weight:600;font-family:Georgia,"Iowan Old Style","Times New Roman",serif}
+.num{font-family:Georgia,"Iowan Old Style","Times New Roman",serif}
+.pill{padding:6px 14px;border-radius:999px;font-size:13px;border:1px solid var(--line-strong);color:var(--ink-soft);background:none;font-family:inherit;cursor:pointer}
+.pill.on{background:var(--paper-2);color:var(--accent);border-color:var(--accent);font-weight:600}
+.b1{text-align:center;background:var(--accent);color:var(--on-accent);padding:10px 14px;border-radius:var(--radius);font-size:15px;border:none;cursor:pointer;font-family:inherit;width:100%}
+.b2{text-align:center;border:1px solid var(--line-strong);padding:10px 14px;border-radius:var(--radius);font-size:15px;background:none;cursor:pointer;font-family:inherit;width:100%;color:var(--ink)}
+.lb{display:block;font-size:13px;color:var(--ink-soft);margin-bottom:6px}
+input,select,textarea{font-family:inherit;font-size:15px;padding:9px 10px;border:1px solid var(--line-strong);border-radius:10px;background:var(--paper-2);color:var(--ink)}
+textarea{width:100%;resize:vertical;min-height:64px}
+.foldsec{margin:0 16px 12px;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--paper-2)}
+.foldhd{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;cursor:pointer}
+.foldhd .chv{transition:transform .15s ease}
+.foldhd.open .chv{transform:rotate(180deg)}
+.ic{display:inline-block;vertical-align:-4px}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
+@keyframes wordmark{0%{opacity:0;transform:translateY(4px)}100%{opacity:1;transform:translateY(0)}}
+.wm{animation:wordmark .6s ease .9s both}
+.frame{position:absolute;inset:0;opacity:0}
+.frame.f0{animation:frm0 1.0s steps(1) forwards}
+.frame.f1{animation:frm1 1.0s steps(1) forwards}
+.frame.f2{animation:frm2 1.0s steps(1) forwards}
+.frame.f3{animation:frm3 1.0s steps(1) forwards}
+@keyframes frm0{0%{opacity:1}24%{opacity:1}25%{opacity:0}100%{opacity:0}}
+@keyframes frm1{0%{opacity:0}24%{opacity:0}25%{opacity:1}49%{opacity:1}50%{opacity:0}100%{opacity:0}}
+@keyframes frm2{0%{opacity:0}49%{opacity:0}50%{opacity:1}74%{opacity:1}75%{opacity:0}100%{opacity:0}}
+@keyframes frm3{0%{opacity:0}74%{opacity:0}75%{opacity:1}100%{opacity:1}}
+@media (prefers-reduced-motion:reduce){.frame{animation:none!important;opacity:0}.frame.f3{opacity:1}.wm{animation:none;opacity:1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1 class="sr-only">Average Height — Points and Travel, a clickable app mockup</h1>
+<div id="ph" class="ph">
+  <div id="topbar" class="topbar" style="display:none"></div>
+  <div id="scr" style="min-height:560px;"><p style="padding:2rem 1rem;color:var(--ink-soft);font-size:14px;margin:0;">Loading the mockup…</p></div>
+  <div id="tabs" class="tabs"></div>
+</div>
+<p style="max-width:390px;margin:14px auto 0;font-size:12px;color:var(--ink-soft);text-align:center">v4 mockup — self-contained, sample data. Open this file directly in any browser.</p>
+</div>
+<script>
+/* ---------- tiny inline icon set (no external font) ---------- */
+function ic(name,size){
+size=size||18;
+const S=`width="${size}" height="${size}" viewBox="0 0 24 24" class="ic" aria-hidden="true"`;
+const stroke=`fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"`;
+const P={
+chevronLeft:`<path ${stroke} d="M15 6l-6 6 6 6"/>`,
+chevronRight:`<path ${stroke} d="M9 6l6 6-6 6"/>`,
+chevronDown:`<path ${stroke} d="M6 9l6 6 6-6"/>`,
+plus:`<path ${stroke} d="M12 5v14M5 12h14"/>`,
+x:`<path ${stroke} d="M6 6l12 12M18 6L6 18"/>`,
+refresh:`<path ${stroke} d="M4 12a8 8 0 0 1 13.66-5.66M20 12a8 8 0 0 1-13.66 5.66"/><path ${stroke} d="M17 3v4h-4M7 21v-4h4"/>`,
+calendarPlus:`<rect ${stroke} x="4" y="5.5" width="16" height="14.5" rx="2"/><path ${stroke} d="M4 10h16M8 3.5v4M16 3.5v4M12 13v5M9.5 15.5h5"/>`,
+archive:`<rect ${stroke} x="3.5" y="5" width="17" height="4" rx="1"/><path ${stroke} d="M5 9v10h14V9M10 13h4"/>`,
+trash:`<path ${stroke} d="M4 7h16M9 7V4.5h6V7M6.5 7l1 12.5h9L17.5 7"/>`,
+check:`<path ${stroke} d="M5 12.5l4.5 4.5L19 7"/>`,
+square:`<rect ${stroke} x="4" y="4" width="16" height="16" rx="4"/>`,
+squareCheck:`<rect ${stroke} x="4" y="4" width="16" height="16" rx="4"/><path ${stroke} d="M8 12.5l2.5 2.5L16 9"/>`,
+info:`<circle ${stroke} cx="12" cy="12" r="8.5"/><path ${stroke} d="M12 11v5.2"/><circle cx="12" cy="8" r="1" fill="currentColor"/>`,
+extLink:`<path ${stroke} d="M14 4.5h5.5V10M19.5 4.5L11 13"/><path ${stroke} d="M17 13.5V18a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 5 18V9a1.5 1.5 0 0 1 1.5-1.5H10"/>`,
+bell:`<path ${stroke} d="M6.5 9a5.5 5.5 0 0 1 11 0c0 5 2 6.2 2 6.2H4.5S6.5 14 6.5 9z"/><path ${stroke} d="M9.7 17.7a2.3 2.3 0 0 0 4.6 0"/>`,
+coins:`<ellipse ${stroke} cx="9" cy="8" rx="5.5" ry="3.2"/><path ${stroke} d="M3.5 8v4c0 1.77 2.46 3.2 5.5 3.2s5.5-1.43 5.5-3.2V8"/><ellipse ${stroke} cx="15.5" cy="14" rx="5" ry="2.9"/><path ${stroke} d="M10.5 14v3c0 1.6 2.24 2.9 5 2.9s5-1.3 5-2.9v-3"/>`,
+card:`<rect ${stroke} x="3" y="5.5" width="18" height="13" rx="2.2"/><path ${stroke} d="M3 10h18"/>`,
+tag:`<path ${stroke} d="M20.3 13.2L12.6 21 3.5 12l7.7-7.8h6a1.5 1.5 0 0 1 1.5 1.5v6z"/><circle cx="16.3" cy="8" r="1.1" fill="currentColor"/>`,
+plane:`<path ${stroke} d="M21.5 2.5L11 13 M21.5 2.5l-6.3 19-3.7-8.5-8.5-3.7z"/>`,
+pencil:`<path ${stroke} d="M4 20l1-4.3L15.7 5A2 2 0 0 1 18.6 7.9L7.9 18.6z"/><path ${stroke} d="M14 6.3l3.7 3.7"/>`
+};
+return `<svg ${S}>${P[name]||""}</svg>`;
+}
+/* ---------- data ---------- */
+const MON=["","January","February","March","April","May","June","July","August","September","October","November","December"];
+const TODAY=new Date(2026,8,10); // Sept 10, 2026, matches the app's "current" date in this mockup
+let seq=200;
+const P={
+chase:{n:"Chase Ultimate Rewards",s:"Chase",h:"blue",u:"points",perCard:true,air:["Southwest","JetBlue","United","British Airways","Virgin Atlantic","Aer Lingus","Air Canada","Air France-KLM","Iberia","Singapore"],hot:["Hyatt","Marriott","IHG","Wyndham"],note:"Chase lets you combine points with one household member, so the two of you can pool Chase points into whichever account needs them.",warn:"Starting Oct 1, 2026, Chase points move to Hyatt at 4 to 3 on Sapphire Preferred and Ink Preferred cards, instead of 1 to 1."},
+amex:{n:"Amex Membership Rewards",s:"Amex",h:"aqua",u:"points",air:["ANA","Delta","British Airways","Virgin Atlantic","Aer Lingus","Air Canada","Air France-KLM","Iberia","Singapore","JetBlue (fewer miles per point)"],hot:["Hilton (1 point becomes 2)","Marriott","Choice"],note:"The Platinum and the Gold feed one shared pot of Amex points."},
+capone:{n:"Capital One miles",s:"Capital One",h:"gold",u:"miles",perCard:true,air:["Japan Airlines (4 miles become 3)","British Airways","Air Canada","Air France-KLM","Singapore","Cathay Pacific","Qatar","Turkish","Virgin Red","JetBlue (fewer miles per point)"],hot:["Wyndham","Choice","Accor","I Prefer"],note:"Capital One is the only big bank program that moves miles to Japan Airlines."},
+hilton:{n:"Hilton Honors",s:"Hilton",h:"violet",u:"points",air:[],hot:["Any Hilton hotel"],note:"Hotel points live in the Hilton account and work only at Hilton hotels. Amex points can top them up."},
+marriott:{n:"Marriott Bonvoy",s:"Marriott",h:"magenta",u:"points",air:[],hot:["Any Marriott hotel, including the Swan and Dolphin at Disney World"],note:"Hotel points live in the Marriott account and work only at Marriott hotels. Chase and Amex points can top them up."}
+};
+const A=[
+{k:"a1",p:"chase",o:"Abby",l:"Sapphire Preferred",b:48200},
+{k:"a2",p:"chase",o:"Abby",l:"Ink Business Preferred",b:112500},
+{k:"a3",p:"chase",o:"Abby",l:"Ink Business Unlimited",b:23900,w:"Move to a Sapphire or Ink Preferred before transferring"},
+{k:"j1",p:"chase",o:"Jess",l:"Sapphire Preferred",b:31700},
+{k:"j2",p:"chase",o:"Jess",l:"Ink Business Preferred",b:88000},
+{k:"j3",p:"chase",o:"Jess",l:"Ink Business Unlimited",b:15400,w:"Move to a Sapphire or Ink Preferred before transferring"},
+{k:"a4",p:"amex",o:"Abby",l:"Platinum and Gold pot",b:146000},
+{k:"j4",p:"capone",o:"Jess",l:"Venture X",b:92300},
+{k:"a5",p:"hilton",o:"Abby",l:"Hilton Honors account",b:210000},
+{k:"a6",p:"marriott",o:"Abby",l:"Marriott Bonvoy account",b:87500}
+];
+const C=[
+{id:"c1",n:"Hilton Honors Amex",o:"Abby",p:"hilton",pot:"a5",fee:null,mo:null,dec:""},
+{id:"c2",n:"Marriott Bonvoy Amex",o:"Abby",p:"marriott",pot:"a6",fee:null,mo:null,dec:""},
+{id:"c3",n:"Amex Platinum",o:"Abby",p:"amex",pot:"a4",fee:895,mo:10,dec:""},
+{id:"c4",n:"Sapphire Preferred",o:"Abby",p:"chase",pot:"a1",fee:95,mo:3,dec:""},
+{id:"c5",n:"Ink Business Preferred",o:"Abby",p:"chase",pot:"a2",fee:95,mo:6,dec:""},
+{id:"c6",n:"Ink Business Unlimited",o:"Abby",p:"chase",pot:"a3",fee:0,mo:null,dec:""},
+{id:"c7",n:"Amex Gold",o:"Both",p:"amex",pot:"a4",fee:325,mo:1,dec:""},
+{id:"c8",n:"Venture X",o:"Jess",p:"capone",pot:"j4",fee:395,mo:11,dec:""},
+{id:"c9",n:"Sapphire Preferred",o:"Jess",p:"chase",pot:"j1",fee:95,mo:8,dec:""},
+{id:"c10",n:"Ink Business Preferred",o:"Jess",p:"chase",pot:"j2",fee:95,mo:12,dec:""},
+{id:"c11",n:"Ink Business Unlimited",o:"Jess",p:"chase",pot:"j3",fee:0,mo:null,dec:""}
+];
+const F=["chase","amex","capone"];
+const CADSUF={monthly:"/mo",quarterly:"/qtr",semiannual:"/half-yr",annual:"/yr"};
+const D=(y,m,d)=>new Date(y,m-1,d);
+/* Perks: status is 'open' (not yet used this window), 'done' (used this window, dated), or 'upcoming' (window not open yet).
+   windowEnd marks when an open window closes; hist holds dated past redemptions. */
+const PK=[
+{id:"pk1",card:"c4",name:"DoorDash non-restaurant promo",value:10,cad:"monthly",status:"open",windowEnd:D(2026,9,30),hist:[{date:D(2026,6,12),used:true},{date:D(2026,7,31),used:false},{date:D(2026,8,31),used:false}]},
+{id:"pk2",card:"c9",name:"DoorDash non-restaurant promo",value:10,cad:"monthly",status:"open",windowEnd:D(2026,9,30),hist:[{date:D(2026,6,12),used:true},{date:D(2026,7,31),used:false},{date:D(2026,8,31),used:false}]},
+{id:"pk3",card:"c4",name:"DashPass membership",value:12,cad:"monthly",note:"Shared benefit, either Sapphire Preferred covers it",status:"done",doneDate:D(2026,9,2),windowEnd:D(2026,9,30),hist:[{date:D(2026,6,2),used:true},{date:D(2026,7,2),used:true},{date:D(2026,8,2),used:true}]},
+{id:"pk4",card:"c3",name:"Walmart+ membership",value:13,cad:"monthly",status:"done",doneDate:D(2026,9,1),windowEnd:D(2026,9,30),hist:[{date:D(2026,6,1),used:true},{date:D(2026,7,1),used:true},{date:D(2026,8,1),used:true}]},
+{id:"pk5",card:"c3",name:"Digital entertainment credit",value:25,cad:"monthly",note:"Using $20/mo toward Disney+ and Hulu",status:"done",doneDate:D(2026,9,3),windowEnd:D(2026,9,30),hist:[{date:D(2026,6,3),used:true},{date:D(2026,7,3),used:true},{date:D(2026,8,3),used:true}]},
+{id:"pk6",card:"c3",name:"Uber Cash",value:15,cad:"monthly",note:"For orders and rides in the U.S.",status:"open",windowEnd:D(2026,9,30),hist:[{date:D(2026,6,20),used:false},{date:D(2026,7,20),used:false},{date:D(2026,8,18),used:true}]},
+{id:"pk7",card:"c7",name:"Dunkin' Donuts credit",value:7,cad:"monthly",status:"open",windowEnd:D(2026,9,30),hist:[{date:D(2026,6,9),used:true},{date:D(2026,7,9),used:false},{date:D(2026,8,9),used:true}]},
+{id:"pk8",card:"c7",name:"Uber Cash",value:10,cad:"monthly",note:"For orders and rides in the U.S.",status:"open",windowEnd:D(2026,9,30),hist:[{date:D(2026,6,9),used:false},{date:D(2026,7,9),used:false},{date:D(2026,8,9),used:false}]},
+{id:"pk9",card:"c3",name:"RESY credit",value:100,cad:"quarterly",status:"open",windowEnd:D(2026,9,30),hist:[{date:D(2026,3,14),used:true},{date:D(2026,6,20),used:true}]},
+{id:"pk10",card:"c3",name:"Lululemon credit",value:75,cad:"quarterly",status:"upcoming",next:"Opens Oct 1, 2026",hist:[{date:D(2025,12,10),used:true},{date:D(2026,3,15),used:true},{date:D(2026,6,22),used:true}]},
+{id:"pk11",card:"c3",name:"Hotel credit",value:300,cad:"semiannual",status:"open",windowEnd:D(2026,12,31),note:"Book through the Amex portal; the Hotel Collection needs a 2-night minimum",hist:[{date:D(2025,11,2),used:true}]},
+{id:"pk12",card:"c3",name:"Saks credit",value:50,cad:"semiannual",status:"open",windowEnd:D(2026,12,31),note:"Not eligible for gift cards",hist:[{date:D(2025,10,4),used:true}]},
+{id:"pk13",card:"c7",name:"RESY credit",value:50,cad:"semiannual",status:"done",doneDate:D(2026,8,29),windowEnd:D(2026,12,31),hist:[{date:D(2025,11,18),used:true},{date:D(2026,8,29),used:true}]},
+{id:"pk14",card:"c4",name:"Chase Travel hotel credit",value:50,cad:"annual",status:"open",windowEnd:D(2027,3,31),note:"Renews in April; earned by booking hotel stays through the Chase Travel portal",hist:[{date:D(2025,2,11),used:true}]},
+{id:"pk15",card:"c9",name:"Chase Travel hotel credit",value:50,cad:"annual",status:"done",doneDate:D(2026,2,20),windowEnd:D(2027,2,28),note:"Renews in March; earned by booking hotel stays through the Chase Travel portal",hist:[{date:D(2025,2,20),used:true},{date:D(2026,2,20),used:true}]},
+{id:"pk16",card:"c3",name:"Incidental fee airline credit",value:200,cad:"annual",status:"open",windowEnd:D(2026,10,31),note:"Pick one qualifying airline per year",hist:[{date:D(2025,10,25),used:true}]},
+{id:"pk17",card:"c7",name:"Hotel Collection credit",value:100,cad:"annual",status:"upcoming",next:"Not booked yet this year; opens once you book a Hotel Collection stay",hist:[]},
+{id:"pk18",card:"c3",name:"Oura Ring credit",value:200,cad:"annual",status:"open",windowEnd:D(2026,10,31),hist:[]},
+{id:"pk19",card:"c3",name:"Equinox and SoulCycle at-home bike credit",value:300,cad:"annual",status:"done",doneDate:D(2026,4,2),windowEnd:D(2027,10,31),hist:[{date:D(2025,4,10),used:true}]}
+];
+const T=[
+{key:"disney",n:"Disney World",sub:"Orlando, 5 nights",notes:["Both kids pay adult prices for park tickets, since Disney's adult pricing starts at age 10.","Park tickets are a cash cost, not a points cost. A later version could track a cash budget next to the points."],
+ flights:{d:"Boston to Orlando, 4 round-trip seats",need:70000,src:["chase","amex","capone"]},
+ hotel:{d:"5 nights, 1 room that fits 4",need:250000,src:["hilton","marriott","chase"]}},
+{key:"japan",n:"Japan",sub:"Tokyo, 9 nights",notes:["Many Tokyo hotel rooms fit only 2 or 3 people, so plan on 2 rooms or a family room.","Four award seats on the same flight to Japan are hard to find. Search early and keep dates flexible."],
+ flights:{d:"Boston to Tokyo, 4 round-trip seats",need:340000,src:["chase","amex","capone"],real:{pts:312000,src:"seats.aero",date:"Sept 8"}},
+ hotel:{d:"9 nights, 2 rooms",need:360000,src:["hilton","marriott","chase"]}},
+{key:"london",n:"London",sub:"6 nights",notes:["Many London hotel rooms fit only 2 or 3 people. Look for a family room or book 2 rooms.","British Airways award tickets can add high cash fees on top of the points. Compare before you book."],
+ flights:{d:"Boston to London, 4 round-trip seats",need:200000,src:["chase","amex","capone"]},
+ hotel:{d:"6 nights, 1 family room",need:240000,src:["marriott","hilton","chase"]}}
+];
+const ALERTS=[
+{id:"al1",p:"capone",t:"30% extra on Capital One transfers to Japan Airlines",d:"1,000 miles become 975 Japan Airlines miles instead of 750. Only worth it once you've found seats, since transfers can't be undone.",aff:"Jess's Venture X",ends:"Disappears after Sept 30"},
+{id:"al2",p:"chase",t:"Hyatt costs more starting Oct 1",d:"Chase points will move to Hyatt at 4 to 3 instead of 1 to 1. Trip math switches over on that date.",aff:"both Sapphire Preferred and both Ink Preferred cards",ends:"Disappears after Oct 31"}];
+/* ---------- state ---------- */
+const S={screen:"splash",tab:"points",stack:[],f:"all",days:34,toast:"",err:{},draft:null,form:null,alerts:ALERTS.slice(),folds:{open:false,done:false,upcoming:false}};
+/* ---------- helpers ---------- */
+const V=()=>S.stack[S.stack.length-1];
+const fmt=n=>Math.round(n).toLocaleString("en-US");
+const esc=v=>String(v==null?"":v).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;");
+const tint=h=>`background:var(--tint-${h}-bg);color:var(--tint-${h}-fg)`;
+const dotc=h=>`background:var(--tint-${h}-fg)`;
+const tot=(p,o)=>A.filter(a=>a.p===p&&(!o||a.o===o)).reduce((s,a)=>s+a.b,0);
+const ownL=o=>o==="Both"?"Jess and Abby":o;
+const card=id=>C.find(c=>c.id===id);
+const pot=k=>A.find(a=>a.k===k);
+const trip=k=>T.find(t=>t.key===k);
+const days=(a,b)=>Math.round((b-a)/86400000);
+const dfmt=d=>d? MON[d.getMonth()+1].slice(0,3)+" "+d.getDate()+", "+d.getFullYear() : "";
+const btn=(go,inner,cls,st,extra)=>`<div class="${cls||"tap"}" role="button" tabindex="0" data-go="${go}" style="${st||""}" ${extra||""}>${inner}</div>`;
+const hd=(t,back)=>(back?`<div style="padding:6px 16px 0">${btn("back",ic("chevronLeft",17)+' Back',"bk")}</div>`:`<div style="height:10px"></div>`)+`<div class="ttl">${t}</div>`;
+const box=(bg,fg,txt)=>`<div style="margin:0 16px 14px;padding:10px 12px;border-radius:var(--radius);background:var(${bg});color:var(${fg});font-size:13px;line-height:1.5">${txt}</div>`;
+const needOf=pt=>pt.real?pt.real.pts:pt.need;
+const cov=pt=>{const have=pt.src.reduce((s,k)=>s+tot(k),0),n=needOf(pt);return{have,n,pct:Math.min(100,Math.round(have/n*100))}};
+const bar=p=>`<div class="bar"><span style="width:${p}%;background:${p>=100?"var(--success)":"var(--warning)"}"></span></div>`;
+const ttag=(k,extra)=>`<span class="chip" style="${tint(P[k].h)};${extra||""}">${P[k].s}</span>`;
+const feeStr=c=>c.fee==null?"Fee not entered":c.fee===0?"No annual fee":`$${fmt(c.fee)} fee${c.mo?" in "+MON[c.mo]:""}`;
+const errH=k=>`<div id="er-${k}" style="font-size:13px;color:var(--danger);margin-top:4px;${S.err[k]?"":"display:none"}">${S.err[k]||""}</div>`;
+const fld=(k,label,val,attrs)=>`<div style="margin:0 16px 14px"><label class="lb" for="f-${k}">${label}</label><input id="f-${k}" name="${k}" value="${esc(val)}" ${attrs||""} style="width:100%">${errH(k)}</div>`;
+const pills=(cur)=>`<div style="margin:0 16px 14px"><div class="lb">Belongs to</div><div style="display:flex;gap:8px">${["Jess","Abby","Both"].map(o=>btn("fo:"+o,o==="Both"?"Both of you":o,"tap pill"+(cur===o?" on":""))).join("")}</div></div>`;
+function multiPills(prefix,keys,cur){return `<div style="display:flex;flex-wrap:wrap;gap:6px 0">${keys.map(k=>btn(prefix+":"+k,P[k].s,"tap pill"+(cur.includes(k)?" on":""))).join("")}</div>`}
+/* computed "ways to pay" for a trip leg, derived from its src programs so a swapped destination needs no code change */
+function waysToPay(kind,srcKeys){
+const rows=[]; const seen={};
+srcKeys.forEach(k=>{(P[k][kind]||[]).forEach(name=>{if(!seen[name])seen[name]=[];if(!seen[name].includes(k))seen[name].push(k);});});
+Object.keys(seen).forEach(name=>rows.push([name,seen[name]]));
+return rows;
+}
+/* ---------- header / topbar ---------- */
+function unread(){return S.alerts.length}
+function topbarH(){
+return `<div class="brand">${bannerLogo()}</div>${btn("openalerts",`<span class="bellwrap">${ic("bell",19)}${unread()?`<span class="dot">${unread()}</span>`:""}</span>`,"tap","","aria-label='Notifications'")}`;
+}
+function bannerLogo(){
+return `<svg viewBox="0 0 697.02 67.63" width="185.5" height="18" role="img" aria-label="Average Height, Points and Travel"><defs><style>
+      .bnrcls-1 {
+        fill: #1e2733;
+      }
+
+      .bnrcls-2, .bnrcls-3 {
+        fill: none;
+        stroke: #1e2733;
+        stroke-miterlimit: 10;
+        stroke-width: .75px;
+      }
+
+      .bnrcls-3 {
+        stroke-linecap: round;
+      }
+    </style></defs><g id="Layer_1-2" data-name="Layer 1">
+    <g>
+      <g>
+        <path class="bnrcls-1" d="M310.84,26.74h14.25c8.59,0,14.24,4.57,14.24,12.07v.11c0,8.21-6.85,12.45-14.95,12.45h-9.24v13.43h-4.29V26.74ZM324.55,47.45c6.31,0,10.44-3.37,10.44-8.37v-.11c0-5.44-4.08-8.26-10.22-8.26h-9.62v16.75h9.41Z"/>
+        <path class="bnrcls-1" d="M344.44,50.88v-.11c0-7.94,6.2-14.68,14.68-14.68s14.62,6.63,14.62,14.57v.11c0,7.94-6.25,14.68-14.73,14.68s-14.57-6.63-14.57-14.57ZM369.45,50.88v-.11c0-6.03-4.51-10.98-10.44-10.98s-10.28,4.95-10.28,10.87v.11c0,6.03,4.46,10.93,10.39,10.93s10.33-4.89,10.33-10.82Z"/>
+        <path class="bnrcls-1" d="M381.41,25.92h4.78v4.62h-4.78v-4.62ZM381.68,36.69h4.19v28.11h-4.19v-28.11Z"/>
+        <path class="bnrcls-1" d="M395.59,36.69h4.19v4.89c1.85-3.05,4.78-5.49,9.62-5.49,6.8,0,10.77,4.57,10.77,11.25v17.45h-4.19v-16.42c0-5.22-2.83-8.48-7.77-8.48s-8.43,3.53-8.43,8.81v16.09h-4.19v-28.11Z"/>
+        <path class="bnrcls-1" d="M430.55,57.34v-16.96h-3.91v-3.7h3.91v-8.48h4.19v8.48h8.92v3.7h-8.92v16.42c0,3.43,1.9,4.68,4.73,4.68,1.41,0,2.61-.27,4.08-.98v3.59c-1.47.76-3.05,1.2-5.06,1.2-4.51,0-7.94-2.23-7.94-7.94Z"/>
+        <path class="bnrcls-1" d="M448.7,61.21l2.12-2.99c3.05,2.28,6.42,3.59,9.73,3.59s5.82-1.74,5.82-4.46v-.11c0-2.83-3.32-3.92-7.01-4.95-4.4-1.25-9.3-2.77-9.3-7.94v-.11c0-4.84,4.02-8.05,9.57-8.05,3.43,0,7.23,1.2,10.11,3.1l-1.9,3.15c-2.61-1.69-5.6-2.72-8.32-2.72-3.32,0-5.44,1.74-5.44,4.08v.11c0,2.66,3.48,3.7,7.23,4.84,4.35,1.31,9.02,2.99,9.02,8.05v.11c0,5.33-4.4,8.43-10,8.43-4.02,0-8.48-1.58-11.63-4.13Z"/>
+        <path class="bnrcls-1" d="M516.6,59.41c-3.48,3.75-7.5,5.93-12.45,5.93-6.85,0-11.96-4.29-11.96-10.66v-.11c0-5.06,3.37-8.7,9.19-10.98-2.61-3.05-3.81-5.38-3.81-8.37v-.11c0-5,4.02-9.02,10.06-9.02,5.33,0,9.24,3.86,9.24,8.59v.11c0,4.84-3.43,7.94-8.97,9.9l8.7,8.86c1.68-2.45,3.21-5.33,4.57-8.48l3.53,1.63c-1.68,3.59-3.42,6.85-5.49,9.57l6.63,6.8-3.26,2.5-5.98-6.14ZM513.99,56.75l-10.17-10.49c-5.06,1.85-7.28,4.95-7.28,8.16v.11c0,4.08,3.26,7.18,7.94,7.18,3.59,0,6.74-1.9,9.51-4.95ZM512.85,35v-.11c0-3.05-2.28-5.27-5.38-5.27-3.42,0-5.76,2.39-5.76,5.49v.11c0,2.23.92,3.91,3.81,7.01,4.84-1.63,7.34-3.97,7.34-7.23Z"/>
+        <path class="bnrcls-1" d="M559.32,30.7h-12.78v-3.97h29.9v3.97h-12.78v34.09h-4.35V30.7Z"/>
+        <path class="bnrcls-1" d="M578.95,36.69h4.19v7.34c2.07-4.68,6.14-8.05,11.47-7.83v4.51h-.33c-6.14,0-11.15,4.4-11.15,12.88v11.2h-4.19v-28.11Z"/>
+        <path class="bnrcls-1" d="M597.48,56.64v-.11c0-5.93,4.89-9.08,12.02-9.08,3.59,0,6.14.49,8.64,1.2v-.98c0-5.06-3.1-7.67-8.37-7.67-3.32,0-5.93.87-8.54,2.07l-1.25-3.42c3.1-1.41,6.14-2.34,10.22-2.34s7.01,1.03,9.08,3.1c1.9,1.9,2.88,4.62,2.88,8.21v17.18h-4.02v-4.24c-1.96,2.56-5.22,4.84-10.17,4.84-5.22,0-10.49-2.99-10.49-8.75ZM618.2,54.46v-2.72c-2.07-.6-4.84-1.19-8.26-1.19-5.27,0-8.21,2.28-8.21,5.82v.11c0,3.53,3.26,5.6,7.07,5.6,5.16,0,9.41-3.15,9.41-7.61Z"/>
+        <path class="bnrcls-1" d="M627.22,36.69h4.62l9.46,23.32,9.52-23.32h4.51l-12.23,28.33h-3.7l-12.18-28.33Z"/>
+        <path class="bnrcls-1" d="M658.53,50.82v-.11c0-8.1,5.71-14.62,13.48-14.62,8.32,0,13.1,6.63,13.1,14.84,0,.54,0,.87-.06,1.36h-22.29c.6,6.09,4.89,9.51,9.9,9.51,3.86,0,6.58-1.58,8.86-3.97l2.61,2.34c-2.83,3.15-6.25,5.27-11.58,5.27-7.72,0-14.03-5.93-14.03-14.62ZM680.88,49.19c-.43-5.11-3.37-9.57-8.97-9.57-4.89,0-8.59,4.08-9.13,9.57h18.1Z"/>
+        <path class="bnrcls-1" d="M692.83,25.1h4.19v39.69h-4.19V25.1Z"/>
+      </g>
+      <g>
+        <path class="bnrcls-1" d="M34.61,25.1h13.52v14.27h12.37v-14.27h13.52v40.46h-13.52v-14.51h-12.37v14.51h-13.52V25.1Z"/>
+        <path class="bnrcls-1" d="M84.43,25.1h34.5v11.1h-21.21v4.1h19.77v9.77h-19.77v4.39h21.5v11.1h-34.79V25.1Z"/>
+        <path class="bnrcls-1" d="M151.89,45.45v-.12c0-12.08,9.54-21.09,22.31-21.09,6.93,0,12.54,2.31,16.93,6.13l-7.57,9.13c-2.66-2.25-5.61-3.53-8.96-3.53-5.26,0-9.07,4.05-9.07,9.54v.12c0,5.72,3.99,9.65,9.65,9.65,2.31,0,3.58-.35,4.62-.92v-4.05h-6.93v-8.67h19.59v18.73c-4.39,3.58-10.52,6.07-17.86,6.07-12.6,0-22.71-8.44-22.71-20.98Z"/>
+        <path class="bnrcls-1" d="M202.18,25.1h13.52v14.27h12.37v-14.27h13.52v40.46h-13.52v-14.51h-12.37v14.51h-13.52V25.1Z"/>
+        <path class="bnrcls-1" d="M262.35,36.55h-11.91v-11.44h37.33v11.44h-11.9v29.01h-13.52v-29.01Z"/>
+        <line class="bnrcls-3" x1="133.9" y1="62.46" x2="144.17" y2="62.46"/>
+        <line class="bnrcls-3" x1="136.61" y1="56.11" x2="144.17" y2="56.11"/>
+        <line class="bnrcls-3" x1="136.61" y1="49.76" x2="144.17" y2="49.76"/>
+        <line class="bnrcls-3" x1="136.61" y1="43.42" x2="144.17" y2="43.42"/>
+        <line class="bnrcls-3" x1="133.9" y1="37.07" x2="144.17" y2="37.07"/>
+        <line class="bnrcls-3" x1="136.61" y1="30.72" x2="144.17" y2="30.72"/>
+        <line class="bnrcls-3" x1="136.61" y1="24.37" x2="144.17" y2="24.37"/>
+        <line class="bnrcls-3" x1="136.61" y1="18.03" x2="144.17" y2="18.03"/>
+        <line class="bnrcls-3" x1="133.9" y1="11.68" x2="144.17" y2="11.68"/>
+        <path class="bnrcls-2" d="M130.64,7.83h13.53v57.73h-13.53V7.83Z"/>
+        <path class="bnrcls-1" d="M39.28,7.39h2.21l4.67,10.98h-2.51l-1-2.44h-4.61l-1,2.44h-2.44l4.67-10.98ZM41.8,13.8l-1.45-3.54-1.45,3.54h2.9Z"/>
+        <path class="bnrcls-1" d="M46.59,7.46h2.65l2.85,7.68,2.85-7.68h2.59l-4.41,10.98h-2.12l-4.41-10.98Z"/>
+        <path class="bnrcls-1" d="M60.45,7.46h8.22v2.13h-5.84v2.21h5.14v2.13h-5.14v2.29h5.92v2.13h-8.3V7.46Z"/>
+        <path class="bnrcls-1" d="M72.13,7.46h4.98c1.39,0,2.46.39,3.18,1.11.61.61.93,1.46.93,2.49v.03c0,1.76-.95,2.87-2.34,3.38l2.66,3.89h-2.8l-2.34-3.49h-1.89v3.49h-2.4V7.46ZM76.96,12.76c1.17,0,1.84-.62,1.84-1.54v-.03c0-1.03-.72-1.56-1.88-1.56h-2.38v3.13h2.43Z"/>
+        <path class="bnrcls-1" d="M88.37,7.39h2.21l4.67,10.98h-2.51l-1-2.44h-4.61l-1,2.44h-2.44l4.67-10.98ZM90.89,13.8l-1.45-3.54-1.45,3.54h2.9Z"/>
+        <path class="bnrcls-1" d="M96.99,12.95v-.03c0-3.1,2.41-5.64,5.72-5.64,1.96,0,3.15.53,4.28,1.5l-1.51,1.82c-.84-.7-1.59-1.1-2.85-1.1-1.74,0-3.13,1.54-3.13,3.39v.03c0,1.99,1.37,3.46,3.3,3.46.87,0,1.65-.22,2.26-.65v-1.56h-2.41v-2.07h4.73v4.73c-1.12.95-2.66,1.73-4.66,1.73-3.39,0-5.73-2.38-5.73-5.61Z"/>
+        <path class="bnrcls-1" d="M110.93,7.46h8.22v2.13h-5.84v2.21h5.14v2.13h-5.14v2.29h5.92v2.13h-8.3V7.46Z"/>
+      </g>
+      <path class="bnrcls-1" d="M18.68,63.99c-.52-.12-1.15-.11-1.91-.41s-1.43-1.13-1.76-1.6c.22-.27,1.06-.31,1.51-.33.45-.02.59.02,1.75-.25,1.16-.27-.01-.63-.47-1.02s-1.06-.08-1.66-.07c-.59.01-.73-.02-1.13-.46s-.02-1.68-.04-3.07c-.02-1.4.25-1.28.8-1.93.55-.64.57-1.45.67-2.14s.16-.66.37-1.63c.21-.97.6-2.35.6-3.12,0-.77.15-2.4.15-2.4,0,0,.5-2.43.32-3.27-.18-.84.46-3.2.46-3.2,0,0,.23-.59.23-1s.05-1.6.05-1.6c0,0-.15-1.26-.2-1.82-.05-.56.14-1.95.35-3.06.21-1.11-.9-2.16-1.44-2.88s-1.26-1.93-1.26-1.93c-.64-.72-.88-.83-.88-.83l.36-.23c-.27-.18,0-.28,0-.28l.04-.31.36-.41c-.38-.26-.35-.78-.35-.78,0,0,.42-.02,1.01.03.59.06.67-1.16.67-1.16l-.1-.28.18-.27.09-.52c.42.01.54-.51.24-.76-.31-.25-.4-.68-.28-1.09.09-.45-.03-1.12-.21-1.4s.02-.59.02-.59c0,0-.43.54,0-.7.43-1.24-3.52-1.31-3.52-1.31-.36,0-.7.1-1.01.24-.08-.48-.18-1-.32-1.59-.66-2.12-2.42-4.32-3.28-5.24s-.44-.91-.19-3.57c.25-2.66.16-3.14-.94-4.75C6.89-.62,4.98.15,3.76.47c-1.22.33-1.9,1.98-1.9,1.98,0,0,.09.32-.05.57s-.32,1.01-.25,1.07c.08.05.08.63.08.63,0,0,.03.12-.44.59-.69.7.2,1.08.2,1.08l-.03.76.22.35s-.17.28-.33.49c-.39,2.08.61,2.06,1.69,2.02,1.08-.04,1.39.65,1.48,1.28.08.63-.73,1.81-2.99,4.77-1.28,1.67-.82,5.49-.82,5.49,0,0-.36,6.31-.55,8.66-.06.74-.15,1.53-.02,1.95.06.18.57,0,.62.25.2,1.01.32,2.57.42,2.92.19.63,1.77,6.34,1.77,6.34,0,0-.03.99.94,3.12-.27,1.72.24,5.19,1.23,6.85.99,1.66.98,5.01.93,6.47-.05,1.41-.84,1.65-1.89,1.56-1.04-.09-1.37.22-1.95.35-2.63,1.74.42,1.48,1,1.45.15.11,1.57,0,3.56.02.09.47-.7,2.12-.71,2.28s-2.97,1.21-4.4,1.47c-1.42.27-.43,1.87.19,2.24.62.37,3.51.04,4.51-.3s1.22-.59,3.48-.82c2.26-.24,1.22-3.42,1.3-4.3.08-.89-.3-9.75-.26-10.69s-.56-1.96-.64-2.85c-.07-.89.06-4.76,0-6.28-.03-1,.36-2.53.96-3.95,0,.1-.01.2-.03.29-.09.7-.32,1.21-.5,2.46-.18,1.25.7,3.93,1.17,4.61.47.68.26,1.58.2,2.35-.06.77-.21,6.14-.25,7.36s-.09,3.63.47,4.76c.55,1.14.6,1.98.8,2.26s-.02.7-.12,1.5.15,1.61.58,1.56.9.1,1.78.13,1.52.44,2.57.4,1.67-.92,1.69-1.3-.3-.53-.82-.66Z"/>
+    </g>
+  </g>
+</svg>`;
+}
+/* ---------- splash ---------- */
+const SPLASH_FRAMES = [
+`<svg viewBox="0 0 168.13 377.03" width="174.7" height="391.8" style="position:absolute;left:32.7px;bottom:0" preserveAspectRatio="xMidYMax meet"><defs><style>
+      .f1cls-1 {
+        fill: #1e2733;
+      }
+
+      .f1cls-2, .f1cls-3 {
+        fill: none;
+        stroke: #1e2733;
+        stroke-miterlimit: 10;
+        stroke-width: .75px;
+      }
+
+      .f1cls-4 {
+        opacity: .25;
+      }
+
+      .f1cls-3 {
+        stroke-linecap: round;
+      }
+    </style></defs><g id="Layer_1-2" data-name="Layer 1">
+    <g>
+      <path class="f1cls-1" d="M56.41,20.1s.36-1.8,10.47-4.33,25.26-7.22,28.15-11.19,19.49-7.94,23.82,0,3.79,20.21,1.98,23.28-7.76,9.38-8.12,10.29-3.61-.36-4.69,0-1.62,1.08-1.26,2.17,7.4,1.08,10.11,7.04,4.13,11.37,5.31,12.99,1.19,3.07,1.91,4.69,2.53,5.59.72,11.91-.25,8.48.78,5.41-1.32,7.76-2.22,5.05-4.15-.93-2.89.44,1.44,2.45-.18,2.63,5.13,8.12,5.54,11.19.77,2.17,3.3,3.07,5.59,4.15,5.41,5.95-1.08,8.12-1.26,9.2-1.26,3.25-3.61,3.61-4.33,1.8-5.05,2.53-1.08,2.17-2.89,0-4.51-3.07-5.77-1.62-7.4,21.11-2.71,34.65,10.11,28.15,5.59,36.09-3.97,34.65-1.44,42.41,2.35,16.6,1.8,25.8-1.62,15.34-.72,17.5c-1.8,2.53-2.35,4.51-1.44,6.32s2.17,5.77,1.62,8.12c-2.17,1.98-11.91,9.38-14.8,10.83s-9.74,3.61-12.45,3.07-3.79-3.25-4.69-3.79-1.8-4.15,2.17-6.32,8.66-4.69,10.47-6.32,3.07-3.43,4.33-3.43,1.8-3.07,1.8-3.07c0,0-3.25-.54-5.77,0s-8.3,3.97-11.19,4.33-8.99,2.35-9.19-.54,1.79-8.48,7.2-9.38,9.02-1.98,11.19-3.61,3.61-3.43,3.61-7.94-3.25-16.6-4.33-21.11-16.93-45.11-17.67-53.23c-2.9,6.86-2.9,20.39-3.08,25.8s-1.62,14.98-4.15,17.86-6.5,20.75-3.07,22.74c6.14,1.26,7.58.72,11.73.9s7.04-.72,9.02.9,5.23,2.53,3.79,5.05-.54,3.79-4.69,3.79-5.59,1.8-12.09.9-8.48-1.44-9.92.18-.36,3.07-.72,6.68-2.35,4.33-1.26,6.14,6.86,12.27,6.86,17.32c5.77,3.25,11.55,4.51,13.89,5.23s6.32.54,8.48,2.53,4.87,5.23,2.71,7.4-3.25,4.51-7.58,4.15-6.5-.18-8.66.9-9.02.9-18.95-2.17-19.13-.54-17.14-12.09l-1.08-2.35s-2.17-70.01,1.8-80.12c-1.44-20.57-2.53-19.85-.72-23.46-2.89-10.47-7.22-27.07-5.41-31.76-7.94-11.19-20.93-36.81-11.19-53.77,3.61-6.86,5.05-10.11,5.05-10.11,0,0-1.62-1.98-3.61-1.98s-3.61-.81-3.61-2.35c-1.53-1.08-2.71-3.25-2.26-6.41s1.62-4.42,3.16-4.78,1.98-1.44,1.89-2.8.54-2.71,3.25-2.08-2.89-26.53,4.33-38.8,9.92-19.49,20.3-28.15Z"/>
+      <g class="f1cls-4">
+        <path class="f1cls-1" d="M0,349.59h8.98v9.48h8.21v-9.48h8.98v26.87h-8.98v-9.63h-8.21v9.63H0v-26.87Z"/>
+        <path class="f1cls-1" d="M33.09,349.59h22.91v7.37h-14.09v2.72h13.13v6.49h-13.13v2.92h14.28v7.37h-23.1v-26.87Z"/>
+        <path class="f1cls-1" d="M77.88,363.1v-.08c0-8.02,6.33-14.01,14.81-14.01,4.61,0,8.33,1.54,11.25,4.07l-5.03,6.06c-1.77-1.5-3.72-2.34-5.95-2.34-3.49,0-6.03,2.69-6.03,6.33v.08c0,3.8,2.65,6.41,6.41,6.41,1.54,0,2.38-.23,3.07-.61v-2.69h-4.61v-5.76h13.01v12.44c-2.92,2.38-6.98,4.03-11.86,4.03-8.37,0-15.08-5.6-15.08-13.93Z"/>
+        <path class="f1cls-1" d="M111.28,349.59h8.98v9.48h8.21v-9.48h8.98v26.87h-8.98v-9.63h-8.21v9.63h-8.98v-26.87Z"/>
+        <path class="f1cls-1" d="M151.24,357.19h-7.91v-7.6h24.79v7.6h-7.91v19.27h-8.98v-19.27Z"/>
+        <line class="f1cls-3" x1="65.94" y1="374.39" x2="72.76" y2="374.39"/>
+        <line class="f1cls-3" x1="67.74" y1="370.18" x2="72.76" y2="370.18"/>
+        <line class="f1cls-3" x1="67.74" y1="365.96" x2="72.76" y2="365.96"/>
+        <line class="f1cls-3" x1="67.74" y1="361.75" x2="72.76" y2="361.75"/>
+        <line class="f1cls-3" x1="65.94" y1="357.53" x2="72.76" y2="357.53"/>
+        <line class="f1cls-3" x1="67.74" y1="353.32" x2="72.76" y2="353.32"/>
+        <line class="f1cls-3" x1="67.74" y1="349.1" x2="72.76" y2="349.1"/>
+        <line class="f1cls-3" x1="67.74" y1="344.89" x2="72.76" y2="344.89"/>
+        <line class="f1cls-3" x1="65.94" y1="340.67" x2="72.76" y2="340.67"/>
+        <path class="f1cls-2" d="M63.77,338.12h8.98v38.34h-8.98v-38.34Z"/>
+        <path class="f1cls-1" d="M3.1,337.82h1.47l3.1,7.29h-1.66l-.66-1.62h-3.06l-.66,1.62H0l3.1-7.29ZM4.78,342.08l-.96-2.35-.96,2.35h1.92Z"/>
+        <path class="f1cls-1" d="M7.96,337.87h1.76l1.89,5.1,1.89-5.1h1.72l-2.93,7.29h-1.41l-2.93-7.29Z"/>
+        <path class="f1cls-1" d="M17.16,337.87h5.46v1.42h-3.88v1.47h3.41v1.42h-3.41v1.52h3.93v1.42h-5.51v-7.24Z"/>
+        <path class="f1cls-1" d="M24.92,337.87h3.31c.92,0,1.63.26,2.11.73.4.4.62.97.62,1.65v.02c0,1.17-.63,1.9-1.55,2.25l1.77,2.59h-1.86l-1.55-2.32h-1.25v2.32h-1.59v-7.24ZM28.12,341.39c.78,0,1.22-.41,1.22-1.02v-.02c0-.68-.48-1.03-1.25-1.03h-1.58v2.08h1.61Z"/>
+        <path class="f1cls-1" d="M35.7,337.82h1.47l3.1,7.29h-1.66l-.66-1.62h-3.06l-.66,1.62h-1.62l3.1-7.29ZM37.38,342.08l-.96-2.35-.96,2.35h1.92Z"/>
+        <path class="f1cls-1" d="M41.43,341.51v-.02c0-2.06,1.6-3.74,3.8-3.74,1.3,0,2.09.35,2.84.99l-1,1.21c-.56-.47-1.05-.73-1.89-.73-1.16,0-2.08,1.02-2.08,2.25v.02c0,1.32.91,2.3,2.19,2.3.58,0,1.1-.15,1.5-.43v-1.04h-1.6v-1.38h3.14v3.14c-.74.63-1.77,1.15-3.09,1.15-2.25,0-3.81-1.58-3.81-3.72Z"/>
+        <path class="f1cls-1" d="M50.68,337.87h5.46v1.42h-3.88v1.47h3.41v1.42h-3.41v1.52h3.93v1.42h-5.51v-7.24Z"/>
+      </g>
+    </g>
+  </g>
+</svg>`,
+`<svg viewBox="0 0 208.47 404.14" width="216.7" height="420.0" style="position:absolute;left:0.0px;bottom:0" preserveAspectRatio="xMidYMax meet"><defs><style>
+      .f2cls-1 {
+        fill: #1e2733;
+      }
+
+      .f2cls-2, .f2cls-3 {
+        fill: none;
+        stroke: #1e2733;
+        stroke-miterlimit: 10;
+        stroke-width: .75px;
+      }
+
+      .f2cls-4 {
+        opacity: .5;
+      }
+
+      .f2cls-3 {
+        stroke-linecap: round;
+      }
+    </style></defs><g id="Layer_1-2" data-name="Layer 1">
+    <g>
+      <g>
+        <path class="f2cls-1" d="M119.09,120.29c-1.98-3.07-3.08-18.05-3.08-18.05,0,0,1.44-.18,3.07-1.44.18-1.62-2.17-5.77-3.25-8.12-1.08-2.35-.9-8.48-4.87-18.23-3.97-9.74-14.08-12.45-17.68-14.26-2.69-1.34-10.36-6.48-14.12-9.02h-.44c-2.39-1.27-4.13-2.17-4.13-2.17l-.54-8.12s5.05-5.77,5.05-9.02,5.05-14.26-1.26-13.71c-1.44-9.2-2.89-14.62-8.48-17.32-.26-.13-2.39-.58-5.13-.75v.08c-4.79-.54-9.87.47-10.29.67-5.59,2.71-7.04,8.12-8.48,17.32-6.32-.54-1.26,10.47-1.26,13.71s5.05,9.02,5.05,9.02l-.54,8.12s-5.59,2.89-10.47,5.59c-4.87,2.71-10.11,3.07-18.05,6.68-7.94,3.61-12.09,27.25-12.09,27.25l-2.71,6.14.18,4.33c.18,4.33,0,4.87-2.89,16.06C-.2,126.24-.2,145.19.16,149.88s2.17,12.45,2.35,17.68c.18,5.23,0,9.07,0,9.07,0,0,1.8-.05,1.8,9.7s8.66,20.57,15.34,22.02,4.87-2.17,1.98-3.79c-2.89-1.62-4.33-4.69-5.05-6.5s0-6.14,0-6.14l2.89-.54.36,1.26c.36,1.26.36,3.97,2.71,6.86,2.35,2.89,4.51-.72,3.97-2.71-.54-1.98-2.53-4.51-3.97-9.38s-3.61-7.4-5.59-9.02c-1.98-1.62-2.53-4.51-2.89-8.48s.9-5.95,2.35-11.73,3.43-9.92,3.43-15.16,2.71-15.7,3.43-19.85c.18-.9,1.62-6.5,2.69-14.8.89.36,3.62,6.32,5.25,10.47,1.62,4.15-1.62,32.66-1.8,41.68-.18,9.02-3.25,11.01,0,12.63-2.17,6.5,0,22.56-.9,26.53-.9,3.97.72,3.61,1.62,7.76.9,4.15.72,31.58,1.26,38.08.54,6.5-2.35,22.56-1.98,24.9.36,2.35,1.62,11.37.18,20.21s3.43,17.14,4.87,20.75.36,7.58.72,13.35c-3.43,4.15-9.56,14.26-9.2,21.47s5.95,7.94,7.22,7.76c5.95.9,10.83-14.62,11.19-20.57s3.43-10.29,3.43-10.29l2.35-3.07c0-1.26-.72-5.23,1.44-12.27,2.17-7.04,1.44-36.45.9-47.1,2.71-5.23,5.41-23.46,8.3-32.66s5.59-24.18,5.59-24.18l1.26.9c.54,3.25,10.83,36.45,14.62,49.98-.9,9.56,1.8,22.01,3.07,36.63,1.26,14.62,3.97,24.54,6.14,30.14-1.44,2.53.54,3.97,2.71,5.05s.9,14.8,2.89,15.34c1.98.54-1.8.36,4.33,7.94,10.83,3.07,11.19-12.63,10.83-14.8-.36-2.17-2.17-5.41-2.71-7.58-.54-2.17-4.51-5.95-4.51-5.95,0,0-.72-13.35.54-22.74,1.26-9.38.9-20.75.9-22.2s-.72-18.77-1.44-22.56c-.72-3.79-2.53-11.01-3.07-15.16-.54-4.15,0-21.11,0-27.61,1.26,0,3.79-.36,9.02-2.89,5.23-2.53,4.69-5.77,5.59-8.66.9-2.89,2.89-7.4,2.89-9.56s.9-5.95.9-5.95c.54-6.86.9-33.56,2.53-43.49,1.62-9.92-1.8-17.32-3.78-20.39ZM109.7,199.32c-1.8,4.51-2.89,3.43-2.35,4.51-3.07,2.53-3.83,1.62-4.35,2.89l-.16-3.25s2.98-6.5,3.66-8.66c.67-2.17.86-2.35.86-2.35,0,0,4.15,2.35,2.35,6.86ZM106.81,182.36c-1.98,4.87-3.81,10.11-3.81,10.11,0,0-1.24-20.39-1.06-24.54.18-4.15-5.05-40.6-5.23-46.2.9-5.05-.81-11.82,1.8-13.89,0,0,1.71,14.53,3.34,16.96.81,5.95,0,12.99,4.06,22.47,4.06,9.47,4.51,20.12,4.51,23.55s-1.62,6.68-3.61,11.55Z"/>
+        <path class="f2cls-1" d="M164.5,79.67s-9.95,1.64-13.45,8.56-5.42,16.08-3.95,21.98c-3.01,2.57-8.55,9.17-5.73,11.89-.67,3.41-.03,2.57.45,4.18s-2.16,3.34-4.4,4.93-6.48,3.66-8.07,10.91c-1.59,7.25-1.79,18.5-1.64,22.15s1.22,9.7-.11,13.42c-1.33,3.71-1.63,12.67-1.53,18.35.11,5.68,1.79,16.59,2.92,24.12s.15,9.88.22,11.64.58,7.29,5.41,12.5c.59,4.31,2.06,16.57,4.78,20.12-.08,4.61-2.35,15-2.1,20.81.25,5.81-.11,19.78.8,22.18.14,3.25.16,7.04.16,7.04,0,0,1,1.31,1.87,2.49-.49,4.36-1.28,5.07-.93,6.95-.38,3.81-.29,5.97-3.14,8.94s-4.36,5.87-2.7,9.87c-.17,2.31,1.05,5.51,3.11,6.37s6.22,2.85,8.33-1.57,1.44-7.65,1.37-9.13c.85-2.2,2.8-7.43,2.56-10s-.46-7.57-1.49-9.55c.62-4.63-.13-3.11.83-6s1.62-6.57,1.54-8.33c2.59-2.82,4.19-6.54,4.79-8.47s1.76-9.56,1.59-13.61.87-8.3,1.41-11.57,3.54-25.21,4.56-26.61c1.33-.6,2.01-.63,2.01-.63,0,0,2.53,21.3,4.4,27.18s2.97,12.61,3.43,17.06-.31,11.93,2.19,16.43c2.49,4.5,3.08,5.56,3.2,8.4l.16,3.79s1.11,3.88.27,6.49-1.69,4.95,1.41,7.8,7.14,5.39,7.14,5.39c0,0,2.38,4.91,6.84,7.97,4.46,3.06,9.61,2.98,9.15-1.47s-.58-4.17-4.12-7.82c-3.54-3.64-8.26-6.29-9.99-8.79s-4.55-8.21-3.1-9.35,2.03-3.2,2.03-3.2c0,0,1.38-12.11,1.56-17.54s-2.95-18.57-2.5-23.87,1.64-15.65,3.5-19.65c1.86-4.01,3.26-15.72,2.97-22.61s-1.54-23.5-1.97-27.28.11-7.05.11-7.05c0,0,4.93,13.7,5.96,15.78s.26,9.02.43,10.1-.73,5.31-.22,7.87-.68,6.67,1.23,6.86,3.1-3.79,2.76-5.4c.06-1.9,1.52.61,1.52.61,0,0,.08,5.01-1.48,6.56s-2.49,1.87-2.01,3.74,1,1.31,3.9-.57,3.7-5.44,4.83-7.52,1.34-3.58-.29-6.76c-1.62-3.18-2.98-12.74-4.03-21.5-1.05-8.76-.86-17.03-3.22-24.85-2.36-7.83-3.54-19.61-2.85-25.78.69-6.17.72-18.23-5.47-23.52s-7.05-3.36-7.05-3.36c0,0-.19-4.6-1.95-4.52-.05-1.08.83-2.74.83-2.74l2.08,1.13s6.31,1.77,3.25-3.12c-3.05-4.88-1.61-2.78-1.95-10.75-.34-7.98-5.19-13.73-7.04-19.07-1.85-5.34-8.37-8.86-10.95-9.15s-4.46.19-4.46.19Z"/>
+      </g>
+      <g class="f2cls-4">
+        <path class="f2cls-1" d="M31.46,376.69h8.98v9.48h8.21v-9.48h8.98v26.87h-8.98v-9.63h-8.21v9.63h-8.98v-26.87Z"/>
+        <path class="f2cls-1" d="M64.55,376.69h22.91v7.37h-14.09v2.72h13.13v6.49h-13.13v2.92h14.28v7.37h-23.1v-26.87Z"/>
+        <path class="f2cls-1" d="M109.35,390.2v-.08c0-8.02,6.33-14.01,14.81-14.01,4.61,0,8.33,1.54,11.25,4.07l-5.03,6.06c-1.77-1.5-3.72-2.34-5.95-2.34-3.49,0-6.03,2.69-6.03,6.33v.08c0,3.8,2.65,6.41,6.41,6.41,1.54,0,2.38-.23,3.07-.61v-2.69h-4.61v-5.76h13.01v12.44c-2.92,2.38-6.98,4.03-11.86,4.03-8.37,0-15.08-5.6-15.08-13.93Z"/>
+        <path class="f2cls-1" d="M142.74,376.69h8.98v9.48h8.21v-9.48h8.98v26.87h-8.98v-9.63h-8.21v9.63h-8.98v-26.87Z"/>
+        <path class="f2cls-1" d="M182.7,384.29h-7.91v-7.6h24.79v7.6h-7.91v19.27h-8.98v-19.27Z"/>
+        <line class="f2cls-3" x1="97.4" y1="401.5" x2="104.22" y2="401.5"/>
+        <line class="f2cls-3" x1="99.2" y1="397.29" x2="104.22" y2="397.29"/>
+        <line class="f2cls-3" x1="99.2" y1="393.07" x2="104.22" y2="393.07"/>
+        <line class="f2cls-3" x1="99.2" y1="388.86" x2="104.22" y2="388.86"/>
+        <line class="f2cls-3" x1="97.4" y1="384.64" x2="104.22" y2="384.64"/>
+        <line class="f2cls-3" x1="99.2" y1="380.43" x2="104.22" y2="380.43"/>
+        <line class="f2cls-3" x1="99.2" y1="376.21" x2="104.22" y2="376.21"/>
+        <line class="f2cls-3" x1="99.2" y1="371.99" x2="104.22" y2="371.99"/>
+        <line class="f2cls-3" x1="97.4" y1="367.78" x2="104.22" y2="367.78"/>
+        <path class="f2cls-2" d="M95.23,365.22h8.98v38.34h-8.98v-38.34Z"/>
+        <path class="f2cls-1" d="M34.56,364.93h1.47l3.1,7.29h-1.66l-.66-1.62h-3.06l-.66,1.62h-1.62l3.1-7.29ZM36.24,369.19l-.96-2.35-.96,2.35h1.92Z"/>
+        <path class="f2cls-1" d="M39.42,364.98h1.76l1.89,5.1,1.89-5.1h1.72l-2.93,7.29h-1.41l-2.93-7.29Z"/>
+        <path class="f2cls-1" d="M48.62,364.98h5.46v1.42h-3.88v1.47h3.41v1.42h-3.41v1.52h3.93v1.42h-5.51v-7.24Z"/>
+        <path class="f2cls-1" d="M56.38,364.98h3.31c.92,0,1.63.26,2.11.73.4.4.62.97.62,1.65v.02c0,1.17-.63,1.9-1.55,2.25l1.77,2.59h-1.86l-1.55-2.32h-1.25v2.32h-1.59v-7.24ZM59.58,368.5c.78,0,1.22-.41,1.22-1.02v-.02c0-.68-.48-1.03-1.25-1.03h-1.58v2.08h1.61Z"/>
+        <path class="f2cls-1" d="M67.16,364.93h1.47l3.1,7.29h-1.66l-.66-1.62h-3.06l-.66,1.62h-1.62l3.1-7.29ZM68.84,369.19l-.96-2.35-.96,2.35h1.92Z"/>
+        <path class="f2cls-1" d="M72.89,368.62v-.02c0-2.06,1.6-3.74,3.8-3.74,1.3,0,2.09.35,2.84.99l-1,1.21c-.56-.47-1.05-.73-1.89-.73-1.16,0-2.08,1.02-2.08,2.25v.02c0,1.32.91,2.3,2.19,2.3.58,0,1.1-.15,1.5-.43v-1.04h-1.6v-1.38h3.14v3.14c-.74.63-1.77,1.15-3.09,1.15-2.25,0-3.81-1.58-3.81-3.72Z"/>
+        <path class="f2cls-1" d="M82.14,364.98h5.46v1.42h-3.88v1.47h3.41v1.42h-3.41v1.52h3.93v1.42h-5.51v-7.24Z"/>
+      </g>
+    </g>
+  </g>
+</svg>`,
+`<svg viewBox="0 0 168.13 402.11" width="174.7" height="417.9" style="position:absolute;left:32.7px;bottom:0" preserveAspectRatio="xMidYMax meet"><defs><style>
+      .f3cls-1 {
+        fill: #1e2733;
+      }
+
+      .f3cls-2, .f3cls-3 {
+        fill: none;
+        stroke: #1e2733;
+        stroke-miterlimit: 10;
+        stroke-width: .75px;
+      }
+
+      .f3cls-4 {
+        opacity: .75;
+      }
+
+      .f3cls-3 {
+        stroke-linecap: round;
+      }
+    </style></defs><g id="Layer_1-2" data-name="Layer 1">
+    <g>
+      <g>
+        <path class="f3cls-1" d="M25.91,13.42s3.25-8.66,9.47-10.56,15.97-6.23,21.92,1.89,6.5,10.56,5.68,24.36-2.98,13.8,1.62,18.41,14.08,15.7,17.86,26.53c5.14,18.68,2.98,24.9,0,41.95s-5.95,21.65-4.6,31.4,7.7,16.51,7.7,16.51c0,0,5.8,12.99,0,22.2s-10.14,23.55-9.59,31.4.54,27.88,1.08,32.48,3.79,9.74,3.79,14.62,3.52,50.62,3.25,55.22,5.68,20.84-5.95,22.47-12.72,2.98-17.86,4.87-20.03,4.1-23.28,2.32-8.66-9.9-1.35-11.53,22.47-7.58,22.47-8.39,3.79-9.47,3.25-11.91c-10.29.27-17.59,1.08-18.41.54-2.98.27-18.68,2.17-5.41-7.31,2.98-.81,4.6-2.44,10.02-2.17s9.47-1.08,9.47-8.39c0-7.58-.54-24.9-5.95-33.29s-8.66-26.26-7.58-35.19c-5.41-10.83-5.41-15.97-5.41-15.97,0,0-9.2-29.23-10.29-32.48-.59-1.77-1.5-9.83-2.71-15.02-.31-1.32-2.93-.24-3.25-1.17-.74-2.14-.4-6.21-.23-10.06.54-12.18,1.31-44.84,1.31-44.84,0,0-3.07-19.65,3.25-28.51,11.19-15.7,15.16-21.92,14.62-25.17s-2.3-6.77-7.85-6.36-10.69.68-9.07-10.15c.81-1.08,1.62-2.57,1.62-2.57l-1.22-1.76v-3.92s-4.68-1.83-1.22-5.55c2.33-2.5,2.17-3.11,2.17-3.11,0,0-.14-2.98-.54-3.25s.41-4.2,1.08-5.55.14-2.98.14-2.98Z"/>
+        <path class="f3cls-1" d="M108.29,80.78s20.39-.36,18.41,6.14.14,3.61.14,3.61c0,0-.95,1.62,0,3.07s1.67,4.87,1.31,7.22c-.54,2.17,0,4.33,1.62,5.59s1.08,3.97-1.08,3.97l-.36,2.71-.9,1.44.54,1.44s-.18,6.32-3.25,6.14-5.21,0-5.21,0c0,0-.02,2.7,1.96,3.97l-1.8,2.17-.16,1.62s-1.42.54,0,1.44l-1.83,1.26s1.26.54,4.69,4.15c0,0,3.97,6.14,6.86,9.74s8.84,8.84,7.94,14.62-1.62,12.99-1.26,15.88,1.36,9.38,1.36,9.38c0,0-.09,6.14,0,8.3s-.99,5.23-.99,5.23c0,0-2.89,12.27-1.8,16.6s-1.08,16.96-1.08,16.96c0,0-.54,8.48-.36,12.45s-1.62,11.19-2.53,16.24-1.26,4.87-1.62,8.48-.36,7.76-3.07,11.19-4.15,2.89-3.79,10.11-1.35,13.71.77,15.88,2.84,2.35,5.91,2.17,6.15-1.88,8.58.05,8.56,3.56,2.61,5.18-6.68,1.44-9.02,1.62-6.68.54-7.76,1.98c1.8,2.35,5.41,6.5,9.38,7.94s7.21,1.26,9.92,1.8,4.33,1.26,4.33,3.25-3.07,6.68-8.48,7.04-8.84-1.62-13.35-1.62-7.04-.72-9.2-.36-3.61-3.79-3.25-7.94,1.44-6.32.36-7.76-1.44-5.77-4.51-11.55-3.25-18.23-3.25-24.54-.18-34.11,0-38.08,1.08-8.66-1.44-12.09-7.58-17.14-6.86-23.64,1.8-9.2,2.17-12.81-.36-9.02-1.44-15.52-2.71-24.54-3.25-27.07-1.62-16.24,0-18.77c-1.8.18-4.51-2.89-5.59-3.25s-4.15-7.76-2.71-11.91,4.15-12.99,5.59-17.32,2.17-9.92,2.53-12.27,6.14-11.19,14.26-11.55Z"/>
+      </g>
+      <g class="f3cls-4">
+        <path class="f3cls-1" d="M0,374.67h8.98v9.48h8.21v-9.48h8.98v26.87h-8.98v-9.63h-8.21v9.63H0v-26.87Z"/>
+        <path class="f3cls-1" d="M33.09,374.67h22.91v7.37h-14.09v2.72h13.13v6.49h-13.13v2.92h14.28v7.37h-23.1v-26.87Z"/>
+        <path class="f3cls-1" d="M77.88,388.18v-.08c0-8.02,6.33-14.01,14.81-14.01,4.61,0,8.33,1.54,11.25,4.07l-5.03,6.06c-1.77-1.5-3.72-2.34-5.95-2.34-3.49,0-6.03,2.69-6.03,6.33v.08c0,3.8,2.65,6.41,6.41,6.41,1.54,0,2.38-.23,3.07-.61v-2.69h-4.61v-5.76h13.01v12.44c-2.92,2.38-6.98,4.03-11.86,4.03-8.37,0-15.08-5.6-15.08-13.93Z"/>
+        <path class="f3cls-1" d="M111.28,374.67h8.98v9.48h8.21v-9.48h8.98v26.87h-8.98v-9.63h-8.21v9.63h-8.98v-26.87Z"/>
+        <path class="f3cls-1" d="M151.24,382.27h-7.91v-7.6h24.79v7.6h-7.91v19.27h-8.98v-19.27Z"/>
+        <line class="f3cls-3" x1="65.94" y1="399.47" x2="72.76" y2="399.47"/>
+        <line class="f3cls-3" x1="67.74" y1="395.26" x2="72.76" y2="395.26"/>
+        <line class="f3cls-3" x1="67.74" y1="391.04" x2="72.76" y2="391.04"/>
+        <line class="f3cls-3" x1="67.74" y1="386.83" x2="72.76" y2="386.83"/>
+        <line class="f3cls-3" x1="65.94" y1="382.61" x2="72.76" y2="382.61"/>
+        <line class="f3cls-3" x1="67.74" y1="378.4" x2="72.76" y2="378.4"/>
+        <line class="f3cls-3" x1="67.74" y1="374.18" x2="72.76" y2="374.18"/>
+        <line class="f3cls-3" x1="67.74" y1="369.97" x2="72.76" y2="369.97"/>
+        <line class="f3cls-3" x1="65.94" y1="365.75" x2="72.76" y2="365.75"/>
+        <path class="f3cls-2" d="M63.77,363.2h8.98v38.34h-8.98v-38.34Z"/>
+        <path class="f3cls-1" d="M3.1,362.9h1.47l3.1,7.29h-1.66l-.66-1.62h-3.06l-.66,1.62H0l3.1-7.29ZM4.78,367.16l-.96-2.35-.96,2.35h1.92Z"/>
+        <path class="f3cls-1" d="M7.96,362.95h1.76l1.89,5.1,1.89-5.1h1.72l-2.93,7.29h-1.41l-2.93-7.29Z"/>
+        <path class="f3cls-1" d="M17.16,362.95h5.46v1.42h-3.88v1.47h3.41v1.42h-3.41v1.52h3.93v1.42h-5.51v-7.24Z"/>
+        <path class="f3cls-1" d="M24.92,362.95h3.31c.92,0,1.63.26,2.11.73.4.4.62.97.62,1.65v.02c0,1.17-.63,1.9-1.55,2.25l1.77,2.59h-1.86l-1.55-2.32h-1.25v2.32h-1.59v-7.24ZM28.12,366.47c.78,0,1.22-.41,1.22-1.02v-.02c0-.68-.48-1.03-1.25-1.03h-1.58v2.08h1.61Z"/>
+        <path class="f3cls-1" d="M35.7,362.9h1.47l3.1,7.29h-1.66l-.66-1.62h-3.06l-.66,1.62h-1.62l3.1-7.29ZM37.38,367.16l-.96-2.35-.96,2.35h1.92Z"/>
+        <path class="f3cls-1" d="M41.43,366.59v-.02c0-2.06,1.6-3.74,3.8-3.74,1.3,0,2.09.35,2.84.99l-1,1.21c-.56-.47-1.05-.73-1.89-.73-1.16,0-2.08,1.02-2.08,2.25v.02c0,1.32.91,2.3,2.19,2.3.58,0,1.1-.15,1.5-.43v-1.04h-1.6v-1.38h3.14v3.14c-.74.63-1.77,1.15-3.09,1.15-2.25,0-3.81-1.58-3.81-3.72Z"/>
+        <path class="f3cls-1" d="M50.68,362.95h5.46v1.42h-3.88v1.47h3.41v1.42h-3.41v1.52h3.93v1.42h-5.51v-7.24Z"/>
+      </g>
+    </g>
+  </g>
+</svg>`,
+`<svg viewBox="0 0 168.13 402.11" width="174.7" height="417.9" style="position:absolute;left:32.7px;bottom:0" preserveAspectRatio="xMidYMax meet"><defs><style>
+      .f4cls-1 {
+        fill: #1e2733;
+      }
+
+      .f4cls-2, .f4cls-3 {
+        fill: none;
+        stroke: #1e2733;
+        stroke-miterlimit: 10;
+        stroke-width: .75px;
+      }
+
+      .f4cls-3 {
+        stroke-linecap: round;
+      }
+    </style></defs><g id="Layer_1-2" data-name="Layer 1">
+    <g>
+      <path class="f4cls-1" d="M128.49,328.53c-2.71-.54-5.95-.36-9.92-1.8s-7.58-5.59-9.38-7.94c1.08-1.44,5.41-1.8,7.76-1.98,2.35-.18,3.07,0,9.02-1.62,5.95-1.62-.18-3.25-2.61-5.18s-5.51-.23-8.58-.05c-3.07.18-3.79,0-5.91-2.17s-.41-8.66-.77-15.88c-.36-7.22,1.08-6.68,3.79-10.11,2.71-3.43,2.71-7.58,3.07-11.19s.72-3.43,1.62-8.48c.9-5.05,2.71-12.27,2.53-16.24-.18-3.97.36-12.45.36-12.45,0,0,2.17-12.63,1.08-16.96-1.08-4.33,1.8-16.6,1.8-16.6,0,0,1.08-3.07.99-5.23s0-8.3,0-8.3c0,0-.99-6.5-1.36-9.38-.36-2.89.36-10.11,1.26-15.88.9-5.77-5.05-11.01-7.94-14.62s-6.86-9.74-6.86-9.74c-3.43-3.61-4.69-4.15-4.69-4.15l1.83-1.26c-1.42-.9,0-1.44,0-1.44l.16-1.62,1.8-2.17c-1.98-1.26-1.96-3.97-1.96-3.97,0,0,2.14-.18,5.21,0,3.07.18,3.25-6.14,3.25-6.14l-.54-1.44.9-1.44.36-2.71c2.17,0,2.71-2.71,1.08-3.97-1.62-1.26-2.17-3.43-1.62-5.59.36-2.35-.36-5.77-1.31-7.22s0-3.07,0-3.07c0,0-2.12,2.89-.14-3.61,1.98-6.5-18.41-6.14-18.41-6.14-1.86.08-3.58.62-5.15,1.41-.48-2.46-1.11-5.13-1.94-8.14-3.79-10.83-13.26-21.92-17.86-26.53s-2.44-4.6-1.62-18.41c.81-13.8.27-16.24-5.68-24.36-5.95-8.12-15.7-3.79-21.92-1.89-6.23,1.89-9.47,10.56-9.47,10.56,0,0,.54,1.62-.14,2.98s-1.49,5.28-1.08,5.55c.41.27.54,3.25.54,3.25,0,0,.17.61-2.17,3.11-3.46,3.72,1.22,5.55,1.22,5.55v3.92l1.22,1.76s-.81,1.49-1.62,2.57c-1.62,10.83,3.52,10.56,9.07,10.15,5.55-.41,7.31,3.11,7.85,6.36.54,3.25-3.43,9.47-14.62,25.17-6.31,8.86-3.25,28.51-3.25,28.51,0,0-.77,32.66-1.31,44.84-.17,3.85-.51,7.92.23,10.06.32.93,2.94-.15,3.25,1.17,1.21,5.19,2.12,13.25,2.71,15.02,1.08,3.25,10.29,32.48,10.29,32.48,0,0,0,5.14,5.41,15.97-1.08,8.93,2.17,26.8,7.58,35.19,5.41,8.39,5.95,25.71,5.95,33.29,0,7.31-4.06,8.66-9.47,8.39-5.41-.27-7.04,1.35-10.02,2.17-13.26,9.47,2.44,7.58,5.41,7.31.81.54,8.12-.27,18.41-.54.54,2.44-3.25,11.1-3.25,11.91s-15.16,6.77-22.47,8.39c-7.31,1.62-1.89,9.74,1.35,11.53,3.25,1.78,18.14-.43,23.28-2.32s6.23-3.25,17.86-4.87c11.64-1.62,5.68-17.86,5.95-22.47.27-4.6-3.25-50.35-3.25-55.22s-3.25-10.02-3.79-14.62c-.54-4.6-.54-24.63-1.08-32.48-.36-5.16,1.4-13.13,4.29-20.59-.01.53-.04,1.04-.09,1.52-.36,3.61-1.44,6.32-2.17,12.81-.72,6.5,4.33,20.21,6.86,23.64,2.53,3.43,1.62,8.12,1.44,12.09-.18,3.97,0,31.76,0,38.08s.18,18.77,3.25,24.54c3.07,5.77,3.43,10.11,4.51,11.55s0,3.61-.36,7.76,1.08,8.3,3.25,7.94,4.69.36,9.2.36,7.94,1.98,13.35,1.62,8.48-5.05,8.48-7.04-1.62-2.71-4.33-3.25Z"/>
+      <g>
+        <path class="f4cls-1" d="M0,374.67h8.98v9.48h8.21v-9.48h8.98v26.87h-8.98v-9.63h-8.21v9.63H0v-26.87Z"/>
+        <path class="f4cls-1" d="M33.09,374.67h22.91v7.37h-14.09v2.72h13.13v6.49h-13.13v2.92h14.28v7.37h-23.1v-26.87Z"/>
+        <path class="f4cls-1" d="M77.88,388.18v-.08c0-8.02,6.33-14.01,14.81-14.01,4.61,0,8.33,1.54,11.25,4.07l-5.03,6.06c-1.77-1.5-3.72-2.34-5.95-2.34-3.49,0-6.03,2.69-6.03,6.33v.08c0,3.8,2.65,6.41,6.41,6.41,1.54,0,2.38-.23,3.07-.61v-2.69h-4.61v-5.76h13.01v12.44c-2.92,2.38-6.98,4.03-11.86,4.03-8.37,0-15.08-5.6-15.08-13.93Z"/>
+        <path class="f4cls-1" d="M111.28,374.67h8.98v9.48h8.21v-9.48h8.98v26.87h-8.98v-9.63h-8.21v9.63h-8.98v-26.87Z"/>
+        <path class="f4cls-1" d="M151.24,382.27h-7.91v-7.6h24.79v7.6h-7.91v19.27h-8.98v-19.27Z"/>
+        <line class="f4cls-3" x1="65.94" y1="399.47" x2="72.76" y2="399.47"/>
+        <line class="f4cls-3" x1="67.74" y1="395.26" x2="72.76" y2="395.26"/>
+        <line class="f4cls-3" x1="67.74" y1="391.04" x2="72.76" y2="391.04"/>
+        <line class="f4cls-3" x1="67.74" y1="386.83" x2="72.76" y2="386.83"/>
+        <line class="f4cls-3" x1="65.94" y1="382.61" x2="72.76" y2="382.61"/>
+        <line class="f4cls-3" x1="67.74" y1="378.4" x2="72.76" y2="378.4"/>
+        <line class="f4cls-3" x1="67.74" y1="374.18" x2="72.76" y2="374.18"/>
+        <line class="f4cls-3" x1="67.74" y1="369.97" x2="72.76" y2="369.97"/>
+        <line class="f4cls-3" x1="65.94" y1="365.75" x2="72.76" y2="365.75"/>
+        <path class="f4cls-2" d="M63.77,363.2h8.98v38.34h-8.98v-38.34Z"/>
+        <path class="f4cls-1" d="M3.1,362.9h1.47l3.1,7.29h-1.66l-.66-1.62h-3.06l-.66,1.62H0l3.1-7.29ZM4.78,367.16l-.96-2.35-.96,2.35h1.92Z"/>
+        <path class="f4cls-1" d="M7.96,362.95h1.76l1.89,5.1,1.89-5.1h1.72l-2.93,7.29h-1.41l-2.93-7.29Z"/>
+        <path class="f4cls-1" d="M17.16,362.95h5.46v1.42h-3.88v1.47h3.41v1.42h-3.41v1.52h3.93v1.42h-5.51v-7.24Z"/>
+        <path class="f4cls-1" d="M24.92,362.95h3.31c.92,0,1.63.26,2.11.73.4.4.62.97.62,1.65v.02c0,1.17-.63,1.9-1.55,2.25l1.77,2.59h-1.86l-1.55-2.32h-1.25v2.32h-1.59v-7.24ZM28.12,366.47c.78,0,1.22-.41,1.22-1.02v-.02c0-.68-.48-1.03-1.25-1.03h-1.58v2.08h1.61Z"/>
+        <path class="f4cls-1" d="M35.7,362.9h1.47l3.1,7.29h-1.66l-.66-1.62h-3.06l-.66,1.62h-1.62l3.1-7.29ZM37.38,367.16l-.96-2.35-.96,2.35h1.92Z"/>
+        <path class="f4cls-1" d="M41.43,366.59v-.02c0-2.06,1.6-3.74,3.8-3.74,1.3,0,2.09.35,2.84.99l-1,1.21c-.56-.47-1.05-.73-1.89-.73-1.16,0-2.08,1.02-2.08,2.25v.02c0,1.32.91,2.3,2.19,2.3.58,0,1.1-.15,1.5-.43v-1.04h-1.6v-1.38h3.14v3.14c-.74.63-1.77,1.15-3.09,1.15-2.25,0-3.81-1.58-3.81-3.72Z"/>
+        <path class="f4cls-1" d="M50.68,362.95h5.46v1.42h-3.88v1.47h3.41v1.42h-3.41v1.52h3.93v1.42h-5.51v-7.24Z"/>
+      </g>
+    </g>
+  </g>
+</svg>`
+];
+function splash(){
+const frames=SPLASH_FRAMES.map((svg,n)=>`<div class="frame f${n}">${svg}</div>`).join("");
+return `<div class="tap" role="button" tabindex="0" data-go="open" aria-label="Open the app" style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--paper-2);padding:24px;box-sizing:border-box">
+<div style="position:relative;width:220px;height:422px">${frames}</div>
+<div class="wm" style="text-align:center;margin-top:18px">
+<div style="font-size:16px;color:var(--ink-soft)">Points &amp; Travel</div>
+</div>
+<div class="wm" style="font-size:13px;color:var(--ink-muted);margin-top:40px">Tap to open</div>
+</div>`}
+/* ---------- alerts ---------- */
+function alertsScreen(){
+let h=hd("Notifications",true);
+if(!S.alerts.length)h+=`<p class="sm" style="margin:0 16px 20px">Nothing to flag right now. New program-rule alerts will show up here.</p>`;
+S.alerts.forEach(al=>{const p=P[al.p];
+h+=`<div style="margin:0 16px 12px;border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:var(--paper-2)"><div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px">${btn("progFromAlert:"+al.p,P[al.p].s,"tap chip",tint(p.h)+";margin:0")}${btn("dismiss:"+al.id,ic("x",16)+'<span class="sr-only">Dismiss</span>',"tap","color:var(--ink-muted);padding:2px 4px")}</div><div style="font-size:15px;font-weight:600;line-height:1.4">${al.t}</div><div class="sm" style="margin-top:4px">${al.d}</div><div class="sm" style="margin-top:6px;color:var(--ink-muted)">Affects ${al.aff}. ${al.ends}.</div></div>`;});
+h+=`<p class="sm" style="margin:8px 16px 20px">Checked manually — the plan is to ask Claude for updates during the monthly balance update.</p>`;
+return h}
+/* ---------- points tab ---------- */
+function points(){
+let h=`<div class="ttl">Your points</div>`;
+h+=`<div style="margin:0 16px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px"><span class="sm">${S.days>0?"Updated "+S.days+" days ago":"Updated today"}</span>${btn("update","Update balances","tap b2","font-size:14px;padding:6px 12px;width:auto")}</div>`;
+h+=`<div class="sec">Balances</div><div class="tc">`;
+const order=["chase","amex","capone","hilton","marriott"];
+order.concat(Object.keys(P).filter(k=>!order.includes(k))).filter(k=>A.some(a=>a.p===k)).forEach(k=>{const p=P[k],a=tot(k,"Abby"),j=tot(k,"Jess"),b=tot(k,"Both");
+const split=[["Abby",a],["Jess",j],["Shared",b]].filter(x=>x[1]).map(x=>x[0]+" "+fmt(x[1])).join(", ");
+h+=btn("prog:"+k,`<span class="dot" style="${dotc(p.h)}"></span><div style="flex:1;min-width:0"><div style="font-size:15px">${p.n}</div><div class="sm">${split||"0"}</div></div><div style="font-size:17px;font-weight:600">${fmt(a+j+b)}</div>${ic("chevronRight",18)}`,"rw tap");});
+h+=btn("addacct",`${ic("plus",18)}<span style="font-size:15px;color:var(--accent)">Add an account without a card</span>`,"rw tap")+`</div>`;
+h+=`<p class="sm" style="margin:8px 16px 8px">Sample balances. Tap a program to see which cards feed it.</p>`;
+h+=`<div style="margin:0 16px 20px">${btn("splash",ic("refresh",15)+' Replay the splash screen (mockup only)',"tap","font-size:13px;color:var(--accent);display:inline-flex;align-items:center;gap:5px")}</div>`;
+return h}
+function progFromAlert(k){S.stack=[];go("prog",k)}
+function prog(k){
+const p=P[k],pots=A.filter(a=>a.p===k);
+let h=hd(p.n,true);
+h+=`<div style="margin:0 16px 8px"><div class="num" style="font-size:30px;font-weight:600">${fmt(tot(k))}</div><div class="sm">${p.u} in ${pots.length} ${pots.length>1?"places":"place"}</div></div>`;
+h+=`<div class="sec">Where the ${p.u} live</div><div class="tc">`;
+pots.forEach(a=>{h+=`<div class="rw"><div style="flex:1;min-width:0"><div style="font-size:15px">${ownL(a.o)}'s ${a.l}</div>${a.w?`<div class="sm" style="color:var(--warning)">${a.w}</div>`:""}</div><div style="font-size:15px">${fmt(a.b)}</div></div>`});
+h+=`</div>`;
+if(p.note)h+=`<p class="sm" style="margin:0 16px 12px">${p.note}</p>`;
+if(p.warn)h+=box("--warning-bg","--warning",p.warn);
+if(p.air.length)h+=`<div class="sec">Airlines they can move to</div><div style="margin:0 16px">${p.air.map(x=>`<span class="chip" style="${tint(p.h)}">${x}</span>`).join("")}</div>`;
+if(p.hot.length)h+=`<div class="sec">${p.air.length?"Hotels they can move to":"Where to use them"}</div><div style="margin:0 16px">${p.hot.map(x=>`<span class="chip" style="${tint(p.h)}">${x}</span>`).join("")}</div>`;
+if(p.air.length||p.hot.length)h+=`<p class="sm" style="margin:14px 16px 20px">Partner list checked Sept 10, 2026. Partners change often.</p>`;
+return h}
+/* ---------- cards tab ---------- */
+function cards(){
+let h=hd("Your cards");
+h+=`<div style="display:flex;gap:8px;align-items:center;margin:0 16px 4px">${[["all","All"],["Abby","Abby"],["Jess","Jess"]].map(([f,l])=>btn("f:"+f,l,"tap pill"+(S.f===f?" on":""))).join("")}<span style="flex:1"></span>${btn("addcard",ic("plus",15)+' Add card',"tap b1","font-size:14px;padding:6px 12px;width:auto;display:inline-flex;align-items:center;gap:5px")}</div>`;
+const vis=c=>S.f==="all"||c.o===S.f||c.o==="Both";
+const open=C.filter(c=>!c.closed&&vis(c)),closed=C.filter(c=>c.closed&&vis(c));
+const up=open.filter(c=>c.fee>0&&c.mo).map(c=>({c,d:(c.mo-9+12)%12})).filter(x=>x.d<=3).sort((a,b)=>a.d-b.d);
+const withFee=open.filter(c=>c.fee!=null),missing=open.filter(c=>c.fee==null).length,total=withFee.reduce((s,c)=>s+c.fee,0);
+h+=`<div class="sec">Fees in the next 3 months</div><div class="tc">`;
+if(!up.length)h+=`<div class="rw"><span class="sm">No fees coming up.</span></div>`;
+else up.forEach(({c})=>{h+=`<div class="rw"><div style="width:36px;flex:none;font-size:13px;color:var(--ink-soft)">${MON[c.mo].slice(0,3)}</div><div style="flex:1;min-width:0">${btn("card:"+c.id,`<div style="font-size:15px">${ownL(c.o)}'s ${c.n}</div>`,"tap")}</div><div style="font-size:15px;font-weight:600">$${fmt(c.fee)}</div>${btn("cal:"+c.id,ic("calendarPlus",19)+'<span class="sr-only">Add to calendar</span>',"tap","color:var(--accent);padding:2px")}</div>`});
+h+=`<div class="rw" style="background:var(--accent-wash);border-top:1px solid var(--line-strong)"><span style="font-size:15px;color:var(--accent)">Yearly fees${S.f==="all"?" for the household":", "+S.f+" and shared"}</span><span class="num" style="flex:1;text-align:right;font-size:15px;font-weight:600;color:var(--accent)">$${fmt(total)}</span></div>`;
+h+=`</div>`;
+h+=`<p class="sm" style="margin:-6px 16px 8px">${missing?missing+(missing>1?" cards need":" card needs")+" a fee entered. ":""}Sample amounts. You'll enter yours from your statements.</p>`;
+h+=`<div class="sec">Open cards</div><div class="tc">`;
+open.forEach(c=>{const p=P[c.p];
+h+=btn("card:"+c.id,`<span class="dot" style="${dotc(p.h)}"></span><div style="flex:1;min-width:0"><div style="font-size:15px">${c.n}</div><div class="sm">${ownL(c.o)}, earns ${p.s} ${p.u}</div><div class="sm" style="${c.fee==null?"color:var(--warning)":""}">${feeStr(c)}</div></div>${ic("chevronRight",18)}`,"rw tap");});
+h+=`</div>`;
+if(closed.length){h+=`<div class="sec">Closed cards</div><div class="tc">`;
+closed.forEach(c=>{h+=btn("card:"+c.id,`${ic("archive",20)}<div style="flex:1;min-width:0"><div style="font-size:15px;color:var(--ink-soft)">${c.n}</div><div class="sm">${ownL(c.o)}, closed ${c.closed}</div></div>`,"rw tap");});
+h+=`</div>`;}
+h+=`<p class="sm" style="margin:6px 16px 20px">The app keeps nicknames only, never card numbers or logins.</p>`;
+return h}
+function cardV(id){
+const c=card(id);if(!c)return hd("Card not found",true);
+const p=P[c.p],pt=pot(c.pot),others=C.filter(x=>x.pot===c.pot&&x.id!==c.id&&!x.closed);
+let h=hd(c.n,true)+`<div class="sm" style="margin:-6px 16px 10px">${ownL(c.o)}${c.closed?", closed "+c.closed:""}</div>`;
+const row=(l,v,go)=>go?btn(go,`<span class="sm" style="flex:1">${l}</span><span style="font-size:15px">${v}</span>${ic("chevronRight",18)}`,"rw tap"):`<div class="rw"><span class="sm" style="flex:1">${l}</span><span style="font-size:15px;text-align:right">${v}</span></div>`;
+h+=`<div class="tc">`;
+h+=row("Earns",`<span class="dot" style="display:inline-block;${dotc(p.h)};margin-right:6px"></span>${p.s} ${p.u}`,"prog:"+c.p);
+h+=row(others.length?"Shared pot":p.perCard?"On this card":`In ${ownL(pt?pt.o:c.o)}'s account`,pt?fmt(pt.b):"None");
+h+=row("Annual fee",c.fee==null?"Not entered":c.fee===0?"None":"$"+fmt(c.fee));
+h+=row("Fee posts in",c.mo?MON[c.mo]:"Not entered");
+h+=`</div>`;
+if(c.fee>0&&!c.closed)h+=`<div class="sec">Before the next fee, the plan is to</div><div style="display:flex;gap:8px;flex-wrap:wrap;margin:0 16px 4px">${["Keep","Downgrade","Cancel"].map(d=>btn(`dec:${c.id}:${d}`,d,"tap pill"+(c.dec===d?" on":""))).join("")}</div>`;
+const cardPerks=PK.filter(x=>x.card===c.id);
+h+=`<div class="sec">Perks</div><div class="tc">`;
+cardPerks.forEach(pk=>{h+=btn("perk:"+pk.id,`<div style="flex:1;min-width:0"><div style="font-size:15px">${pk.name}</div><div class="sm">$${fmt(pk.value)}${CADSUF[pk.cad]}${pk.note?" · "+pk.note:""}</div></div>${ic("chevronRight",18)}`,"rw tap");});
+if(!c.closed)h+=btn("addperk:"+c.id,`${ic("plus",18)}<span style="font-size:15px;color:var(--accent)">Add a perk to this card</span>`,"rw tap");
+h+=`</div>`;
+if(cardPerks.length&&c.fee>0){
+const cap=cardPerks.reduce((s,pk)=>s+pk.value*(pk.hist.filter(x=>x.used).length+(pk.status==="done"?1:0)),0);
+const pct=Math.min(100,Math.round(cap/c.fee*100));
+h+=`<div style="margin:12px 16px 0;padding:12px 14px;background:var(--paper-2);border-radius:12px"><div class="sm" style="margin-bottom:6px">Captured toward the annual fee</div><div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px"><span class="num" style="font-size:18px;font-weight:600">$${fmt(cap)} of $${fmt(c.fee)}</span><span class="sm">${pct}%</span></div>${bar(pct)}</div>`;
+}
+if(cardPerks.length)h+=`<p class="sm" style="margin:10px 16px 0">Sample perk history. Tap a perk to see past periods.</p>`;
+if(!c.closed){
+h+=`<div style="display:flex;gap:8px;margin:20px 16px 0">${btn("editcard:"+c.id,"Edit card","tap b2","flex:1")}${c.fee>0&&c.mo?btn("cal:"+c.id,ic("calendarPlus",16)+' Add to calendar',"tap b2","flex:1;display:inline-flex;align-items:center;justify-content:center;gap:6px"):""}</div>`;
+h+=`<div style="margin:12px 16px 20px">${btn("close:"+c.id,"Close or delete card","tap b2","color:var(--danger);border-color:var(--danger)")}</div>`;}
+else h+=`<p class="sm" style="margin:14px 16px 20px">Kept as a record. Some banks limit sign-up bonuses based on cards you've had before.</p>`;
+return h}
+function closeV(id){
+const c=card(id),p=P[c.p],pt=pot(c.pot),others=C.filter(x=>x.pot===c.pot&&x.id!==c.id&&!x.closed);
+let h=hd("Close "+c.n,true);
+if(others.length)h+=box("--paper-2","--ink-soft",`Your ${p.s} points stay put. The ${others[0].n} still feeds the same pot.`);
+else if(p.perCard||c.p==="amex"){if(pt&&pt.b>0)h+=box("--warning-bg","--warning",`This card holds ${fmt(pt.b)} ${p.u}. Move them to ${p.s==="Chase"?"a Sapphire Preferred or another Chase card":"another "+p.s+" card"} first, or they may be lost when the card closes.`);else h+=box("--paper-2","--ink-soft","No points are left on this card.");}
+else h+=box("--paper-2","--ink-soft",`Your ${p.s} points live in the ${p.s} account, not on the card, so they stay after the card closes.`);
+h+=`<div class="sec">Choose one</div><div class="tc" style="margin-bottom:20px">`;
+h+=btn("closecard:"+id,`${ic("archive",20)}<div style="flex:1"><div style="font-size:15px">Move to closed cards</div><div class="sm">Keeps a record of when you had it. Some banks limit sign-up bonuses based on past cards.</div></div>`,"rw tap");
+h+=btn("delcard:"+id,`<span style="color:var(--danger)">${ic("trash",20)}</span><div style="flex:1"><div style="font-size:15px;color:var(--danger)">Delete completely</div><div class="sm">Removes it with no record. Best for cards added by mistake.</div></div>`,"rw tap");
+h+=`</div>`;
+return h}
+function formV(){
+const id=V()[1],f=S.form,isNew=!id;
+let h=hd(isNew?"Add a card":"Edit card",true);
+h+=fld("n","Nickname",f.n,`placeholder="Abby's Hyatt card"`);
+h+=pills(f.o);
+if(isNew){
+h+=`<div style="margin:0 16px 14px"><label class="lb" for="f-p">Earns</label><select id="f-p" name="p" style="width:100%">${Object.keys(P).map(k=>`<option value="${k}"${f.p===k?" selected":""}>${P[k].n}</option>`).join("")}<option value="new"${f.p==="new"?" selected":""}>A new program</option></select><div class="sm" style="margin-top:6px">${f.p==="new"?"Creates a new program on your Points tab.":P[f.p].perCard?"Gets its own balance, starting at 0.":"Joins your existing "+P[f.p].s+" balance."}</div></div>`;
+if(f.p==="new")h+=fld("np","Program name",f.np,`placeholder="World of Hyatt"`)+fld("nb","Starting balance",f.nb,`inputmode="numeric" placeholder="0"`);
+}else h+=`<div style="margin:0 16px 14px"><div class="lb">Earns</div><div style="font-size:15px">${P[card(id).p].n}</div><div class="sm">To switch programs, close this card and add a new one.</div></div>`;
+h+=fld("fee","Annual fee in dollars (optional)",f.fee,`inputmode="numeric" placeholder="95"`);
+h+=`<div style="margin:0 16px 14px"><label class="lb" for="f-mo">Fee posts in (optional)</label><select id="f-mo" name="mo" style="width:100%"><option value="">Not sure yet</option>${MON.slice(1).map((m,i)=>`<option value="${i+1}"${String(f.mo)===String(i+1)?" selected":""}>${m}</option>`).join("")}</select></div>`;
+h+=`<div style="display:flex;gap:8px;margin:18px 16px 20px;border-top:1px solid var(--line);padding-top:16px">${btn("savecard",isNew?"Add card":"Save changes","tap b1","flex:1")}${btn("back","Cancel","tap b2","flex:1")}</div>`;
+return h}
+function acctV(){
+const f=S.form;
+let h=hd("Add an account",true)+`<p class="sm" style="margin:-4px 16px 14px">For points in an airline or hotel account with no card attached, like points you've moved to British Airways.</p>`;
+h+=`<div style="margin:0 16px 14px"><label class="lb" for="f-p">Program</label><select id="f-p" name="p" style="width:100%"><option value="new"${f.p==="new"?" selected":""}>A new program</option>${Object.keys(P).filter(k=>!F.includes(k)).map(k=>`<option value="${k}"${f.p===k?" selected":""}>${P[k].n}</option>`).join("")}</select></div>`;
+if(f.p==="new")h+=fld("np","Program name",f.np,`placeholder="British Airways Avios"`);
+h+=pills(f.o);
+h+=fld("nb","Current balance",f.nb,`inputmode="numeric" placeholder="25000"`);
+h+=`<div style="display:flex;gap:8px;margin:18px 16px 20px;border-top:1px solid var(--line);padding-top:16px">${btn("saveacct","Add account","tap b1","flex:1")}${btn("back","Cancel","tap b2","flex:1")}</div>`;
+return h}
+/* ---------- perks tab (redesigned around status) ---------- */
+function closesInDays(pk){if(pk.cad==="monthly"||!pk.windowEnd)return null;const d=days(TODAY,pk.windowEnd);return d}
+function redeemedTotals(){
+let month=0,year=0;
+PK.forEach(pk=>{
+const events=pk.hist.filter(x=>x.used).map(x=>x.date).concat(pk.status==="done"?[pk.doneDate]:[]);
+events.forEach(d=>{if(d.getFullYear()===TODAY.getFullYear()){year+=pk.value;if(d.getMonth()===TODAY.getMonth())month+=pk.value;}});
+});
+return{month,year};
+}
+function foldHead(key,label,count){
+const open=S.folds[key];
+return btn("fold:"+key,`<span style="font-size:14px;font-weight:600">${label}</span><span style="display:flex;align-items:center;gap:6px"><span class="sm">${count}</span><span class="chv">${ic("chevronDown",16)}</span></span>`,"tap foldhd"+(open?" open":""));
+}
+function perkRow(pk){
+const c=card(pk.card);
+if(pk.status==="upcoming")return btn("perk:"+pk.id,`<div style="flex:1;min-width:0"><div style="font-size:15px">${pk.name}</div><div class="sm">${ownL(c.o)}'s ${c.n} · <span class="chip" style="background:var(--paper);border:1px solid var(--line);margin:0">${pk.cad}</span> ${pk.next||""}</div></div><div style="font-size:15px;color:var(--ink-soft)">$${fmt(pk.value)}</div>${ic("chevronRight",18)}`,"rw tap","opacity:.7");
+if(pk.status==="done")return btn("perk:"+pk.id,`${ic("squareCheck",22)}<div style="flex:1;min-width:0"><div style="font-size:15px">${pk.name}</div><div class="sm">${ownL(c.o)}'s ${c.n}${pk.note?" · "+pk.note:""}</div><div class="sm" style="color:var(--success)">Redeemed ${dfmt(pk.doneDate)}</div></div><div style="font-size:15px;font-weight:600">$${fmt(pk.value)}</div>`,"rw tap");
+const dleft=closesInDays(pk);
+const closeNote=(dleft!==null&&dleft<=21)?`<div class="sm" style="color:var(--warning)">Closes in ${dleft} day${dleft===1?"":"s"}</div>`:"";
+return `<div class="rw">${btn("toggleperk:"+pk.id,ic("square",22),"tap","color:var(--ink-muted)")}${btn("perk:"+pk.id,`<div style="font-size:15px">${pk.name}</div><div class="sm">${ownL(c.o)}'s ${c.n} · <span class="chip" style="background:var(--paper-2);border:1px solid var(--line);margin:0">${pk.cad}</span>${pk.note?" · "+pk.note:""}</div>${closeNote}`,"tap","flex:1;min-width:0")}<div style="font-size:15px;font-weight:600">$${fmt(pk.value)}</div></div>`}
+function perks(){
+let h=hd("Perks");
+const tot2=redeemedTotals();
+h+=`<div style="margin:0 16px 14px;display:flex;gap:8px">
+<div style="flex:1;padding:12px 14px;background:var(--paper-2);border-radius:12px"><div class="sm">Redeemed this month</div><div class="num" style="font-size:19px;font-weight:600">$${fmt(tot2.month)}</div></div>
+<div style="flex:1;padding:12px 14px;background:var(--paper-2);border-radius:12px"><div class="sm">Redeemed ${TODAY.getFullYear()}</div><div class="num" style="font-size:19px;font-weight:600">$${fmt(tot2.year)}</div></div>
+</div>`;
+const open=PK.filter(x=>x.status==="open"),done=PK.filter(x=>x.status==="done"),upc=PK.filter(x=>x.status==="upcoming");
+h+=`<div class="foldsec">${foldHead("open","Redeem soon",open.length)}<div style="${S.folds.open?"":"display:none"}">${open.map(perkRow).join("")}</div></div>`;
+h+=`<div class="foldsec">${foldHead("done","Redeemed",done.length)}<div style="${S.folds.done?"":"display:none"}">${done.map(perkRow).join("")}</div></div>`;
+h+=`<div class="foldsec">${foldHead("upcoming","Upcoming redeemables",upc.length)}<div style="${S.folds.upcoming?"":"display:none"}">${upc.map(perkRow).join("")}</div></div>`;
+h+=`<p class="sm" style="margin:14px 16px 20px">Sample perks. Tap a section to expand it, tap a perk for its history, or the card it's on for that card's fee comparison.</p>`;
+return h}
+function perkV(id){
+const pk=PK.find(x=>x.id===id);if(!pk)return hd("Perk not found",true);
+const c=card(pk.card);
+let h=hd(pk.name,true)+`<div class="sm" style="margin:-6px 16px 10px">${ownL(c.o)}'s ${c.n} · $${fmt(pk.value)}${CADSUF[pk.cad]}</div>`;
+if(pk.note)h+=box("--paper-2","--ink-soft",pk.note);
+if(pk.status==="open"){
+h+=`<div style="margin:0 16px 14px">${btn("toggleperk:"+pk.id,ic("check",16)+" Mark redeemed today ("+dfmt(TODAY)+")","tap b1","display:inline-flex;align-items:center;gap:6px;width:auto")}</div>`;
+}else if(pk.status==="done"){
+h+=`<div style="margin:0 16px 14px">${fld("redate","Redeemed on (edit to backdate)",dfmt(pk.doneDate),`placeholder="Sept 10, 2026"`)}${btn("saveredate:"+pk.id,"Save date","tap b2","width:auto;padding:8px 14px")}<div style="margin-top:10px">${btn("toggleperk:"+pk.id,"Undo — mark not redeemed","tap","font-size:13px;color:var(--danger)")}</div></div>`;
+}
+h+=`<div class="sec">History</div>`;
+const rows=pk.hist.slice().concat(pk.status==="done"?[{date:pk.doneDate,used:true,cur:true}]:[]).sort((a,b)=>b.date-a.date);
+if(!rows.length)h+=`<p class="sm" style="margin:0 16px 12px">No past periods logged yet.</p>`;
+rows.forEach(x=>{h+=`<div class="rw"><span style="flex:1;font-size:15px">${dfmt(x.date)}${x.cur?" (current)":""}</span>${x.used?`<span style="color:var(--success)">${ic("check",18)}</span>`:`<span style="color:var(--danger)">${ic("x",18)}</span>`}</div>`;});
+h+=`<p class="sm" style="margin:14px 16px 20px">Sample history. Past periods lock once they're over — only the current period can be checked off or backdated.</p>`;
+return h}
+/* ---------- trips tab (editable slots) ---------- */
+function trips(){
+let h=hd("Trips");
+T.forEach(t=>{
+h+=`<div class="tc tap" role="button" tabindex="0" data-go="trip:${t.key}"><div style="padding:14px 16px 12px;display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:19px;font-weight:600">${t.n}</div><div class="sm">${t.sub}, 4 travelers from Boston</div></div>${ic("chevronRight",18)}</div><div style="display:flex;align-items:center"><span style="width:14px;height:14px;margin-left:-7px;border-radius:50%;background:var(--paper);border:1px solid var(--line);flex:none"></span><span style="flex:1;border-top:1.5px dashed var(--line-strong);margin:0 4px"></span><span style="width:14px;height:14px;margin-right:-7px;border-radius:50%;background:var(--paper);border:1px solid var(--line);flex:none"></span></div><div style="padding:12px 16px 14px;display:grid;gap:10px">`+
+[["Flights",t.flights],["Hotel",t.hotel]].map(([l,pt])=>{const c=cov(pt);return `<div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px"><span>${l}<span style="color:var(--ink-muted)">, ${pt.real?"real price":"estimate"}</span></span><span style="color:${c.pct>=100?"var(--success)":"var(--warning)"}">${c.pct>=100?"Covered":c.pct+"% covered"}</span></div>${bar(c.pct)}</div>`}).join("")+`</div></div>`;});
+h+=`<p class="sm" style="margin:4px 16px 20px">Bars are rough for now. They don't yet apply transfer ratios, and all three trips count the same points. There are always 3 trip slots — edit a trip to swap in a new destination.</p>`;
+return h}
+function tripV(k){
+const t=trip(k);let h=hd(t.n,true);
+h+=`<div class="sm" style="margin:-6px 16px 4px">${t.sub}, from Boston</div>`;
+h+=`<div style="margin:6px 16px 4px">${btn("edittrip:"+k,ic("pencil",15)+" Edit this trip","tap","font-size:13px;color:var(--accent);display:inline-flex;align-items:center;gap:5px")}</div>`;
+h+=`<div class="sec">Travelers</div><div style="margin:0 16px">`+["Jess","Abby","Kid, 14","Kid, 10"].map(x=>`<span class="chip" style="background:var(--paper-2);color:var(--ink);border:1px solid var(--line)">${x}</span>`).join("")+`</div>`;
+[["flights","Flights",t.flights],["hotel","Hotel",t.hotel]].forEach(([pkey,l,pt])=>{const c=cov(pt);
+const tag=pt.real?`<span class="chip" style="background:var(--success-bg);color:var(--success);margin:8px 0 0">Real price from ${pt.real.src}, checked ${pt.real.date}</span>`:`<span class="chip" style="background:var(--paper-2);color:var(--ink-soft);border:1px solid var(--line);margin:8px 0 0">Estimate</span>`;
+h+=`<div class="sec">${l}</div><div style="margin:0 16px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper-2)"><div style="display:flex;justify-content:space-between;gap:8px"><div><div style="font-size:15px">${pt.d}</div><div class="sm">${pt.real?fmt(c.n)+" points":"About "+fmt(c.n)+" points"}</div>${tag}</div>${ic(pkey==="flights"?"plane":"card",20)}</div><div style="margin:12px 0 6px">${bar(c.pct)}</div><div class="sm">${fmt(Math.min(c.have,c.n))} of ${fmt(c.n)} covered by your ${pt.src.map(s=>P[s].s).join(", ")} ${pt.src.length>1?"balances":"balance"}</div>${btn(`price:${k}:${pkey}`,pt.real?"Update price":"Enter real price","tap b2","font-size:14px;padding:7px 12px;display:inline-block;margin-top:10px;width:auto")}<div class="sm" style="margin:14px 0 4px">Ways to pay</div>`+
+waysToPay(pkey==="flights"?"air":"hot",pt.src).map(([nm,fr])=>`<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;padding:8px 0;border-top:1px solid var(--line);font-size:14px"><span style="flex:1;min-width:0">${nm}</span><span style="text-align:right;max-width:55%">${fr.map(f=>ttag(f,"margin:0 0 4px 4px")).join("")}</span></div>`).join("")+`</div>`;});
+h+=`<div class="sec">Good to know for a family of 4</div>`+t.notes.map(n=>`<div class="rw" style="align-items:flex-start">${ic("info",18)}<span style="font-size:14px;line-height:1.5">${n}</span></div>`).join("");
+const lk="flex:1;text-align:center;font-size:14px;padding:10px 8px;border:1px solid var(--line-strong);border-radius:var(--radius);color:var(--ink);text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:5px";
+h+=`<div style="display:flex;gap:8px;margin:14px 16px 20px;border-top:1px solid var(--line);padding-top:14px"><a href="https://www.point.me" style="${lk}">Search point.me ${ic("extLink",15)}</a><a href="https://seats.aero" style="${lk}">Search seats.aero ${ic("extLink",15)}</a></div>`;
+return h}
+function tripFormV(){
+const k=V()[1],f=S.form;
+let h=hd("Edit trip",true);
+h+=fld("n","Destination",f.n,`placeholder="Rome"`);
+h+=fld("sub","Subtitle",f.sub,`placeholder="7 nights"`);
+h+=`<div style="margin:0 16px 14px"><label class="lb" for="f-notes">Good-to-know notes (one per line)</label><textarea id="f-notes" name="notes">${esc(f.notes)}</textarea></div>`;
+h+=`<div class="sec" style="margin-top:6px">Flights</div>`;
+h+=fld("fd","Description",f.fd,`placeholder="Boston to Rome, 4 round-trip seats"`);
+h+=fld("fneed","Points needed (estimate)",f.fneed,`inputmode="numeric" placeholder="240000"`);
+h+=`<div style="margin:0 16px 14px"><div class="lb">Programs that can pay for flights</div>${multiPills("fsrc",Object.keys(P),f.fsrc)}${errH("fsrc")}</div>`;
+h+=`<div class="sec">Hotel</div>`;
+h+=fld("hd","Description",f.hd,`placeholder="7 nights, 1 family room"`);
+h+=fld("hneed","Points needed (estimate)",f.hneed,`inputmode="numeric" placeholder="200000"`);
+h+=`<div style="margin:0 16px 14px"><div class="lb">Programs that can pay for the hotel</div>${multiPills("hsrc",Object.keys(P),f.hsrc)}${errH("hsrc")}</div>`;
+h+=`<p class="sm" style="margin:0 16px 14px">Ways to pay and airline/hotel partner lists are worked out automatically from the programs you pick here — no rebuild needed to swap in a new destination.</p>`;
+h+=`<div style="display:flex;gap:8px;margin:18px 16px 20px;border-top:1px solid var(--line);padding-top:16px">${btn("savetrip","Save trip","tap b1","flex:1")}${btn("back","Cancel","tap b2","flex:1")}</div>`;
+return h}
+function priceV(){
+const v=V(),t=trip(v[1]),pkey=v[2],pt=pkey==="flights"?t.flights:t.hotel,f=S.form;
+let h=hd("Real price",true)+`<p class="sm" style="margin:-4px 16px 14px">${t.n} ${(pkey==="flights"?"flights":"hotel").toLowerCase()}: ${pt.d}</p>`;
+h+=fld("pts",pkey==="hotel"?"Total points for the whole stay":"Total points for all 4 travelers",f.pts,`inputmode="numeric" placeholder="312000"`);
+h+=`<div style="margin:0 16px 14px"><label class="lb" for="f-src">Where you found it</label><select id="f-src" name="src" style="width:100%">${["seats.aero","point.me","Airline website","Hotel website or app"].map(s=>`<option${f.src===s?" selected":""}>${s}</option>`).join("")}</select></div>`;
+h+=`<p class="sm" style="margin:0 16px 14px">Today's date is saved with the price, since award prices change daily.</p>`;
+h+=`<div style="display:flex;gap:8px;margin:18px 16px 0;border-top:1px solid var(--line);padding-top:16px">${btn("saveprice","Save price","tap b1","flex:1")}${btn("back","Cancel","tap b2","flex:1")}</div>`;
+h+=pt.real?`<div style="margin:14px 16px 20px">${btn("clearprice","Go back to the estimate","tap","font-size:14px;color:var(--accent);display:inline-block")}</div>`:`<div style="height:20px"></div>`;
+return h}
+/* ---------- update balances ---------- */
+function upd(){
+let h=hd("Update balances",true);
+h+=`<p class="sm" style="margin:-4px 16px 12px">Type what each bank or hotel app shows. Saving updates both phones.</p><div class="tc">`;
+A.forEach(a=>{const v=S.draft?S.draft[a.k]:a.b;
+h+=`<div class="rw" style="flex-wrap:wrap"><span class="dot" style="${dotc(P[a.p].h)}"></span><label for="in-${a.k}" style="flex:1;min-width:0;font-size:14px;line-height:1.4">${ownL(a.o)}'s ${a.l}</label><input id="in-${a.k}" data-k="${a.k}" inputmode="numeric" value="${esc(v)}" style="width:110px;text-align:right"><div id="er-${a.k}" style="width:100%;font-size:13px;color:var(--danger);text-align:right;${S.err[a.k]?"":"display:none"}">Enter a whole number, like 48200</div></div>`;});
+h+=`</div><div style="display:flex;gap:8px;margin:16px 16px 20px">${btn("save","Save balances","tap b1","flex:1")}${btn("back","Cancel","tap b2","flex:1")}</div>`;
+return h}
+/* ---------- render ---------- */
+const scr=document.getElementById("scr"),tabs=document.getElementById("tabs"),ph=document.getElementById("ph"),topbar=document.getElementById("topbar");
+let spT;
+function render(){
+if(S.screen==="splash"){scr.innerHTML=splash();tabs.innerHTML="";tabs.style.display="none";topbar.style.display="none";return}
+tabs.style.display="flex";topbar.style.display="flex";topbar.innerHTML=topbarH();
+const v=V();let h;
+if(v){const t=v[0];
+h=t==="prog"?prog(v[1]):t==="trip"?tripV(v[1]):t==="edittrip"?tripFormV():t==="card"?cardV(v[1]):t==="close"?closeV(v[1]):t==="cardform"?formV():t==="acct"?acctV():t==="price"?priceV():t==="perk"?perkV(v[1]):t==="alerts"?alertsScreen():upd();}
+else h={points,cards,perks,trips}[S.tab]();
+scr.innerHTML=(S.toast?`<div style="margin:12px 16px 0;padding:10px 12px;border-radius:var(--radius);background:var(--success-bg);color:var(--success);font-size:14px;display:flex;align-items:center;gap:6px">${ic("check",16)} ${S.toast}</div>`:"")+h;
+tabs.innerHTML=[["points","coins","Points"],["cards","card","Cards"],["perks","tag","Perks"],["trips","plane","Trips"]].map(([k,i,l])=>`<button type="button" class="tb${S.tab===k?" on":""}" data-go="tab:${k}">${ic(i,21)}${l}</button>`).join("");
+}
+function showSplash(){S.screen="splash";render();clearTimeout(spT);spT=setTimeout(()=>{if(S.screen==="splash"){S.screen="app";render()}},2600)}
+function newProg(name){const k="x"+(++seq);P[k]={n:name,s:name,h:"green",u:"points",air:[],hot:[],note:"Added by you. Partner details aren't filled in for added programs yet."};return k}
+function newPot(p,o,l,b){const k="p"+(++seq);A.push({k,p,o,l,b});return k}
+const num=v=>String(v||"").replace(/[$,\s]/g,"");
+function saveBal(){
+let bad=false;const raw={},vals={};
+A.forEach(a=>{const r=document.getElementById("in-"+a.k).value;raw[a.k]=r;const c=num(r);
+if(!/^\d+$/.test(c)){S.err[a.k]=1;bad=true}else{delete S.err[a.k];vals[a.k]=parseInt(c,10)}});
+if(bad){S.draft=raw;render();return}
+A.forEach(a=>{a.b=vals[a.k]});S.days=0;S.draft=null;S.err={};S.stack=[];S.tab="points";S.toast="Balances saved";render();
+}
+function saveCard(){
+const f=S.form,id=V()[1];S.err={};
+if(!f.n.trim())S.err.n="Enter a nickname, like Abby's Hyatt card";
+const fee=num(f.fee);if(fee&&!/^\d+$/.test(fee))S.err.fee="Enter a whole dollar amount, like 95";
+if(!id&&f.p==="new"){if(!f.np.trim())S.err.np="Enter the program name, like World of Hyatt";if(!/^\d+$/.test(num(f.nb)))S.err.nb="Enter a whole number, like 0 or 25000";}
+if(Object.keys(S.err).length){render();return}
+const feeV=fee===""?null:parseInt(fee,10),moV=f.mo?parseInt(f.mo,10):null;
+if(id){const c=card(id);c.n=f.n.trim();c.o=f.o;c.fee=feeV;c.mo=moV;const pt=pot(c.pot);if(pt&&P[c.p].perCard&&!C.some(x=>x.pot===c.pot&&x.id!==c.id)){pt.l=c.n;pt.o=c.o}S.stack.pop();S.toast="Changes saved";render();return}
+let pk=f.p,pk2;
+if(pk==="new"){pk=newProg(f.np.trim());pk2=newPot(pk,f.o,P[pk].s+" account",parseInt(num(f.nb),10))}
+else if(P[pk].perCard)pk2=newPot(pk,f.o,f.n.trim(),0);
+else{const ex=A.find(a=>a.p===pk&&(a.o===f.o||a.o==="Both"||f.o==="Both"))||A.find(a=>a.p===pk);pk2=ex?ex.k:newPot(pk,f.o,P[pk].s+" account",0)}
+C.push({id:"c"+(++seq),n:f.n.trim(),o:f.o,p:pk,pot:pk2,fee:feeV,mo:moV,dec:""});
+S.stack=[];S.tab="cards";S.toast="Card added";render();
+}
+function saveAcct(){
+const f=S.form;S.err={};
+if(f.p==="new"&&!f.np.trim())S.err.np="Enter the program name, like British Airways Avios";
+if(!/^\d+$/.test(num(f.nb)))S.err.nb="Enter a whole number, like 25000";
+if(Object.keys(S.err).length){render();return}
+const pk=f.p==="new"?newProg(f.np.trim()):f.p;
+newPot(pk,f.o,P[pk].s+" account",parseInt(num(f.nb),10));
+S.stack=[];S.tab="points";S.toast="Account added";render();
+}
+function savePrice(){
+const v=V(),t=trip(v[1]),pkey=v[2],pt=pkey==="flights"?t.flights:t.hotel,f=S.form;S.err={};
+const p=num(f.pts);if(!/^\d+$/.test(p)||parseInt(p,10)===0){S.err.pts="Enter the total points, like 312000";render();return}
+pt.real={pts:parseInt(p,10),src:f.src,date:"Sept 10"};S.stack.pop();S.toast="Price saved";render();
+}
+function saveTrip(){
+const k=V()[1],t=trip(k),f=S.form;S.err={};
+if(!f.n.trim())S.err.n="Enter a destination name";
+if(!/^\d+$/.test(num(f.fneed))||parseInt(num(f.fneed),10)===0)S.err.fneed="Enter the estimated points needed, like 240000";
+if(!/^\d+$/.test(num(f.hneed))||parseInt(num(f.hneed),10)===0)S.err.hneed="Enter the estimated points needed, like 200000";
+if(!f.fsrc.length)S.err.fsrc="Pick at least one program for flights";
+if(!f.hsrc.length)S.err.hsrc="Pick at least one program for the hotel";
+if(Object.keys(S.err).length){render();return}
+t.n=f.n.trim();t.sub=f.sub.trim();t.notes=f.notes.split("\n").map(x=>x.trim()).filter(Boolean);
+t.flights={d:f.fd.trim(),need:parseInt(num(f.fneed),10),src:f.fsrc.slice()};
+t.hotel={d:f.hd.trim(),need:parseInt(num(f.hneed),10),src:f.hsrc.slice()};
+S.stack.pop();S.toast="Trip saved";render();
+}
+function saveRedate(id){
+const pk=PK.find(x=>x.id===id),v=document.getElementById("f-redate").value.trim();
+const m=v.match(/([A-Za-z]+)\s+(\d{1,2}),?\s+(\d{4})/);
+if(!m){S.err.redate="Use a format like Sept 10, 2026";render();return}
+const mi=MON.findIndex(x=>x.toLowerCase().startsWith(m[1].slice(0,3).toLowerCase()));
+if(mi<1){S.err.redate="Use a format like Sept 10, 2026";render();return}
+pk.doneDate=new Date(parseInt(m[3],10),mi-1,parseInt(m[2],10));delete S.err.redate;S.toast="Date updated";render();
+}
+function go(a,b,c){
+if(a==="save"){saveBal();return}
+if(a==="savecard"){saveCard();return}
+if(a==="saveacct"){saveAcct();return}
+if(a==="saveprice"){savePrice();return}
+if(a==="savetrip"){saveTrip();return}
+if(a==="saveredate"){saveRedate(b);return}
+if(a==="fo"){S.form.o=b;render();return}
+if(a==="fsrc"){const i=S.form.fsrc.indexOf(b);i>-1?S.form.fsrc.splice(i,1):S.form.fsrc.push(b);render();return}
+if(a==="hsrc"){const i=S.form.hsrc.indexOf(b);i>-1?S.form.hsrc.splice(i,1):S.form.hsrc.push(b);render();return}
+if(a==="fold"){S.folds[b]=!S.folds[b];render();return}
+if(a==="progFromAlert"){progFromAlert(b);return}
+S.toast="";
+if(a==="open"){S.screen="app";clearTimeout(spT)}
+else if(a==="splash"){showSplash();return}
+else if(a==="tab"){S.tab=b;S.stack=[]}
+else if(a==="prog"||a==="trip"||a==="card"||a==="close"||a==="perk")S.stack.push([a,b]);
+else if(a==="openalerts")S.stack.push(["alerts"]);
+else if(a==="back"){S.stack.pop();S.err={};S.draft=null}
+else if(a==="update"){S.stack.push(["upd"]);S.err={};S.draft=null}
+else if(a==="f")S.f=b;
+else if(a==="dismiss")S.alerts=S.alerts.filter(x=>x.id!==b);
+else if(a==="toggleperk"){const pk=PK.find(x=>x.id===b);if(pk){if(pk.status==="open"){pk.status="done";pk.doneDate=new Date(TODAY)}else{pk.status="open"}}}
+else if(a==="addperk")S.toast="In the full app, this opens a form to add a new perk";
+else if(a==="addcard"){S.form={n:"",o:"Jess",p:"chase",np:"",nb:"",fee:"",mo:""};S.err={};S.stack.push(["cardform",null])}
+else if(a==="editcard"){const x=card(b);S.form={n:x.n,o:x.o,p:x.p,np:"",nb:"",fee:x.fee==null?"":String(x.fee),mo:x.mo?String(x.mo):""};S.err={};S.stack.push(["cardform",b])}
+else if(a==="addacct"){S.form={p:"new",np:"",o:"Jess",nb:""};S.err={};S.stack.push(["acct"])}
+else if(a==="edittrip"){const t=trip(b);S.form={n:t.n,sub:t.sub,notes:t.notes.join("\n"),fd:t.flights.d,fneed:String(t.flights.need),fsrc:t.flights.src.slice(),hd:t.hotel.d,hneed:String(t.hotel.need),hsrc:t.hotel.src.slice()};S.err={};S.stack.push(["edittrip",b])}
+else if(a==="price"){const t=trip(b),pt=c==="flights"?t.flights:t.hotel;S.form={pts:pt.real?String(pt.real.pts):"",src:pt.real?pt.real.src:"seats.aero"};S.err={};S.stack.push(["price",b,c])}
+else if(a==="clearprice"){const v=V(),t=trip(v[1]);delete (v[2]==="flights"?t.flights:t.hotel).real;S.stack.pop();S.toast="Back to the estimate"}
+else if(a==="dec"){const x=card(b);x.dec=x.dec===c?"":c}
+else if(a==="cal")S.toast="In the real app, this adds the fee date to your iPhone calendar";
+else if(a==="closecard"){const x=card(b);x.closed="Sept 2026";x.dec="";S.stack=[];S.tab="cards";S.toast="Moved to closed cards"}
+else if(a==="delcard"){const i=C.findIndex(x=>x.id===b);if(i>-1)C.splice(i,1);S.stack=[];S.tab="cards";S.toast="Card deleted"}
+render();
+}
+ph.addEventListener("click",e=>{const el=e.target.closest("[data-go]");if(!el)return;const [a,b,c]=el.dataset.go.split(":");go(a,b,c)});
+topbar.addEventListener("click",e=>{const el=e.target.closest("[data-go]");if(!el)return;const [a,b,c]=el.dataset.go.split(":");go(a,b,c)});
+ph.addEventListener("keydown",e=>{if(e.key!=="Enter"&&e.key!==" ")return;const t=e.target;if(t.tagName==="INPUT"||t.tagName==="SELECT"||t.tagName==="TEXTAREA")return;const el=t.closest("[data-go]");if(!el)return;e.preventDefault();el.click()});
+ph.addEventListener("input",e=>{const t=e.target;
+if(t.dataset&&t.dataset.k){const k=t.dataset.k;delete S.err[k];const er=document.getElementById("er-"+k);if(er)er.style.display="none";return}
+if(t.name&&S.form){S.form[t.name]=t.value;if(S.err[t.name]){delete S.err[t.name];const er=document.getElementById("er-"+t.name);if(er)er.style.display="none"}}});
+ph.addEventListener("change",e=>{const t=e.target;if(t.name==="p"&&S.form){S.form.p=t.value;render()}});
+showSplash();
+</script>
+</body>
+</html>

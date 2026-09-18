@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Splash animation — pose reference check</title>
+<style>
+:root{
+  --paper:#EFEDE7; --paper-2:#FFFFFF; --ink:#1E2733; --ink-soft:#5B6169; --ink-muted:#9A9690;
+  --line:#DAD6CC; --line-strong:#C7C2B4;
+  --accent:#C1592E; --on-accent:#FFFCF6;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink)}
+.serif{font-family:Georgia,"Iowan Old Style","Times New Roman",serif}
+.wrap{max-width:640px;margin:0 auto;padding:32px 20px 56px}
+h1{font-size:20px;margin:0 0 6px}
+.sub{font-size:14px;color:var(--ink-soft);margin:0 0 28px;line-height:1.5}
+.stage{background:var(--paper-2);border:1px solid var(--line);border-radius:20px;padding:32px 24px;display:flex;flex-direction:column;align-items:center}
+.frame{position:absolute;inset:0;opacity:0}
+.frame.f0{animation:frm0 1.3s steps(1) forwards}
+.frame.f1{animation:frm1 1.3s steps(1) forwards}
+.frame.f2{animation:frm2 1.3s steps(1) forwards}
+.frame.f3{animation:frm3 1.3s steps(1) forwards}
+@keyframes frm0{0%{opacity:1}24%{opacity:1}25%{opacity:0}100%{opacity:0}}
+@keyframes frm1{0%{opacity:0}24%{opacity:0}25%{opacity:1}49%{opacity:1}50%{opacity:0}100%{opacity:0}}
+@keyframes frm2{0%{opacity:0}49%{opacity:0}50%{opacity:1}74%{opacity:1}75%{opacity:0}100%{opacity:0}}
+@keyframes frm3{0%{opacity:0}74%{opacity:0}75%{opacity:1}100%{opacity:1}}
+.anim-box{position:relative;width:176px;height:118px}
+.replay{margin-top:20px;background:none;border:1px solid var(--line-strong);color:var(--accent);font-size:13px;padding:7px 14px;border-radius:999px;cursor:pointer;font-family:inherit}
+.strip{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:36px}
+.card{background:var(--paper-2);border:1px solid var(--line);border-radius:14px;padding:14px 10px;text-align:center}
+.card svg{display:block;margin:0 auto 10px}
+.tag{font-size:11.5px;font-weight:600;letter-spacing:.01em}
+.tag.real{color:#2F6F4E}
+.tag.drawn{color:var(--accent)}
+.lbl{font-size:12px;color:var(--ink-soft);margin-top:4px;line-height:1.4}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1 class="serif">Splash animation — pose check</h1>
+<p class="sub">Frames 0, 2, and 3 are adapted from Images 1, 3, and 4. Frame 1 is a transition I drew myself — a partial turn, since there was no matching side-view photo for it. Look this over and tell me what to adjust before it goes back into the real mockup.</p>
+
+<div class="stage">
+  <div id="animBox" class="anim-box"></div>
+  <button class="replay" id="replayBtn">Replay animation</button>
+</div>
+
+<div class="strip">
+  <div class="card">
+    <div id="s0"></div>
+    <div class="tag real">FROM IMAGE 1</div>
+    <div class="lbl">Hug</div>
+  </div>
+  <div class="card">
+    <div id="s1"></div>
+    <div class="tag drawn">DRAWN BY ME</div>
+    <div class="lbl">Turning, one arm trailing</div>
+  </div>
+  <div class="card">
+    <div id="s2"></div>
+    <div class="tag real">FROM IMAGE 3</div>
+    <div class="lbl">Apart, same direction</div>
+  </div>
+  <div class="card">
+    <div id="s3"></div>
+    <div class="tag real">FROM IMAGE 4</div>
+    <div class="lbl">Back to back</div>
+  </div>
+</div>
+</div>
+
+<script>
+function pose(n){
+const poses=[
+// 0 — HUG (from Image 1): tall figure leaning head down, arms wrapped fully around; short figure leaning in, close, feet together
+`<g fill="var(--ink)">
+  <ellipse cx="84" cy="42" rx="15" ry="16"/>
+  <path d="M58 72c0-20 12-30 26-30s27 13 26 35c-1 6-4 10-9 13l3 28H64l3-28c-5-3-8-7-9-18z"/>
+  <ellipse cx="118" cy="56" rx="12" ry="13"/>
+  <path d="M97 80c0-16 10-23 21-23s21 9 21 26c0 5-2 9-6 11l2 24H99l2-24c-3-2-4-5-4-14z"/>
+</g>`,
+// 1 — TURNING (drawn): bodies rotating toward same-direction stance, one arm still trailing back onto the other's shoulder, feet starting to separate
+`<g fill="var(--ink)">
+  <ellipse cx="66" cy="42" rx="15" ry="16"/>
+  <path d="M44 118l4-46c2-18 10-28 22-28s21 11 22 29l1 11c-1 5-4 8-9 10l4 24z"/>
+  <ellipse cx="128" cy="54" rx="12" ry="13"/>
+  <path d="M110 118l3-40c1-14 8-22 18-22s17 8 18 22l1 9c-4 3-8 4-13 3l-1 28z"/>
+</g>`,
+// 2 — APART, SAME DIRECTION (from Image 3): tall figure ahead, short figure behind, gap between, arms at sides, standing
+`<g fill="var(--ink)">
+  <ellipse cx="56" cy="40" rx="15" ry="16"/>
+  <path d="M38 118l4-46c1-19 9-30 22-30s21 11 22 30l4 46z"/>
+  <ellipse cx="140" cy="50" rx="12" ry="13"/>
+  <path d="M124 118l3-40c1-15 8-23 18-23s17 8 18 23l3 40z"/>
+</g>`,
+// 3 — BACK TO BACK (from Image 4): standing apart, opposite directions, touching backs
+`<g fill="var(--ink)">
+  <ellipse cx="46" cy="42" rx="15" ry="16"/>
+  <path d="M20 118l6-49c2-18 10-28 22-28s22 12 22 31l2 46z"/>
+  <ellipse cx="156" cy="52" rx="12" ry="13"/>
+  <path d="M138 118l3-41c1-14 8-21 18-21s17 8 19 22l4 40z"/>
+</g>`
+];
+return `<svg viewBox="0 0 176 118" width="176" height="118" xmlns="http://www.w3.org/2000/svg">${poses[n]}</svg>`;
+}
+document.getElementById("s0").innerHTML=pose(0);
+document.getElementById("s1").innerHTML=pose(1);
+document.getElementById("s2").innerHTML=pose(2);
+document.getElementById("s3").innerHTML=pose(3);
+function playAnim(){
+const box=document.getElementById("animBox");
+box.innerHTML=[0,1,2,3].map(n=>`<div class="frame f${n}">${pose(n)}</div>`).join("");
+}
+document.getElementById("replayBtn").addEventListener("click",playAnim);
+playAnim();
+</script>
+</body>
+</html>

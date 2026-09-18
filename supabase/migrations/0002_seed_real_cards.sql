@@ -1,0 +1,50 @@
+-- Pre-loads the real cards and points pots from the kickoff summary.
+-- Balances, annual fees, fee months, and due dates are left blank (null/0) --
+-- those get filled in through the app once it's built.
+
+insert into points_pots (program_id, owner, label, balance) values
+  ((select id from programs where short_name = 'Chase'), 'Abby', 'Abby''s Sapphire Preferred pot', 0),
+  ((select id from programs where short_name = 'Chase'), 'Abby', 'Abby''s Ink Business Preferred pot', 0),
+  ((select id from programs where short_name = 'Chase'), 'Abby', 'Abby''s Ink Business Unlimited pot', 0),
+  ((select id from programs where short_name = 'Chase'), 'Jess', 'Jess''s Sapphire Preferred pot', 0),
+  ((select id from programs where short_name = 'Chase'), 'Jess', 'Jess''s Ink Business Preferred pot', 0),
+  ((select id from programs where short_name = 'Chase'), 'Jess', 'Jess''s Ink Business Unlimited pot', 0),
+  ((select id from programs where short_name = 'Capital One'), 'Jess', 'Jess''s Venture X pot', 0),
+  ((select id from programs where short_name = 'Amex'), 'Both', 'Platinum and Gold pot', 0),
+  ((select id from programs where short_name = 'Hilton'), 'Abby', 'Hilton Honors account', 0),
+  ((select id from programs where short_name = 'Marriott'), 'Abby', 'Marriott Bonvoy account', 0);
+
+insert into cards (name, owner, program_id, pot_id) values
+  ('Hilton Honors Amex', 'Abby',
+    (select id from programs where short_name = 'Hilton'),
+    (select id from points_pots where label = 'Hilton Honors account')),
+  ('Marriott Bonvoy Amex', 'Abby',
+    (select id from programs where short_name = 'Marriott'),
+    (select id from points_pots where label = 'Marriott Bonvoy account')),
+  ('Amex Platinum', 'Abby',
+    (select id from programs where short_name = 'Amex'),
+    (select id from points_pots where label = 'Platinum and Gold pot')),
+  ('Sapphire Preferred', 'Abby',
+    (select id from programs where short_name = 'Chase'),
+    (select id from points_pots where label = 'Abby''s Sapphire Preferred pot')),
+  ('Ink Business Preferred', 'Abby',
+    (select id from programs where short_name = 'Chase'),
+    (select id from points_pots where label = 'Abby''s Ink Business Preferred pot')),
+  ('Ink Business Unlimited', 'Abby',
+    (select id from programs where short_name = 'Chase'),
+    (select id from points_pots where label = 'Abby''s Ink Business Unlimited pot')),
+  ('Amex Gold', 'Both',
+    (select id from programs where short_name = 'Amex'),
+    (select id from points_pots where label = 'Platinum and Gold pot')),
+  ('Venture X', 'Jess',
+    (select id from programs where short_name = 'Capital One'),
+    (select id from points_pots where label = 'Jess''s Venture X pot')),
+  ('Sapphire Preferred', 'Jess',
+    (select id from programs where short_name = 'Chase'),
+    (select id from points_pots where label = 'Jess''s Sapphire Preferred pot')),
+  ('Ink Business Preferred', 'Jess',
+    (select id from programs where short_name = 'Chase'),
+    (select id from points_pots where label = 'Jess''s Ink Business Preferred pot')),
+  ('Ink Business Unlimited', 'Jess',
+    (select id from programs where short_name = 'Chase'),
+    (select id from points_pots where label = 'Jess''s Ink Business Unlimited pot'));

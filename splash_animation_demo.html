@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Average Height — Splash Animation Demo</title>
+<style>
+  :root{
+    --bg: #14213a;
+    --bg-2: #1c2c4d;
+    --fig-tall: #f2b134;
+    --fig-short: #f2ece4;
+    --line: rgba(242,236,228,0.18);
+    --text: #f2ece4;
+    --text-muted: rgba(242,236,228,0.6);
+  }
+  *{box-sizing:border-box}
+  html,body{
+    margin:0; padding:0; height:100%;
+    background:#0b1020;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .stage-wrap{
+    display:flex; flex-direction:column; align-items:center; gap:22px;
+    padding:32px 16px;
+  }
+  .phone{
+    width:300px; height:560px;
+    background:linear-gradient(180deg,var(--bg) 0%, var(--bg-2) 100%);
+    border-radius:36px;
+    position:relative;
+    overflow:hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.45);
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .ticks{
+    position:absolute; inset:0;
+    display:flex; flex-direction:column; justify-content:center; align-items:center;
+    gap:34px;
+    pointer-events:none;
+  }
+  .ticks span{
+    width:64px; height:1px; background:var(--line);
+  }
+  .frame{
+    position:absolute; inset:0;
+    display:flex; align-items:flex-end; justify-content:center;
+    padding-bottom:120px;
+    opacity:0;
+    transition:opacity 0.18s ease;
+  }
+  .frame.on{ opacity:1; }
+  .figs{ width:180px; height:200px; }
+  .wordmark{
+    position:absolute; left:0; right:0; bottom:64px;
+    text-align:center;
+    opacity:0;
+    transition:opacity 0.5s ease 0.25s;
+  }
+  .wordmark.on{ opacity:1; }
+  .wordmark .title{
+    font-size:21px; font-weight:600; color:var(--text); letter-spacing:0.2px;
+  }
+  .wordmark .sub{
+    margin-top:3px;
+    font-size:12.5px; color:var(--text-muted);
+  }
+  .controls{
+    display:flex; align-items:center; gap:14px;
+  }
+  button{
+    font-family:inherit; font-size:14px; font-weight:500;
+    padding:9px 18px; border-radius:999px; border:1px solid rgba(255,255,255,0.15);
+    background:rgba(255,255,255,0.06); color:var(--text); cursor:pointer;
+  }
+  button:hover{ background:rgba(255,255,255,0.12); }
+  .note{
+    max-width:300px; font-size:13px; line-height:1.5; color:rgba(255,255,255,0.55);
+    text-align:center;
+  }
+  @media (prefers-reduced-motion: reduce){
+    .frame{ transition:none; }
+    .wordmark{ transition:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="stage-wrap">
+  <div class="phone" id="phone">
+    <div class="ticks"><span></span><span></span><span></span><span></span></div>
+
+    <!-- Frame 1: hugging, front-on -->
+    <div class="frame f1">
+      <svg class="figs" viewBox="0 0 180 200" xmlns="http://www.w3.org/2000/svg">
+        <!-- tall figure -->
+        <g fill="var(--fig-tall)">
+          <circle cx="78" cy="34" r="14"/>
+          <path d="M62 52 C58 70, 56 110, 60 170 L74 170 C73 130, 76 95, 82 78 C88 95, 92 130, 92 170 L104 170 C108 110, 104 68, 96 52 C90 44, 68 44, 62 52 Z"/>
+          <path d="M92 60 C104 66, 112 78, 110 92 L100 92 C100 82, 96 74, 88 68 Z"/>
+        </g>
+        <!-- short figure -->
+        <g fill="var(--fig-short)" opacity="0.92">
+          <circle cx="100" cy="60" r="12"/>
+          <path d="M88 76 C85 92, 84 126, 87 170 L98 170 C97 138, 99 112, 104 98 C109 112, 111 138, 111 170 L122 170 C124 126, 121 90, 116 76 C110 70, 94 70, 88 76 Z"/>
+          <path d="M90 82 C80 86, 73 96, 74 108 L84 108 C84 100, 87 92, 94 88 Z"/>
+        </g>
+      </svg>
+    </div>
+
+    <!-- Frame 2: loosening, turning -->
+    <div class="frame f2">
+      <svg class="figs" viewBox="0 0 180 200" xmlns="http://www.w3.org/2000/svg">
+        <g fill="var(--fig-tall)">
+          <circle cx="70" cy="34" r="14"/>
+          <path d="M56 52 C51 74, 50 118, 55 170 L69 170 C68 128, 70 96, 74 80 C79 96, 82 128, 83 170 L96 170 C99 118, 97 72, 91 52 C84 44, 62 44, 56 52 Z"/>
+          <path d="M84 58 C94 62, 100 70, 99 80 L90 80 C90 74, 87 68, 80 64 Z"/>
+        </g>
+        <g fill="var(--fig-short)" opacity="0.92">
+          <circle cx="108" cy="58" r="12"/>
+          <path d="M97 74 C93 90, 92 126, 95 170 L106 170 C105 138, 107 112, 111 98 C116 112, 118 138, 119 170 L129 170 C131 124, 128 88, 123 74 C117 68, 101 68, 97 74 Z"/>
+          <path d="M100 78 C92 80, 87 86, 87 94 L96 94 C96 89, 98 84, 103 81 Z"/>
+        </g>
+      </svg>
+    </div>
+
+    <!-- Frame 3: mid-turn, side profiles moving apart -->
+    <div class="frame f3">
+      <svg class="figs" viewBox="0 0 180 200" xmlns="http://www.w3.org/2000/svg">
+        <g fill="var(--fig-tall)">
+          <circle cx="52" cy="34" r="14"/>
+          <path d="M40 52 C36 76, 35 120, 40 170 L52 170 C51 128, 53 96, 56 80 C60 96, 63 128, 64 170 L76 170 C79 120, 76 74, 70 52 C64 45, 46 45, 40 52 Z"/>
+        </g>
+        <g fill="var(--fig-short)" opacity="0.92">
+          <circle cx="128" cy="58" r="12"/>
+          <path d="M117 74 C113 90, 112 126, 115 170 L126 170 C125 138, 127 112, 131 98 C136 112, 138 138, 139 170 L149 170 C151 124, 148 88, 143 74 C137 68, 121 68, 117 74 Z"/>
+        </g>
+      </svg>
+    </div>
+
+    <!-- Frame 4: back-to-back, final logo frame -->
+    <div class="frame f4">
+      <svg class="figs" viewBox="0 0 180 200" xmlns="http://www.w3.org/2000/svg">
+        <g fill="var(--fig-tall)">
+          <circle cx="66" cy="32" r="14"/>
+          <path d="M52 50 C48 74, 47 120, 52 170 L64 170 C63 126, 65 92, 68 76 C72 92, 75 126, 76 170 L88 170 C91 120, 88 72, 82 50 C76 43, 58 43, 52 50 Z"/>
+          <path d="M52 58 C42 64, 36 74, 37 86 L47 86 C47 78, 50 70, 57 65 Z"/>
+        </g>
+        <g fill="var(--fig-short)" opacity="0.92">
+          <circle cx="112" cy="60" r="12"/>
+          <path d="M101 76 C97 92, 96 126, 99 170 L110 170 C109 138, 111 112, 115 98 C120 112, 122 138, 123 170 L133 170 C135 124, 132 88, 127 76 C121 70, 105 70, 101 76 Z"/>
+          <path d="M126 82 C136 86, 143 94, 142 104 L132 104 C132 97, 129 90, 122 86 Z"/>
+        </g>
+      </svg>
+    </div>
+
+    <div class="wordmark f4-word">
+      <div class="title">Average Height</div>
+      <div class="sub">Points &amp; Travel</div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button id="replay">Replay animation</button>
+  </div>
+  <p class="note">Rough stand-in: 4 code-drawn frames swapped in sequence, holding on the last one as the logo. Once you send reference art (or the 4 PNGs), the poses get replaced — the timing and structure stay the same.</p>
+</div>
+
+<script>
+(function(){
+  const frames = [...document.querySelectorAll('.frame')];
+  const word = document.querySelector('.wordmark');
+  const replayBtn = document.getElementById('replay');
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let timer = null;
+
+  function clearAll(){
+    frames.forEach(f => f.classList.remove('on'));
+    word.classList.remove('on');
+  }
+
+  function play(){
+    clearTimeout(timer);
+    clearAll();
+    if(reduced){
+      frames[3].classList.add('on');
+      word.classList.add('on');
+      return;
+    }
+    const steps = [0,1,2,3];
+    const stepDelay = 420;
+    steps.forEach((idx, i) => {
+      timer = setTimeout(() => {
+        clearAll();
+        frames[idx].classList.add('on');
+        if(idx === 3){
+          setTimeout(() => word.classList.add('on'), 250);
+        }
+      }, i * stepDelay);
+    });
+  }
+
+  replayBtn.addEventListener('click', play);
+  play();
+})();
+</script>
+
+</body>
+</html>

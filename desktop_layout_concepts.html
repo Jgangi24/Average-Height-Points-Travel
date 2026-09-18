@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Desktop layout concepts — Average Height Points &amp; Travel</title>
+<style>
+:root{
+  --paper:#EFEDE7; --paper-2:#FFFFFF; --ink:#1E2733; --ink-soft:#5B6169; --ink-muted:#9A9690;
+  --line:#DAD6CC; --line-strong:#C7C2B4;
+  --accent:#C1592E; --on-accent:#FFFCF6; --accent-wash:#F3E2D9;
+  --success:#2F6F4E; --success-bg:#E1EBE3;
+  --warning:#96731D; --warning-bg:#F1E8D2;
+  --radius:12px; --radius-lg:22px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#DAD6CC;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink)}
+h1,h2,h3,.serif{font-family:Georgia,"Iowan Old Style","Times New Roman",serif}
+.num{font-family:Georgia,"Iowan Old Style","Times New Roman",serif}
+.bar{height:6px;border-radius:3px;background:var(--line);overflow:hidden}
+.bar>span{display:block;height:100%;background:var(--warning)}
+.bar.full>span{background:var(--success)}
+.chip{display:inline-flex;align-items:center;gap:4px;font-size:12px;padding:3px 9px;border-radius:999px;margin:0 6px 6px 0;background:var(--paper-2);border:1px solid var(--line);color:var(--ink-soft)}
+.ic{display:inline-block;vertical-align:-4px}
+
+/* ---- reviewer chrome (not part of either design) ---- */
+.reviewbar{position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:center;gap:10px;padding:14px;background:#1E2733;color:#fff;font-size:14px}
+.reviewbar b{font-weight:600}
+.togbtn{font-family:inherit;font-size:14px;padding:8px 16px;border-radius:999px;border:1px solid rgba(255,255,255,.35);background:transparent;color:#fff;cursor:pointer}
+.togbtn.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.stagewrap{padding:36px 24px 64px;display:flex;justify-content:center}
+.stage{width:100%;max-width:1180px;background:var(--paper);border:1px solid var(--line-strong);border-radius:14px;overflow:hidden;box-shadow:0 30px 60px -30px rgba(28,39,51,.35)}
+.note{max-width:1180px;margin:0 auto;padding:0 24px;color:#4b4f55;font-size:13px}
+.note p{line-height:1.6}
+
+/* =========================================================
+   OPTION A — left sidebar, single centered column (minimal
+   change from the phone app: same nav items, same stacked
+   card layout, just given more breathing room)
+   ========================================================= */
+.optA{display:flex;min-height:640px}
+.optA .side{width:230px;flex:none;background:var(--paper-2);border-right:1px solid var(--line);padding:24px 18px;display:flex;flex-direction:column;gap:28px}
+.optA .brand{font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px}
+.optA .navlist{display:flex;flex-direction:column;gap:4px}
+.optA .navitem{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;font-size:14px;color:var(--ink-soft);cursor:pointer}
+.optA .navitem.on{background:var(--accent-wash);color:var(--accent);font-weight:600}
+.optA .main{flex:1;min-width:0;padding:32px 28px;overflow:auto}
+.optA .col{max-width:640px;margin:0 auto}
+.optA .ttl{font-size:24px;font-weight:600;margin:0 0 18px}
+.optA .tc{border:1px solid var(--line);border-radius:16px;background:var(--paper-2);margin-bottom:16px;overflow:hidden}
+.optA .tchd{padding:16px 18px 12px;display:flex;justify-content:space-between;align-items:flex-start}
+.optA .legs{padding:12px 18px 16px;display:grid;gap:10px}
+.optA .legrow{display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px}
+
+/* =========================================================
+   OPTION B — top nav bar, full-width grid content (leans
+   into "desktop app": trip cards sit side by side, more of
+   the window's width gets used)
+   ========================================================= */
+.optB .topnav{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;border-bottom:1px solid var(--line);background:var(--paper-2)}
+.optB .brand{font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px}
+.optB .navrow{display:flex;gap:6px}
+.optB .navitem{padding:8px 16px;border-radius:999px;font-size:13.5px;color:var(--ink-soft);cursor:pointer}
+.optB .navitem.on{background:var(--accent-wash);color:var(--accent);font-weight:600}
+.optB .main{padding:28px 32px 36px}
+.optB .ttl{font-size:24px;font-weight:600;margin:0 0 18px}
+.optB .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.optB .tc{border:1px solid var(--line);border-radius:16px;background:var(--paper-2);overflow:hidden;display:flex;flex-direction:column}
+.optB .tchd{padding:16px 18px 12px}
+.optB .legs{padding:12px 18px 16px;display:grid;gap:10px;flex:1}
+.optB .legrow{display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px}
+@media (max-width:940px){.optB .grid{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+
+<div class="reviewbar">
+  <span>Preview only, not part of either design &mdash;</span>
+  <button class="togbtn on" id="btnA" onclick="show('A')">Option A: Sidebar</button>
+  <button class="togbtn" id="btnB" onclick="show('B')">Option B: Top nav + grid</button>
+</div>
+
+<div class="note" style="margin-top:20px">
+  <p id="capA"><b>Option A &mdash; Sidebar nav, single wider column.</b> Closest to the phone app: same four sections, same stacked trip cards, just with room to breathe instead of a cramped phone-width column. Lowest-risk change, and the fastest to build.</p>
+  <p id="capB" style="display:none"><b>Option B &mdash; Top nav bar, trip cards side by side.</b> Feels more like a dedicated desktop app. Uses the width to show more at once &mdash; on a wide-enough window all three trips are visible without scrolling. A bigger visual departure from the phone version, a bit more CSS work.</p>
+</div>
+
+<div class="stagewrap">
+  <div class="stage">
+
+    <!-- ============ OPTION A ============ -->
+    <div class="optA" id="stageA">
+      <div class="side">
+        <div class="brand"><span style="width:8px;height:8px;border-radius:50%;background:var(--accent);display:inline-block"></span> Average Height</div>
+        <div class="navlist">
+          <div class="navitem">Points</div>
+          <div class="navitem">Cards</div>
+          <div class="navitem">Perks</div>
+          <div class="navitem on">Trips</div>
+        </div>
+      </div>
+      <div class="main">
+        <div class="col">
+          <div class="ttl">Trips</div>
+          <div class="tc">
+            <div class="tchd"><div><div style="font-size:18px;font-weight:600">Disney World</div><div style="font-size:13px;color:var(--ink-soft)">Orlando, 5 nights, 4 travelers from Boston</div></div></div>
+            <div class="legs">
+              <div><div class="legrow"><span>Flights, estimate</span><span style="color:var(--warning)">46% covered</span></div><div class="bar"><span style="width:46%"></span></div></div>
+              <div><div class="legrow"><span>Hotel, estimate</span><span style="color:var(--success)">Covered</span></div><div class="bar full"><span style="width:100%"></span></div></div>
+            </div>
+          </div>
+          <div class="tc">
+            <div class="tchd"><div><div style="font-size:18px;font-weight:600">Japan</div><div style="font-size:13px;color:var(--ink-soft)">Tokyo, 9 nights, 4 travelers from Boston</div></div></div>
+            <div class="legs">
+              <div><div class="legrow"><span>Flights, real price</span><span style="color:var(--warning)">28% covered</span></div><div class="bar"><span style="width:28%"></span></div></div>
+              <div><div class="legrow"><span>Hotel, estimate</span><span style="color:var(--warning)">19% covered</span></div><div class="bar"><span style="width:19%"></span></div></div>
+            </div>
+          </div>
+          <div class="tc">
+            <div class="tchd"><div><div style="font-size:18px;font-weight:600">London</div><div style="font-size:13px;color:var(--ink-soft)">6 nights, 4 travelers from Boston</div></div></div>
+            <div class="legs">
+              <div><div class="legrow"><span>Flights, estimate</span><span style="color:var(--warning)">61% covered</span></div><div class="bar"><span style="width:61%"></span></div></div>
+              <div><div class="legrow"><span>Hotel, estimate</span><span style="color:var(--warning)">33% covered</span></div><div class="bar"><span style="width:33%"></span></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ OPTION B ============ -->
+    <div class="optB" id="stageB" style="display:none">
+      <div class="topnav">
+        <div class="brand"><span style="width:8px;height:8px;border-radius:50%;background:var(--accent);display:inline-block"></span> Average Height Points &amp; Travel</div>
+        <div class="navrow">
+          <div class="navitem">Points</div>
+          <div class="navitem">Cards</div>
+          <div class="navitem">Perks</div>
+          <div class="navitem on">Trips</div>
+        </div>
+        <div style="width:120px"></div>
+      </div>
+      <div class="main">
+        <div class="ttl">Trips</div>
+        <div class="grid">
+          <div class="tc">
+            <div class="tchd"><div style="font-size:18px;font-weight:600">Disney World</div><div style="font-size:13px;color:var(--ink-soft)">Orlando, 5 nights</div></div>
+            <div class="legs">
+              <div><div class="legrow"><span>Flights, estimate</span><span style="color:var(--warning)">46%</span></div><div class="bar"><span style="width:46%"></span></div></div>
+              <div><div class="legrow"><span>Hotel, estimate</span><span style="color:var(--success)">Covered</span></div><div class="bar full"><span style="width:100%"></span></div></div>
+            </div>
+          </div>
+          <div class="tc">
+            <div class="tchd"><div style="font-size:18px;font-weight:600">Japan</div><div style="font-size:13px;color:var(--ink-soft)">Tokyo, 9 nights</div></div>
+            <div class="legs">
+              <div><div class="legrow"><span>Flights, real price</span><span style="color:var(--warning)">28%</span></div><div class="bar"><span style="width:28%"></span></div></div>
+              <div><div class="legrow"><span>Hotel, estimate</span><span style="color:var(--warning)">19%</span></div><div class="bar"><span style="width:19%"></span></div></div>
+            </div>
+          </div>
+          <div class="tc">
+            <div class="tchd"><div style="font-size:18px;font-weight:600">London</div><div style="font-size:13px;color:var(--ink-soft)">6 nights</div></div>
+            <div class="legs">
+              <div><div class="legrow"><span>Flights, estimate</span><span style="color:var(--warning)">61%</span></div><div class="bar"><span style="width:61%"></span></div></div>
+              <div><div class="legrow"><span>Hotel, estimate</span><span style="color:var(--warning)">33%</span></div><div class="bar"><span style="width:33%"></span></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function show(which){
+  document.getElementById('stageA').style.display = which==='A' ? '' : 'none';
+  document.getElementById('stageB').style.display = which==='B' ? '' : 'none';
+  document.getElementById('btnA').classList.toggle('on', which==='A');
+  document.getElementById('btnB').classList.toggle('on', which==='B');
+  document.getElementById('capA').style.display = which==='A' ? '' : 'none';
+  document.getElementById('capB').style.display = which==='B' ? '' : 'none';
+}
+</script>
+</body>
+</html>
