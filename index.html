@@ -724,7 +724,7 @@ function cardDetailScreen(id){
   h+=`<div class="tc">`;
   h+=row("Earns",`<span class="dot" style="display:inline-block;${dotc(hueFor(pr&&pr.short_name))};margin-right:6px"></span>${esc(pr?pr.name:"")}`,"prog:"+c.program_id);
   h+=row(others.length?"Shared pot":"In this pot",pt?fmt(pt.balance):"None");
-  if(pt)h+=row("Update balance","",`editpot:${c.pot_id}`);
+  if(pt)h+=row("Update points/miles","",`editpot:${c.pot_id}`);
   h+=row("Annual fee",c.annual_fee==null?"Not entered":c.annual_fee===0?"None":"$"+fmt(c.annual_fee));
   h+=row("Fee posts in",c.fee_month?MON[c.fee_month]:"Not entered");
   h+=row("Bill due",c.bill_due_day?"The "+ordinal(c.bill_due_day):"Not entered");
