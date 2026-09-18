@@ -687,8 +687,11 @@ function cardsScreen(){
   let h=hd("Your cards");
   h+=`<div style="display:flex;gap:8px;align-items:center;margin:0 20px 4px">${[["all","All"],["Abby","Abby"],["Jess","Jess"]].map(([f,l])=>btn("f:"+f,l,"tap pill"+(S.f===f?" on":""))).join("")}<span style="flex:1"></span>${btn("addcard",ic("plus",15)+' Add card',"tap b1","font-size:14px;padding:6px 12px;width:auto;display:inline-flex;align-items:center;gap:5px")}</div>`;
   const vis=c=>S.f==="all"||c.owner===S.f||c.owner==="Both";
-  const open=S.data.cards.filter(c=>c.status==="open"&&vis(c));
-  const closed=S.data.cards.filter(c=>c.status==="closed"&&vis(c));
+  const programRank=id=>{const pr=program(id);const i=PROGRAM_ORDER.indexOf(pr?pr.short_name:"");return i===-1?999:i};
+  const ownerRank=o=>o==="Jess"?0:o==="Abby"?1:2;
+  const byProgram=(a,b)=>programRank(a.program_id)-programRank(b.program_id)||ownerRank(a.owner)-ownerRank(b.owner);
+  const open=S.data.cards.filter(c=>c.status==="open"&&vis(c)).sort(byProgram);
+  const closed=S.data.cards.filter(c=>c.status==="closed"&&vis(c)).sort(byProgram);
   const curMonth=new Date().getMonth()+1;
   const up=open.filter(c=>c.annual_fee>0&&c.fee_month).map(c=>({c,d:(c.fee_month-curMonth+12)%12})).filter(x=>x.d<=3).sort((a,b)=>a.d-b.d);
   const withFee=open.filter(c=>c.annual_fee!=null),missing=open.filter(c=>c.annual_fee==null).length,total=withFee.reduce((s,c)=>s+c.annual_fee,0);
