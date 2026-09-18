@@ -95,7 +95,8 @@ body{overflow:hidden}
 /* Floating rounded nav bar instead of a flat, edge-to-edge docked strip.
    Scoped to phone widths so it can't touch the desktop top-nav layout below. */
 @media (max-width:879px){
-  .tabs{margin:0 16px 16px;border-top:none;border-radius:26px;overflow:hidden;box-shadow:0 14px 32px -18px rgba(28,39,51,.35)}
+  .tabs{width:fit-content;margin:0 auto 16px;padding:0 4px;gap:2px;border-top:none;border-radius:26px;overflow:hidden;box-shadow:0 14px 32px -18px rgba(28,39,51,.35)}
+  .tabs .tb{flex:none;padding:9px 18px 13px}
 }
 /* Wide-screen shell: instead of the phone frame stretching edge to edge,
    it becomes a contained card (bordered, rounded, shadowed, auto height)
