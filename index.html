@@ -697,7 +697,11 @@ function cardsScreen(){
   const withFee=open.filter(c=>c.annual_fee!=null),missing=open.filter(c=>c.annual_fee==null).length,total=withFee.reduce((s,c)=>s+c.annual_fee,0);
   h+=`<div class="sec">Fees in the next 3 months</div><div class="tc">`;
   if(!up.length)h+=`<div class="rw"><span class="sm">No fees coming up.</span></div>`;
-  else up.forEach(({c})=>{h+=`<div class="rw"><div style="width:36px;flex:none;font-size:13px;color:var(--ink-soft)">${MON[c.fee_month].slice(0,3)}</div><div style="flex:1;min-width:0">${btn("card:"+c.id,`<div style="font-size:15px">${ownL(c.owner)}'s ${esc(c.name)}</div>`,"tap")}</div><div style="font-size:15px;font-weight:600">$${fmt(c.annual_fee)}</div>${btn("cal:"+c.id,ic("calendarPlus",19)+'<span class="sr-only">Add to calendar</span>',"tap","color:var(--accent);padding:2px")}</div>`});
+  else up.forEach(({c})=>{
+    const noteColor=c.decision_note==="Cancel"?"var(--danger)":c.decision_note==="Downgrade"?"var(--warning)":"var(--ink-soft)";
+    const noteLine=c.decision_note?`<div class="sm" style="color:${noteColor}">Plan: ${esc(c.decision_note)}</div>`:"";
+    h+=`<div class="rw"><div style="width:36px;flex:none;font-size:13px;color:var(--ink-soft)">${MON[c.fee_month].slice(0,3)}</div><div style="flex:1;min-width:0">${btn("card:"+c.id,`<div style="font-size:15px">${ownL(c.owner)}'s ${esc(c.name)}</div>${noteLine}`,"tap")}</div><div style="font-size:15px;font-weight:600">$${fmt(c.annual_fee)}</div>${btn("cal:"+c.id,ic("calendarPlus",19)+'<span class="sr-only">Add to calendar</span>',"tap","color:var(--accent);padding:2px")}</div>`;
+  });
   h+=`<div class="rw" style="background:var(--accent-wash);border-top:1px solid var(--line-strong)"><span style="font-size:15px;color:var(--accent)">Yearly fees${S.f==="all"?" for the household":", "+S.f+" and shared"}</span><span class="num" style="flex:1;text-align:right;font-size:15px;font-weight:600;color:var(--accent)">$${fmt(total)}</span></div>`;
   h+=`</div>`;
   h+=`<p class="sm" style="margin:-6px 20px 8px">${missing?missing+(missing>1?" cards need":" card needs")+" a fee entered. ":""}Enter fees from your statements.</p>`;
