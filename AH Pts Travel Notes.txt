@@ -7,7 +7,11 @@ Round 1
 - Cards >> Closed cards: Once a card appears in Closed cards- can it be deleted forever? I have a test card sitting there and I'd like to remove it
 
 
-Round 2 — done
-- Screenshot 1, Points: lets have none of the balances editable, just gets confusing
+Round 2
+- Screenshot 1, Points: lets have none of the balances editable, just gets confusing 
 - Screenshot 2, Cards >> Edit Cards: is it possible to have balance be specifically for the card that's being edited? The shared pot is viewable on the Points tab and I'd like this screen to be more targeted to the specific card only
-- Screenshot 3, Perks: Can you move "upcoming redeemaables" below "redeemed"? Makes more sense that way (already in that order in the code — no change needed)
+- Screenshot 3, Perks: Can you move "upcoming redeemaables" below "redeemed"? Makes more sense that way
+
+
+Round 3
+- Screenshot 1, Cards >> Amex Gold: I'm fine with the "shared pot" row, but it should not be editable. Please add a separate editable row only for the points/miles for the specific card being edited. It should function the same way as shown in screenshot 2 (universal add)
