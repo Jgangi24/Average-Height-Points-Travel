@@ -566,6 +566,7 @@ const program=id=>S.data.programs.find(p=>p.id===id);
 const pot=id=>S.data.pots.find(p=>p.id===id);
 const card=id=>S.data.cards.find(c=>c.id===id);
 const potsFor=programId=>S.data.pots.filter(p=>p.program_id===programId);
+const cardsForPot=potId=>S.data.cards.filter(c=>c.pot_id===potId&&c.status==="open");
 function orderedPrograms(){const rank=s=>{const i=PROGRAM_ORDER.indexOf(s);return i===-1?999:i};return [...S.data.programs].sort((a,b)=>rank(a.short_name)-rank(b.short_name))}
 /* ---------- data ---------- */
 async function loadData(){
@@ -627,7 +628,7 @@ function topbarH(){
 function pointsScreen(){
   let h=hd("Your points");
   const latest=S.data.pots.reduce((m,p)=>p.updated_at>m?p.updated_at:m,"");
-  h+=`<div style="margin:0 20px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px"><span class="sm">${latest?daysAgoText(latest):"Not updated yet"}</span>${btn("update","Update balances","tap b2","font-size:14px;padding:6px 12px;width:auto")}</div>`;
+  h+=`<div style="margin:0 20px 14px"><span class="sm">${latest?daysAgoText(latest):"Not updated yet"}</span></div>`;
   const totalValue=S.data.pots.reduce((s,p)=>{const pr=program(p.program_id);return s+estValue(p.balance,pr?pr.short_name:null)},0);
   if(totalValue>0)h+=`<p class="sm" style="margin:-6px 20px 14px">Rough value of everything below: <strong style="color:var(--ink)">$${fmt(totalValue)}</strong></p>`;
   h+=`<div class="sec">Balances</div><div class="tc">`;
@@ -644,7 +645,7 @@ function pointsScreen(){
     h+=btn("prog:"+pr.id,`<span class="dot" style="${dotc(hue)}"></span><div style="flex:1;min-width:0"><div style="font-size:15px">${esc(pr.name)}</div><div class="sm">${split||"0"}</div></div><div style="text-align:right"><div style="font-size:17px;font-weight:600">${fmt(a+j+bo)}</div>${val>0?`<div class="sm">≈$${fmt(val)}</div>`:""}</div>${ic("chevronRight",18)}`,"rw tap");
   });
   h+=btn("addacct",`${ic("plus",18)}<span style="font-size:15px;color:var(--accent)">Add an account without a card</span>`,"rw tap")+`</div>`;
-  h+=`<p class="sm" style="margin:8px 20px 20px">Tap a program to see which cards feed it. Dollar values are rough industry estimates (checked September 2026), not a guarantee — actual value depends a lot on how you redeem.</p>`;
+  h+=`<p class="sm" style="margin:8px 20px 20px">Tap a program to see which cards feed it, or update a card's balance from its page on the Cards tab. Dollar values are rough industry estimates (checked September 2026), not a guarantee — actual value depends a lot on how you redeem.</p>`;
   return h;
 }
 function progScreen(id){
@@ -655,8 +656,21 @@ function progScreen(id){
   h+=`<div style="margin:0 20px 8px"><div class="num" style="font-size:30px;font-weight:600">${fmt(total)}</div><div class="sm">${esc(pr.unit)} in ${here.length} ${here.length===1?"place":"places"}</div></div>`;
   h+=`<div class="sec">Where the ${esc(pr.unit)} live</div><div class="tc">`;
   if(!here.length)h+=`<div class="rw"><span class="sm">No pots yet.</span></div>`;
-  here.forEach(p=>{h+=`<div class="rw"><div style="flex:1;min-width:0"><div style="font-size:15px">${potLabel(p)}</div></div><div style="font-size:15px">${fmt(p.balance)}</div></div>`});
+  here.forEach(p=>{
+    const standalone=!cardsForPot(p.id).length;
+    if(standalone)h+=btn("editpot:"+p.id,`<div style="flex:1;min-width:0"><div style="font-size:15px">${potLabel(p)}</div></div><div style="font-size:15px">${fmt(p.balance)}</div>${ic("chevronRight",18)}`,"rw tap");
+    else h+=`<div class="rw"><div style="flex:1;min-width:0"><div style="font-size:15px">${potLabel(p)}</div></div><div style="font-size:15px">${fmt(p.balance)}</div></div>`;
+  });
   h+=`</div>`;
+  if(here.some(p=>!cardsForPot(p.id).length))h+=`<p class="sm" style="margin:8px 20px 20px">Tap a standalone account to update its balance. Cards' balances are updated from their own page on the Cards tab.</p>`;
+  return h;
+}
+function potEditScreen(id){
+  const p=pot(id);if(!p)return hd("Not found",true);
+  const pr=program(p.program_id),f=S.form;
+  let h=hd(potLabel(p),true);
+  h+=fld("bal","Balance",f.bal,`inputmode="numeric" placeholder="25000"`);
+  h+=`<div style="display:flex;gap:8px;margin:18px 20px 20px;border-top:1px solid var(--line);padding-top:16px">${btn("savepotbal","Save balance","tap b1","flex:1")}${btn("back","Cancel","tap b2","flex:1")}</div>`;
   return h;
 }
 function acctScreen(){
@@ -668,24 +682,6 @@ function acctScreen(){
   h+=pills(f.o);
   h+=fld("nb","Current balance",f.nb,`inputmode="numeric" placeholder="25000"`);
   h+=`<div style="display:flex;gap:8px;margin:18px 20px 20px;border-top:1px solid var(--line);padding-top:16px">${btn("saveacct","Add account","tap b1","flex:1")}${btn("back","Cancel","tap b2","flex:1")}</div>`;
-  return h;
-}
-function updScreen(){
-  let h=hd("Update balances",true);
-  h+=`<p class="sm" style="margin:-4px 20px 12px">Type what each bank or hotel app shows. Saving updates both phones.</p>`;
-  const progs=orderedPrograms().filter(pr=>S.data.pots.some(p=>p.program_id===pr.id));
-  const ownerRank=o=>o==="Jess"?0:o==="Abby"?1:2;
-  if(!progs.length)h+=`<div class="tc"><div class="rw"><span class="sm">No pots yet.</span></div></div>`;
-  progs.forEach(pr=>{
-    const here=S.data.pots.filter(p=>p.program_id===pr.id).sort((a,b)=>ownerRank(a.owner)-ownerRank(b.owner));
-    const hue=hueFor(pr.short_name);
-    h+=`<div class="sec">${esc(pr.name)}</div><div class="tc">`;
-    here.forEach(p=>{
-      h+=`<div class="rw" style="flex-wrap:wrap"><span class="dot" style="${dotc(hue)}"></span><label for="in-${p.id}" style="flex:1;min-width:0;font-size:14px;line-height:1.4">${potLabel(p)}</label><input id="in-${p.id}" data-k="${p.id}" inputmode="numeric" value="${esc(p.balance)}" style="width:110px;text-align:right"><div id="er-${p.id}" style="width:100%;font-size:13px;color:var(--danger);text-align:right;${S.err[p.id]?"":"display:none"}">Enter a whole number, like 48200</div></div>`;
-    });
-    h+=`</div>`;
-  });
-  h+=`<div style="display:flex;gap:8px;margin:16px 20px 20px">${btn("save","Save balances","tap b1","flex:1")}${btn("back","Cancel","tap b2","flex:1")}</div>`;
   return h;
 }
 /* ---------- cards tab ---------- */
@@ -748,7 +744,10 @@ function cardDetailScreen(id){
     if(c.bill_due_day)calBtns.push(btn("caldue:"+c.id,ic("calendarPlus",16)+' Add due date to calendar',"tap b2","flex:1;display:inline-flex;align-items:center;justify-content:center;gap:6px"));
     if(calBtns.length)h+=`<div style="display:flex;gap:8px;margin:10px 20px 0">${calBtns.join("")}</div>`;
     h+=`<div style="margin:12px 20px 20px">${btn("close:"+c.id,"Close or delete card","tap b2","color:var(--danger);border-color:var(--danger)")}</div>`;
-  }else h+=`<p class="sm" style="margin:14px 20px 20px">Kept as a record. Some banks limit sign-up bonuses based on cards you've had before.</p>`;
+  }else{
+    h+=`<p class="sm" style="margin:14px 20px 8px">Kept as a record. Some banks limit sign-up bonuses based on cards you've had before.</p>`;
+    h+=`<div style="margin:8px 20px 20px">${btn("delcard:"+c.id,"Delete completely","tap b2","color:var(--danger);border-color:var(--danger)")}</div>`;
+  }
   return h;
 }
 function closeCardScreen(id){
@@ -784,7 +783,9 @@ function cardFormScreen(){
     }
   }else{
     const c=card(id),pr=program(c.program_id);
+    const shared=S.data.cards.filter(x=>x.pot_id===c.pot_id&&x.id!==c.id&&x.status==="open");
     h+=`<div style="margin:0 20px 14px"><div class="lb">Earns</div><div style="font-size:15px">${esc(pr?pr.name:"")}</div><div class="sm">To switch programs, close this card and add a new one.</div></div>`;
+    h+=fld("bal",shared.length?`Balance (shared with ${shared.map(x=>esc(x.name)).join(", ")})`:"Balance",f.bal,`inputmode="numeric" placeholder="25000"`);
   }
   h+=fld("fee","Annual fee in dollars (optional)",f.fee,`inputmode="numeric" placeholder="95"`);
   h+=monthSelect(f);
@@ -974,6 +975,8 @@ async function saveCard(){
   if(feeRaw&&!/^\d+$/.test(feeRaw))S.err.fee="Enter a whole dollar amount, like 95";
   const dueRaw=num(f.due);
   if(dueRaw&&(!/^\d+$/.test(dueRaw)||+dueRaw<1||+dueRaw>31))S.err.due="Enter a day between 1 and 31";
+  const balRaw=num(f.bal||"");
+  if(id&&!/^\d+$/.test(balRaw))S.err.bal="Enter a whole number, like 25000";
   if(!id){
     if(f.p==="new"&&!(f.np||"").trim())S.err.np="Enter the program name, like World of Hyatt";
     if((f.p==="new"||f.pot==="new")&&!/^\d+$/.test(num(f.nb||"0")))S.err.nb="Enter a whole number, like 0 or 25000";
@@ -986,6 +989,9 @@ async function saveCard(){
   if(id){
     const {error}=await sb.from("cards").update({name,owner:f.o,annual_fee:feeV,fee_month:moV,bill_due_day:dueV}).eq("id",id);
     if(error){S.err.n=error.message;render();return}
+    const c=card(id);
+    const {error:balErr}=await sb.from("points_pots").update({balance:parseInt(balRaw,10),updated_at:new Date().toISOString()}).eq("id",c.pot_id);
+    if(balErr){S.err.bal=balErr.message;render();return}
     await loadData();S.stack.pop();S.toast="Changes saved";render();return;
   }
   let programId=f.p;
@@ -1055,17 +1061,13 @@ async function clearPrice(){
   if(error){S.toast="Couldn't clear the price";render();return}
   await loadData();S.stack.pop();S.toast="Back to the estimate";render();
 }
-async function saveBalances(){
-  let bad=false;const vals={};
-  S.data.pots.forEach(p=>{
-    const el=document.getElementById("in-"+p.id);if(!el)return;
-    const c=num(el.value);
-    if(!/^\d+$/.test(c)){S.err[p.id]=1;bad=true}else{delete S.err[p.id];vals[p.id]=parseInt(c,10)}
-  });
-  if(bad){render();return}
-  const now=new Date().toISOString();
-  await Promise.all(Object.entries(vals).map(([id,balance])=>sb.from("points_pots").update({balance,updated_at:now}).eq("id",id)));
-  await loadData();S.err={};S.stack=[];S.tab="points";S.toast="Balances saved";render();
+async function savePotBalance(){
+  const id=stackTop()[1],f=S.form;S.err={};
+  const balRaw=num(f.bal);
+  if(!/^\d+$/.test(balRaw)){S.err.bal="Enter a whole number, like 25000";render();return}
+  const {error}=await sb.from("points_pots").update({balance:parseInt(balRaw,10),updated_at:new Date().toISOString()}).eq("id",id);
+  if(error){S.err.bal=error.message;render();return}
+  await loadData();S.stack.pop();S.toast="Balance saved";render();
 }
 /* ---------- render ---------- */
 const scr=document.getElementById("scr"),tabsEl=document.getElementById("tabs"),ph=document.getElementById("ph"),topbar=document.getElementById("topbar");
@@ -1078,7 +1080,7 @@ function render(){
   topbar.style.display="flex";tabsEl.style.display="flex";topbar.innerHTML=topbarH();
   const v=stackTop();let h;
   if(v){const t=v[0];
-    h=t==="prog"?progScreen(v[1]):t==="card"?cardDetailScreen(v[1]):t==="close"?closeCardScreen(v[1]):t==="cardform"?cardFormScreen():t==="acct"?acctScreen():t==="upd"?updScreen():t==="alerts"?alertsScreen():t==="perk"?perkDetailScreen(v[1]):t==="perkform"?perkFormScreen():t==="trip"?tripDetailScreen(v[1]):t==="edittrip"?tripFormScreen():t==="price"?priceFormScreen():"";
+    h=t==="prog"?progScreen(v[1]):t==="card"?cardDetailScreen(v[1]):t==="close"?closeCardScreen(v[1]):t==="cardform"?cardFormScreen():t==="acct"?acctScreen():t==="potedit"?potEditScreen(v[1]):t==="alerts"?alertsScreen():t==="perk"?perkDetailScreen(v[1]):t==="perkform"?perkFormScreen():t==="trip"?tripDetailScreen(v[1]):t==="edittrip"?tripFormScreen():t==="price"?priceFormScreen():"";
   }else{
     h=S.tab==="points"?pointsScreen():S.tab==="cards"?cardsScreen():S.tab==="perks"?perksScreen():tripsScreen();
   }
@@ -1102,12 +1104,12 @@ async function go(a,b,c){
   if(a==="close"){S.stack.push(["close",b]);render();return}
   if(a==="back"){S.stack.pop();S.err={};render();return}
   if(a==="addcard"){const defProg=orderedPrograms()[0];S.form={n:"",o:"Jess",p:defProg?defProg.id:"new",pot:"new",np:"",nb:"",fee:"",mo:"",due:""};S.err={};S.stack.push(["cardform",null]);render();return}
-  if(a==="editcard"){const x=card(b);S.form={n:x.name,o:x.owner,fee:x.annual_fee==null?"":String(x.annual_fee),mo:x.fee_month?String(x.fee_month):"",due:x.bill_due_day?String(x.bill_due_day):""};S.err={};S.stack.push(["cardform",b]);render();return}
+  if(a==="editcard"){const x=card(b);const pt=pot(x.pot_id);S.form={n:x.name,o:x.owner,fee:x.annual_fee==null?"":String(x.annual_fee),mo:x.fee_month?String(x.fee_month):"",due:x.bill_due_day?String(x.bill_due_day):"",bal:pt?String(pt.balance):""};S.err={};S.stack.push(["cardform",b]);render();return}
   if(a==="savecard"){await saveCard();return}
   if(a==="addacct"){const defProg=orderedPrograms()[0];S.form={p:defProg?defProg.id:"new",np:"",o:"Jess",nb:""};S.err={};S.stack.push(["acct"]);render();return}
   if(a==="saveacct"){await saveAcct();return}
-  if(a==="update"){S.stack.push(["upd"]);S.err={};render();return}
-  if(a==="save"){await saveBalances();return}
+  if(a==="editpot"){const p=pot(b);S.form={bal:String(p.balance)};S.err={};S.stack.push(["potedit",b]);render();return}
+  if(a==="savepotbal"){await savePotBalance();return}
   if(a==="f"){S.f=b;render();return}
   if(a==="closecard"){await sb.from("cards").update({status:"closed",closed_at:new Date().toISOString()}).eq("id",b);await loadData();S.stack=[];S.tab="cards";S.toast="Moved to closed cards";render();return}
   if(a==="delcard"){const x=card(b);if(!window.confirm(`Delete "${x?x.name:"this card"}" completely? This can't be undone.`)){return}await sb.from("cards").delete().eq("id",b);await loadData();S.stack=[];S.tab="cards";S.toast="Card deleted";render();return}
