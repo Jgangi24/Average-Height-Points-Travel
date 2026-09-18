@@ -663,10 +663,12 @@ function potEditScreen(id){
   const p=pot(id);if(!p)return hd("Not found",true);
   const pr=program(p.program_id),f=S.form;
   const feeding=S.data.cards.filter(x=>x.pot_id===id&&x.status==="open");
+  const anyCard=S.data.cards.some(x=>x.pot_id===id);
   let h=hd(potLabel(p),true);
   if(feeding.length)h+=`<p class="sm" style="margin:-4px 20px 14px">${feeding.length>1?"Shared by "+feeding.map(x=>esc(x.name)).join(" and "):"Feeds "+esc(feeding[0].name)}.</p>`;
   h+=fld("bal","Balance",f.bal,`inputmode="numeric" placeholder="25000"`);
   h+=`<div style="display:flex;gap:8px;margin:18px 20px 20px;border-top:1px solid var(--line);padding-top:16px">${btn("savepotbal","Save balance","tap b1","flex:1")}${btn("back","Cancel","tap b2","flex:1")}</div>`;
+  if(!anyCard)h+=`<div style="margin:0 20px 20px">${btn("delpot:"+id,"Delete this account","tap b2","color:var(--danger);border-color:var(--danger)")}</div>`;
   return h;
 }
 function acctScreen(){
@@ -1141,6 +1143,15 @@ async function go(a,b,c){
   if(a==="saveacct"){await saveAcct();return}
   if(a==="editpot"){const p=pot(b);S.form={bal:String(p.balance)};S.err={};S.stack.push(["potedit",b]);render();return}
   if(a==="savepotbal"){await savePotBalance();return}
+  if(a==="delpot"){
+    const p=pot(b);if(!p)return;
+    if(!window.confirm(`Delete "${potLabel(p)}"? This can't be undone.`)){return}
+    const {error}=await sb.from("points_pots").delete().eq("id",b);
+    if(error){S.toast="Couldn't delete: "+error.message;render();return}
+    const stillUsed=S.data.pots.some(x=>x.program_id===p.program_id&&x.id!==b);
+    if(!stillUsed)await sb.from("programs").delete().eq("id",p.program_id);
+    await loadData();S.stack=[];S.toast="Account deleted";render();return;
+  }
   if(a==="f"){S.f=b;render();return}
   if(a==="closecard"){await sb.from("cards").update({status:"closed",closed_at:new Date().toISOString()}).eq("id",b);await loadData();S.stack=[];S.tab="cards";S.toast="Moved to closed cards";render();return}
   if(a==="delcard"){const x=card(b);if(!window.confirm(`Delete "${x?x.name:"this card"}" completely? This can't be undone.`)){return}await sb.from("cards").delete().eq("id",b);await loadData();S.stack=[];S.tab="cards";S.toast="Card deleted";render();return}
