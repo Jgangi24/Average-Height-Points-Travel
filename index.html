@@ -821,8 +821,8 @@ function perksScreen(){
   const upc=withStatus.filter(x=>x.status==="upcoming").map(x=>x.pk);
   const empty=`<div class="rw"><span class="sm">Nothing here right now.</span></div>`;
   h+=`<div class="foldsec">${foldHead("open","Redeem soon",open.length)}<div style="${S.folds.open?"":"display:none"}">${open.length?open.map(perkRow).join(""):empty}</div></div>`;
-  h+=`<div class="foldsec">${foldHead("done","Redeemed",done.length)}<div style="${S.folds.done?"":"display:none"}">${done.length?done.map(perkRow).join(""):empty}</div></div>`;
   h+=`<div class="foldsec">${foldHead("upcoming","Upcoming redeemables",upc.length)}<div style="${S.folds.upcoming?"":"display:none"}">${upc.length?upc.map(perkRow).join(""):empty}</div></div>`;
+  h+=`<div class="foldsec">${foldHead("done","Redeemed",done.length)}<div style="${S.folds.done?"":"display:none"}">${done.length?done.map(perkRow).join(""):empty}</div></div>`;
   h+=`<p class="sm" style="margin:14px 20px 20px">Tap a section to expand it, tap a perk for its history, or add perks from a card's page.</p>`;
   return h;
 }
