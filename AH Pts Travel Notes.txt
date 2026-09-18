@@ -1,6 +1,13 @@
 Feedback notes:
+Round 1
 - Adding points is clunky
 	- Screenshot 1 Points tab: do we need an "Update balances" btn? Could you make it so that you click into a card row on Cards and just points there?
 	- We're already editing individual cards there so seems	like a natural fit and would eliminate the entire update balances screen (which I noticed doesn't dynamically change if I were to change "Jess' Platinum card" to "Abby's Platinum card")
 	- The Points tab would then become mostly view only except when "Add an account without a card" is clicked
 - Cards >> Closed cards: Once a card appears in Closed cards- can it be deleted forever? I have a test card sitting there and I'd like to remove it
+
+
+Round 2 — done
+- Screenshot 1, Points: lets have none of the balances editable, just gets confusing
+- Screenshot 2, Cards >> Edit Cards: is it possible to have balance be specifically for the card that's being edited? The shared pot is viewable on the Points tab and I'd like this screen to be more targeted to the specific card only
+- Screenshot 3, Perks: Can you move "upcoming redeemaables" below "redeemed"? Makes more sense that way (already in that order in the code — no change needed)
