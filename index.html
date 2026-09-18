@@ -87,6 +87,11 @@ textarea{width:100%;resize:vertical;min-height:64px}
    fixed-size phone bezel the mockup used for desktop previewing. */
 body{overflow:hidden}
 .ph{height:100vh;height:100dvh;max-width:600px;margin:0 auto;border:none;border-radius:0;box-shadow:none}
+/* iOS 26+/27 standalone web apps get a system blur band painted over the
+   top ~35pt of the screen that can't be turned off via meta tags. Push the
+   topbar content down clear of that band instead, the way native apps'
+   nav bars sit below the status bar with room to spare. */
+#topbar{padding-top:44px}
 /* Wide-screen shell: instead of the phone frame stretching edge to edge,
    it becomes a contained card (bordered, rounded, shadowed, auto height)
    that floats on the page background -- so the header/nav and the content
