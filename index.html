@@ -91,7 +91,12 @@ body{overflow:hidden}
    top ~35pt of the screen that can't be turned off via meta tags. Push the
    topbar content down clear of that band instead, the way native apps'
    nav bars sit below the status bar with room to spare. */
-#topbar{padding-top:44px}
+#topbar{padding-top:30px}
+/* Floating rounded nav bar instead of a flat, edge-to-edge docked strip.
+   Scoped to phone widths so it can't touch the desktop top-nav layout below. */
+@media (max-width:879px){
+  .tabs{margin:0 16px 16px;border-top:none;border-radius:26px;overflow:hidden;box-shadow:0 14px 32px -18px rgba(28,39,51,.35)}
+}
 /* Wide-screen shell: instead of the phone frame stretching edge to edge,
    it becomes a contained card (bordered, rounded, shadowed, auto height)
    that floats on the page background -- so the header/nav and the content
