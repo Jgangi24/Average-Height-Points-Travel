@@ -707,8 +707,9 @@ function cardsScreen(){
   h+=`<p class="sm" style="margin:-6px 20px 8px">${missing?missing+(missing>1?" cards need":" card needs")+" a fee entered. ":""}Enter fees from your statements.</p>`;
   h+=`<div class="sec">Open cards</div><div class="tc">`;
   if(!open.length)h+=`<div class="rw"><span class="sm">No cards yet.</span></div>`;
-  open.forEach(c=>{const pr=program(c.program_id),hue=hueFor(pr&&pr.short_name);
-    h+=btn("card:"+c.id,`<span class="dot" style="${dotc(hue)}"></span><div style="flex:1;min-width:0"><div style="font-size:15px">${esc(c.name)}</div><div class="sm">${ownL(c.owner)}, earns ${esc(pr?pr.short_name:"")} ${esc(pr?pr.unit:"")}</div><div class="sm" style="margin-top:7px;${c.annual_fee==null?"color:var(--warning)":""}">${feeLine(c)}</div></div>${ic("chevronRight",18)}`,"rw tap");});
+  open.forEach(c=>{const pr=program(c.program_id),hue=hueFor(pr&&pr.short_name),pt=pot(c.pot_id);
+    const balCol=`<div style="text-align:right;flex:none;margin-left:8px"><div style="font-size:15px;font-weight:600">${pt?fmt(pt.balance):"—"}</div>${pt?`<div class="sm">${esc(pr?pr.unit:"points")}</div>`:""}</div>`;
+    h+=btn("card:"+c.id,`<span class="dot" style="${dotc(hue)}"></span><div style="flex:1;min-width:0"><div style="font-size:15px">${esc(c.name)}</div><div class="sm">${ownL(c.owner)}, earns ${esc(pr?pr.short_name:"")} ${esc(pr?pr.unit:"")}</div><div class="sm" style="margin-top:7px;${c.annual_fee==null?"color:var(--warning)":""}">${feeLine(c)}</div></div>${balCol}${ic("chevronRight",18)}`,"rw tap");});
   h+=`</div>`;
   if(closed.length){h+=`<div class="sec">Closed cards</div><div class="tc">`;
     closed.forEach(c=>{const closedLabel=c.closed_at?new Date(c.closed_at).toLocaleDateString("en-US",{month:"short",year:"numeric"}):"";
