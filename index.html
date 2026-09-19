@@ -480,10 +480,14 @@ const fld=(k,label,val,attrs)=>`<div style="margin:0 20px 14px"><label class="lb
 const pills=(cur)=>`<div style="margin:0 20px 14px"><div class="lb">Belongs to</div><div style="display:flex;gap:8px">${["Jess","Abby","Both"].map(o=>btn("fo:"+o,o==="Both"?"Both of you":o,"tap pill"+(cur===o?" on":""))).join("")}</div></div>`;
 function daysAgoText(iso){const d=Math.floor((Date.now()-new Date(iso).getTime())/86400000);if(d<=0)return "Updated today";if(d===1)return "Updated 1 day ago";return "Updated "+d+" days ago"}
 function feeStr(c){if(c.annual_fee==null)return "Fee not entered";if(c.annual_fee===0)return "No annual fee";return `$${fmt(c.annual_fee)} fee${c.fee_month?" in "+MON[c.fee_month]:""}`}
-function dueStr(c){if(c.bill_due_day==null)return null;return `Monthly statement balance due on the <strong>${ordinal(c.bill_due_day)}</strong>`}
+function dueStr(c){if(c.bill_due_day==null)return null;return `Statement balance due on the <strong>${ordinal(c.bill_due_day)}</strong>`}
 function feeLine(c){const f=feeStr(c),d=dueStr(c);return d?`${f} &nbsp;||&nbsp; ${d}`:f}
 function monthSelect(f){return `<div style="margin:0 20px 14px"><label class="lb" for="f-mo">Fee posts in (optional)</label><select id="f-mo" name="mo" style="width:100%"><option value="">Not sure yet</option>${MON.slice(1).map((m,i)=>`<option value="${i+1}"${String(f.mo)===String(i+1)?" selected":""}>${m}</option>`).join("")}</select></div>`}
-function potLabel(p){const pr=program(p.program_id);return `${ownL(p.owner)}'s ${esc(p.label)} ${esc(pr?pr.unit:"points")}`}
+function potDisplayName(p){
+  const feeding=S.data.cards.filter(c=>c.pot_id===p.id&&c.status==="open");
+  return feeding.length?feeding.map(c=>c.name).join(" and "):p.label;
+}
+function potLabel(p){const pr=program(p.program_id);return `${ownL(p.owner)}'s ${esc(potDisplayName(p))} ${esc(pr?pr.unit:"points")}`}
 const CADSUF={monthly:"/mo",quarterly:"/qtr",semiannual:"/half-yr",annual:"/yr"};
 const bar=p=>`<div class="bar"><span style="width:${p}%;background:${p>=100?"var(--success)":"var(--warning)"}"></span></div>`;
 const todayStr=()=>new Date().toISOString().slice(0,10);
@@ -789,7 +793,7 @@ function cardFormScreen(){
   }else if(f.p){
     const prSel=program(f.p);
     const pots=potsFor(f.p);
-    const potOptions=pots.map(p=>`<option value="${p.id}"${f.pot===p.id?" selected":""}>${ownL(p.owner)}'s ${esc(p.label)} (${fmt(p.balance)} ${esc(prSel?prSel.unit:"points")})</option>`).join("");
+    const potOptions=pots.map(p=>`<option value="${p.id}"${f.pot===p.id?" selected":""}>${ownL(p.owner)}'s ${esc(potDisplayName(p))} (${fmt(p.balance)} ${esc(prSel?prSel.unit:"points")})</option>`).join("");
     h+=`<div style="margin:0 20px 14px"><label class="lb" for="f-pot">Points balance</label><select id="f-pot" name="pot" style="width:100%"><option value="new"${f.pot==="new"?" selected":""}>Start a fresh balance for this card</option>${potOptions}</select><div class="sm" style="margin-top:6px">${f.pot==="new"?"Gets its own balance, starting at 0.":"Joins that existing balance."}</div>${errH("pot")}</div>`;
     if(f.pot==="new")h+=fld("nb","Starting balance",f.nb,`inputmode="numeric" placeholder="0"`);
   }
