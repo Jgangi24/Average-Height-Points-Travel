@@ -520,29 +520,51 @@ function gcalLink({title,start,recurRule,details}){
   if(recurRule)url+=`&recur=${encodeURIComponent("RRULE:"+recurRule)}`;
   return url;
 }
-function currentPeriodStart(cadence){
+const CADENCE_MONTHS={monthly:1,quarterly:3,semiannual:6,annual:12};
+function addMonths(d,n){return new Date(d.getFullYear(),d.getMonth()+n,d.getDate())}
+function calendarPeriodStart(cadence){
   const t=new Date(),y=t.getFullYear(),m=t.getMonth();
   if(cadence==="monthly")return new Date(y,m,1);
   if(cadence==="quarterly")return new Date(y,Math.floor(m/3)*3,1);
   if(cadence==="semiannual")return new Date(y,m<6?0:6,1);
   return new Date(y,0,1);
 }
-function currentPeriodEnd(cadence){
+function calendarPeriodEnd(cadence){
   const t=new Date(),y=t.getFullYear(),m=t.getMonth();
   if(cadence==="monthly")return new Date(y,m+1,0);
   if(cadence==="quarterly")return new Date(y,Math.floor(m/3)*3+3,0);
   if(cadence==="semiannual")return new Date(y,m<6?6:12,0);
   return new Date(y,11,31);
 }
+/* Rolls a perk's own "Current period closes on" date forward/back by whole
+   cycles (always from the original stored anchor, never a previously-rolled
+   date, so day-31-style overflow can't compound across cycles) to find the
+   end of whichever cycle contains today. */
+function anchoredPeriodEnd(anchorIso,cycleMonths){
+  const anchor=new Date(anchorIso+"T00:00:00");
+  const today=new Date();today.setHours(0,0,0,0);
+  let k=Math.round(((today.getFullYear()-anchor.getFullYear())*12+(today.getMonth()-anchor.getMonth()))/cycleMonths);
+  let end=addMonths(anchor,k*cycleMonths);
+  while(end<today)end=addMonths(anchor,(++k)*cycleMonths);
+  while(true){const prev=addMonths(anchor,(k-1)*cycleMonths);if(prev>=today){end=prev;k--;}else break;}
+  return end;
+}
+function currentPeriodEnd(pk){
+  if(pk.window_end)return anchoredPeriodEnd(pk.window_end,CADENCE_MONTHS[pk.cadence]||12);
+  return calendarPeriodEnd(pk.cadence);
+}
+function currentPeriodStart(pk){
+  if(pk.window_end)return addDays(addMonths(currentPeriodEnd(pk),-(CADENCE_MONTHS[pk.cadence]||12)),1);
+  return calendarPeriodStart(pk.cadence);
+}
 function redemptionsFor(perkId){return S.data.redemptions.filter(r=>r.perk_id===perkId).slice().sort((a,b)=>a.redeemed_on<b.redeemed_on?1:-1)}
 function currentRedemption(pk){
-  const startIso=currentPeriodStart(pk.cadence).toISOString().slice(0,10);
+  const startIso=currentPeriodStart(pk).toISOString().slice(0,10);
   return redemptionsFor(pk.id).find(r=>r.redeemed_on>=startIso);
 }
 function closesInDays(pk){
   if(pk.cadence==="monthly")return null;
-  const end=pk.window_end?new Date(pk.window_end+"T00:00:00"):currentPeriodEnd(pk.cadence);
-  return Math.round((end-new Date())/86400000);
+  return Math.round((currentPeriodEnd(pk)-new Date())/86400000);
 }
 function perkStatus(pk){
   if(currentRedemption(pk))return "done";
