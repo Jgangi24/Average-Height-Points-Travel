@@ -600,6 +600,18 @@ function redeemedTotals(){
   });
   return {month,year};
 }
+function redeemedThisYearFiltered(f){
+  const y=new Date().getFullYear();
+  let total=0;
+  S.data.redemptions.forEach(r=>{
+    if(new Date(r.redeemed_on+"T00:00:00").getFullYear()!==y)return;
+    const pk=S.data.perks.find(p=>p.id===r.perk_id);if(!pk)return;
+    const c=card(pk.card_id);
+    if(f!=="all"&&!(c&&(c.owner===f||c.owner==="Both")))return;
+    total+=Number(pk.value);
+  });
+  return total;
+}
 function cardCapturedThisYear(cardId){
   const y=new Date().getFullYear();
   const cardPerkIds=new Set(S.data.perks.filter(p=>p.card_id===cardId).map(p=>p.id));
@@ -758,6 +770,7 @@ function cardsScreen(){
     h+=`<div class="rw"><div style="width:36px;flex:none;font-size:13px;color:var(--ink-soft)">${MON[c.fee_month].slice(0,3)}</div><div style="flex:1;min-width:0">${btn("card:"+c.id,`<div style="font-size:15px">${ownL(c.owner)}'s ${esc(c.name)}</div>${noteLine}`,"tap")}</div><div style="font-size:15px;font-weight:600">$${fmt(c.annual_fee)}</div>${btn("cal:"+c.id,ic("calendarPlus",19)+'<span class="sr-only">Add to calendar</span>',"tap","color:var(--accent);padding:2px")}</div>`;
   });
   h+=`<div class="rw" style="background:var(--accent-wash);border-top:1px solid var(--line-strong)"><span style="font-size:15px;color:var(--accent)">Yearly fees${S.f==="all"?" for the household":", "+S.f+" and shared"}</span><span class="num" style="flex:1;text-align:right;font-size:15px;font-weight:600;color:var(--accent)">$${fmt(total)}</span></div>`;
+  h+=`<div class="rw" style="background:var(--success-bg);border-top:1px solid var(--line-strong)"><span style="font-size:15px;color:var(--success)">Redeemed ${new Date().getFullYear()}${S.f==="all"?" for the household":", "+S.f+" and shared"}</span><span class="num" style="flex:1;text-align:right;font-size:15px;font-weight:600;color:var(--success)">$${fmt(redeemedThisYearFiltered(S.f))}</span></div>`;
   h+=`</div>`;
   h+=`<p class="sm" style="margin:-6px 20px 8px">${missing?missing+(missing>1?" cards need":" card needs")+" a fee entered. ":""}Enter fees from your statements.</p>`;
   h+=`<div class="sec">Open cards</div><div class="tc">`;
