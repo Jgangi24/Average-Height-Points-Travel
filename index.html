@@ -889,9 +889,8 @@ function perkRow(pk){
     const red=currentRedemption(pk);
     return btn("perk:"+pk.id,`${ic("squareCheck",22)}<div style="flex:1;min-width:0"><div style="font-size:15px">${esc(pk.name)}</div><div class="sm">${ownL(c?c.owner:"")}'s ${esc(c?c.name:"")}${pk.note?" · "+esc(pk.note):""}</div><div class="sm" style="color:var(--success)">Redeemed ${red?fmtDate(red.redeemed_on):""}</div></div><div style="font-size:15px;font-weight:600">$${fmt(pk.value)}</div>`,"rw tap");
   }
-  const dleft=closesInDays(pk);
-  const closeNote=(dleft!==null&&dleft<=URGENT_DAYS)?`<div class="sm" style="color:var(--warning)">Closes in ${dleft} day${dleft===1?"":"s"}</div>`:"";
-  return `<div class="rw">${btn("toggleperk:"+pk.id,ic("square",22),"tap","color:var(--ink-muted)")}${btn("perk:"+pk.id,`<div style="font-size:15px">${esc(pk.name)}</div><div class="sm">${ownL(c?c.owner:"")}'s ${esc(c?c.name:"")} · <span class="chip" style="background:var(--paper-2);border:1px solid var(--line);margin:0">${pk.cadence}</span>${pk.note?" · "+esc(pk.note):""}</div>${closeNote}`,"tap","flex:1;min-width:0")}<div style="font-size:15px;font-weight:600">$${fmt(pk.value)}</div></div>`;
+  const dueNote=`<div class="sm" style="color:var(--accent)">Redeem by ${fmtDate(currentPeriodEnd(pk).toISOString().slice(0,10))}</div>`;
+  return `<div class="rw">${btn("toggleperk:"+pk.id,ic("square",22),"tap","color:var(--ink-muted)")}${btn("perk:"+pk.id,`<div style="font-size:15px">${esc(pk.name)}</div><div class="sm">${ownL(c?c.owner:"")}'s ${esc(c?c.name:"")} · <span class="chip" style="background:var(--paper-2);border:1px solid var(--line);margin:0">${pk.cadence}</span>${pk.note?" · "+esc(pk.note):""}</div>${dueNote}`,"tap","flex:1;min-width:0")}<div style="font-size:15px;font-weight:600">$${fmt(pk.value)}</div></div>`;
 }
 function perksScreen(){
   let h=hd("Perks");
