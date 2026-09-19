@@ -562,6 +562,24 @@ function currentRedemption(pk){
   const startIso=currentPeriodStart(pk).toISOString().slice(0,10);
   return redemptionsFor(pk.id).find(r=>r.redeemed_on>=startIso);
 }
+/* Calendar-year backfill helper: every full calendar period of this cadence
+   that's already closed so far this year (the still-open current period is
+   never included), minus any period that already has a logged redemption. */
+function periodsToFillThisYear(pk){
+  const months=CADENCE_MONTHS[pk.cadence]||12;
+  const y=new Date().getFullYear();
+  const today=new Date();today.setHours(0,0,0,0);
+  const existing=redemptionsFor(pk.id).map(r=>r.redeemed_on);
+  const dates=[];
+  for(let m=0;m<12;m+=months){
+    const start=new Date(y,m,1),end=new Date(y,m+months,0);
+    if(end>=today)continue;
+    const startIso=start.toISOString().slice(0,10),endIso=end.toISOString().slice(0,10);
+    if(existing.some(d=>d>=startIso&&d<=endIso))continue;
+    dates.push(startIso);
+  }
+  return dates;
+}
 function closesInDays(pk){
   if(pk.cadence==="monthly")return null;
   return Math.round((currentPeriodEnd(pk)-new Date())/86400000);
@@ -891,10 +909,15 @@ function perkDetailScreen(id){
     const red=currentRedemption(pk);
     h+=`<div style="margin:0 20px 14px">${fld("redate","Redeemed on (edit to backdate)",fmtDate(red.redeemed_on),`placeholder="Sept 10, 2026"`)}${btn("saveredate:"+pk.id,"Save date","tap b2","width:auto;padding:8px 14px")}<div style="margin-top:10px">${btn("undoperk:"+pk.id,"Undo — mark not redeemed","tap","font-size:13px;color:var(--danger)")}</div></div>`;
   }
+  const fillDates=periodsToFillThisYear(pk);
+  if(fillDates.length){
+    h+=`<div style="margin:0 20px 14px">${btn("fillperiods:"+pk.id,ic("check",16)+` Fill in ${fillDates.length} past period${fillDates.length===1?"":"s"} this year`,"tap b2","display:inline-flex;align-items:center;gap:6px;width:auto")}</div>`;
+  }
   h+=`<div class="sec">History</div>`;
+  h+=`<div style="margin:0 20px 14px">${fld("logdate","Log a past redemption","",`placeholder="Jan 15, 2026"`)}${btn("addlogged:"+pk.id,"Add","tap b2","width:auto;padding:8px 14px")}</div>`;
   const rows=redemptionsFor(pk.id);
   if(!rows.length)h+=`<p class="sm" style="margin:0 20px 12px">No past periods logged yet.</p>`;
-  rows.forEach(r=>{h+=`<div class="rw"><span style="flex:1;font-size:15px">${fmtDate(r.redeemed_on)}</span><span style="color:var(--success)">${ic("check",18)}</span></div>`});
+  rows.forEach(r=>{h+=`<div class="rw"><span style="flex:1;font-size:15px">${fmtDate(r.redeemed_on)}</span><span style="color:var(--success)">${ic("check",18)}</span>${btn("delredemption:"+r.id,ic("trash",16),"tap","color:var(--ink-muted);margin-left:4px")}</div>`});
   h+=`<div style="margin:16px 20px 20px">${btn("editperk:"+pk.id,"Edit perk","tap b2")}</div>`;
   return h;
 }
@@ -1221,6 +1244,12 @@ async function go(a,b,c){
     if(red)await sb.from("perk_redemptions").delete().eq("id",red.id);
     await loadData();S.stack.pop();render();return;
   }
+  if(a==="fillperiods"){
+    const pk=S.data.perks.find(x=>x.id===b);
+    const dates=pk?periodsToFillThisYear(pk):[];
+    if(dates.length)await sb.from("perk_redemptions").insert(dates.map(d=>({perk_id:b,redeemed_on:d})));
+    await loadData();S.toast=`Logged ${dates.length} past period${dates.length===1?"":"s"}`;render();return;
+  }
   if(a==="saveredate"){
     const pk=S.data.perks.find(x=>x.id===b);
     const red=pk?currentRedemption(pk):null;
@@ -1228,6 +1257,16 @@ async function go(a,b,c){
     if(!iso){S.err.redate="Use a format like Sept 10, 2026";render();return}
     if(red)await sb.from("perk_redemptions").update({redeemed_on:iso}).eq("id",red.id);
     await loadData();delete S.err.redate;S.toast="Date updated";render();return;
+  }
+  if(a==="addlogged"){
+    const iso=parseDateInput(document.getElementById("f-logdate").value);
+    if(!iso){S.err.logdate="Use a format like Jan 15, 2026";render();return}
+    await sb.from("perk_redemptions").insert({perk_id:b,redeemed_on:iso});
+    await loadData();delete S.err.logdate;S.toast="Redemption logged";render();return;
+  }
+  if(a==="delredemption"){
+    await sb.from("perk_redemptions").delete().eq("id",b);
+    await loadData();S.toast="Redemption removed";render();return;
   }
   if(a==="addperk"){S.form={name:"",value:"",cad:"monthly",windowEnd:"",note:""};S.err={};S.stack.push(["perkform",null,b]);render();return}
   if(a==="editperk"){
