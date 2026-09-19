@@ -489,6 +489,7 @@ function potDisplayName(p){
 }
 function potLabel(p){const pr=program(p.program_id);return `${ownL(p.owner)}'s ${esc(potDisplayName(p))} ${esc(pr?pr.unit:"points")}`}
 const CADSUF={monthly:"/mo",quarterly:"/qtr",semiannual:"/half-yr",annual:"/yr"};
+const URGENT_DAYS=14;
 const bar=p=>`<div class="bar"><span style="width:${p}%;background:${p>=100?"var(--success)":"var(--warning)"}"></span></div>`;
 const todayStr=()=>new Date().toISOString().slice(0,10);
 function fmtDate(iso){const d=new Date(iso+"T00:00:00");return MON[d.getMonth()+1].slice(0,3)+" "+d.getDate()+", "+d.getFullYear()}
@@ -526,18 +527,28 @@ function currentPeriodStart(cadence){
   if(cadence==="semiannual")return new Date(y,m<6?0:6,1);
   return new Date(y,0,1);
 }
+function currentPeriodEnd(cadence){
+  const t=new Date(),y=t.getFullYear(),m=t.getMonth();
+  if(cadence==="monthly")return new Date(y,m+1,0);
+  if(cadence==="quarterly")return new Date(y,Math.floor(m/3)*3+3,0);
+  if(cadence==="semiannual")return new Date(y,m<6?6:12,0);
+  return new Date(y,11,31);
+}
 function redemptionsFor(perkId){return S.data.redemptions.filter(r=>r.perk_id===perkId).slice().sort((a,b)=>a.redeemed_on<b.redeemed_on?1:-1)}
 function currentRedemption(pk){
   const startIso=currentPeriodStart(pk.cadence).toISOString().slice(0,10);
   return redemptionsFor(pk.id).find(r=>r.redeemed_on>=startIso);
 }
-function perkStatus(pk){
-  if(pk.starts_on&&pk.starts_on>todayStr())return "upcoming";
-  return currentRedemption(pk)?"done":"open";
-}
 function closesInDays(pk){
-  if(pk.cadence==="monthly"||!pk.window_end)return null;
-  return Math.round((new Date(pk.window_end+"T00:00:00")-new Date())/86400000);
+  if(pk.cadence==="monthly")return null;
+  const end=pk.window_end?new Date(pk.window_end+"T00:00:00"):currentPeriodEnd(pk.cadence);
+  return Math.round((end-new Date())/86400000);
+}
+function perkStatus(pk){
+  if(currentRedemption(pk))return "done";
+  if(pk.cadence==="monthly")return "open";
+  const dleft=closesInDays(pk);
+  return (dleft!==null&&dleft<=URGENT_DAYS)?"open":"avail";
 }
 function redeemedTotals(){
   const now=new Date(),y=now.getFullYear(),m=now.getMonth();
@@ -564,7 +575,7 @@ function foldHead(key,label,count){
   return btn("fold:"+key,`<span style="font-size:14px;font-weight:600">${label}</span><span style="display:flex;align-items:center;gap:6px"><span class="sm">${count}</span><span class="chv">${ic("chevronDown",16)}</span></span>`,"tap foldhd"+(open?" open":""));
 }
 /* ---------- state ---------- */
-const S={screen:"splash",tab:"points",stack:[],f:"all",toast:"",err:{},form:null,loadError:null,folds:{open:false,done:false,upcoming:false},data:{programs:[],pots:[],cards:[],perks:[],redemptions:[],alerts:[],trips:[],tripLegs:[]}};
+const S={screen:"splash",tab:"points",stack:[],f:"all",toast:"",err:{},form:null,loadError:null,folds:{open:false,avail:false,done:false},data:{programs:[],pots:[],cards:[],perks:[],redemptions:[],alerts:[],trips:[],tripLegs:[]}};
 const stackTop=()=>S.stack[S.stack.length-1];
 const program=id=>S.data.programs.find(p=>p.id===id);
 const pot=id=>S.data.pots.find(p=>p.id===id);
@@ -818,16 +829,12 @@ function cardFieldScreen(){
 /* ---------- perks tab ---------- */
 function perkRow(pk){
   const c=card(pk.card_id),status=perkStatus(pk);
-  if(status==="upcoming"){
-    const startTxt=pk.starts_on?("Opens "+fmtDate(pk.starts_on)):"";
-    return btn("perk:"+pk.id,`<div style="flex:1;min-width:0"><div style="font-size:15px">${esc(pk.name)}</div><div class="sm">${ownL(c?c.owner:"")}'s ${esc(c?c.name:"")} · <span class="chip" style="background:var(--paper);border:1px solid var(--line);margin:0">${pk.cadence}</span> ${startTxt}</div></div><div style="font-size:15px;color:var(--ink-soft)">$${fmt(pk.value)}</div>${ic("chevronRight",18)}`,"rw tap","opacity:.7");
-  }
   if(status==="done"){
     const red=currentRedemption(pk);
     return btn("perk:"+pk.id,`${ic("squareCheck",22)}<div style="flex:1;min-width:0"><div style="font-size:15px">${esc(pk.name)}</div><div class="sm">${ownL(c?c.owner:"")}'s ${esc(c?c.name:"")}${pk.note?" · "+esc(pk.note):""}</div><div class="sm" style="color:var(--success)">Redeemed ${red?fmtDate(red.redeemed_on):""}</div></div><div style="font-size:15px;font-weight:600">$${fmt(pk.value)}</div>`,"rw tap");
   }
   const dleft=closesInDays(pk);
-  const closeNote=(dleft!==null&&dleft<=21)?`<div class="sm" style="color:var(--warning)">Closes in ${dleft} day${dleft===1?"":"s"}</div>`:"";
+  const closeNote=(dleft!==null&&dleft<=URGENT_DAYS)?`<div class="sm" style="color:var(--warning)">Closes in ${dleft} day${dleft===1?"":"s"}</div>`:"";
   return `<div class="rw">${btn("toggleperk:"+pk.id,ic("square",22),"tap","color:var(--ink-muted)")}${btn("perk:"+pk.id,`<div style="font-size:15px">${esc(pk.name)}</div><div class="sm">${ownL(c?c.owner:"")}'s ${esc(c?c.name:"")} · <span class="chip" style="background:var(--paper-2);border:1px solid var(--line);margin:0">${pk.cadence}</span>${pk.note?" · "+esc(pk.note):""}</div>${closeNote}`,"tap","flex:1;min-width:0")}<div style="font-size:15px;font-weight:600">$${fmt(pk.value)}</div></div>`;
 }
 function perksScreen(){
@@ -839,11 +846,11 @@ function perksScreen(){
 </div>`;
   const withStatus=S.data.perks.map(pk=>({pk,status:perkStatus(pk)}));
   const open=withStatus.filter(x=>x.status==="open").map(x=>x.pk);
+  const avail=withStatus.filter(x=>x.status==="avail").map(x=>x.pk);
   const done=withStatus.filter(x=>x.status==="done").map(x=>x.pk);
-  const upc=withStatus.filter(x=>x.status==="upcoming").map(x=>x.pk);
   const empty=`<div class="rw"><span class="sm">Nothing here right now.</span></div>`;
   h+=`<div class="foldsec">${foldHead("open","Redeem soon",open.length)}<div style="${S.folds.open?"":"display:none"}">${open.length?open.map(perkRow).join(""):empty}</div></div>`;
-  h+=`<div class="foldsec">${foldHead("upcoming","Upcoming redeemables",upc.length)}<div style="${S.folds.upcoming?"":"display:none"}">${upc.length?upc.map(perkRow).join(""):empty}</div></div>`;
+  h+=`<div class="foldsec">${foldHead("avail","Open redeemables",avail.length)}<div style="${S.folds.avail?"":"display:none"}">${avail.length?avail.map(perkRow).join(""):empty}</div></div>`;
   h+=`<div class="foldsec">${foldHead("done","Redeemed",done.length)}<div style="${S.folds.done?"":"display:none"}">${done.length?done.map(perkRow).join(""):empty}</div></div>`;
   h+=`<p class="sm" style="margin:14px 20px 20px">Tap a section to expand it, tap a perk for its history, or add perks from a card's page.</p>`;
   return h;
@@ -853,9 +860,9 @@ function perkDetailScreen(id){
   const c=card(pk.card_id),status=perkStatus(pk);
   let h=hd(pk.name,true)+`<div class="sm" style="margin:-6px 20px 10px">${ownL(c?c.owner:"")}'s ${esc(c?c.name:"")} · $${fmt(pk.value)}${CADSUF[pk.cadence]||""}</div>`;
   if(pk.note)h+=box("--paper-2","--ink-soft",esc(pk.note));
-  if(status==="open"){
+  if(status!=="done"){
     h+=`<div style="margin:0 20px 14px">${btn("toggleperk:"+pk.id,ic("check",16)+" Mark redeemed today ("+fmtDate(todayStr())+")","tap b1","display:inline-flex;align-items:center;gap:6px;width:auto")}</div>`;
-  }else if(status==="done"){
+  }else{
     const red=currentRedemption(pk);
     h+=`<div style="margin:0 20px 14px">${fld("redate","Redeemed on (edit to backdate)",fmtDate(red.redeemed_on),`placeholder="Sept 10, 2026"`)}${btn("saveredate:"+pk.id,"Save date","tap b2","width:auto;padding:8px 14px")}<div style="margin-top:10px">${btn("undoperk:"+pk.id,"Undo — mark not redeemed","tap","font-size:13px;color:var(--danger)")}</div></div>`;
   }
@@ -873,7 +880,6 @@ function perkFormScreen(){
   h+=fld("value","Dollar value",f.value,`inputmode="numeric" placeholder="15"`);
   h+=`<div style="margin:0 20px 14px"><label class="lb" for="f-cad">How often it renews</label><select id="f-cad" name="cad" style="width:100%">${["monthly","quarterly","semiannual","annual"].map(cc=>`<option value="${cc}"${f.cad===cc?" selected":""}>${cc[0].toUpperCase()+cc.slice(1)}</option>`).join("")}</select></div>`;
   h+=fld("windowEnd","Current period closes on (optional)",f.windowEnd,`placeholder="Oct 31, 2026"`);
-  h+=fld("startsOn","Opens on, if not usable yet (optional)",f.startsOn,`placeholder="Oct 1, 2026"`);
   h+=`<div style="margin:0 20px 14px"><label class="lb" for="f-note">Note (optional)</label><input id="f-note" name="note" value="${esc(f.note)}" style="width:100%"></div>`;
   h+=`<div style="display:flex;gap:8px;margin:18px 20px 20px;border-top:1px solid var(--line);padding-top:16px">${btn("saveperk",isNew?"Add perk":"Save changes","tap b1","flex:1")}${btn("back","Cancel","tap b2","flex:1")}</div>`;
   if(!isNew)h+=`<div style="margin:0 20px 20px">${btn("delperk:"+id,"Delete perk","tap b2","color:var(--danger);border-color:var(--danger)")}</div>`;
@@ -885,11 +891,10 @@ async function savePerk(){
   if(!name)S.err.name="Enter a perk name, like Uber Cash";
   const valueRaw=num(f.value);
   if(!/^\d+(\.\d+)?$/.test(valueRaw))S.err.value="Enter a dollar amount, like 15";
-  let windowEndIso=null,startsOnIso=null;
+  let windowEndIso=null;
   if((f.windowEnd||"").trim()){windowEndIso=parseDateInput(f.windowEnd);if(!windowEndIso)S.err.windowEnd="Use a format like Oct 31, 2026"}
-  if((f.startsOn||"").trim()){startsOnIso=parseDateInput(f.startsOn);if(!startsOnIso)S.err.startsOn="Use a format like Oct 1, 2026"}
   if(Object.keys(S.err).length){render();return}
-  const payload={name,value:parseFloat(valueRaw),cadence:f.cad,window_end:windowEndIso,starts_on:startsOnIso,note:(f.note||"").trim()||null};
+  const payload={name,value:parseFloat(valueRaw),cadence:f.cad,window_end:windowEndIso,note:(f.note||"").trim()||null};
   if(id){
     const {error}=await sb.from("perks").update(payload).eq("id",id);
     if(error){S.err.name=error.message;render();return}
@@ -1182,7 +1187,7 @@ async function go(a,b,c){
   if(a==="perk"){S.stack.push(["perk",b]);render();return}
   if(a==="toggleperk"){
     const pk=S.data.perks.find(x=>x.id===b);
-    if(pk&&perkStatus(pk)==="open"){await sb.from("perk_redemptions").insert({perk_id:b,redeemed_on:todayStr()});await loadData()}
+    if(pk&&perkStatus(pk)!=="done"){await sb.from("perk_redemptions").insert({perk_id:b,redeemed_on:todayStr()});await loadData()}
     render();return;
   }
   if(a==="undoperk"){
@@ -1199,10 +1204,10 @@ async function go(a,b,c){
     if(red)await sb.from("perk_redemptions").update({redeemed_on:iso}).eq("id",red.id);
     await loadData();delete S.err.redate;S.toast="Date updated";render();return;
   }
-  if(a==="addperk"){S.form={name:"",value:"",cad:"monthly",windowEnd:"",startsOn:"",note:""};S.err={};S.stack.push(["perkform",null,b]);render();return}
+  if(a==="addperk"){S.form={name:"",value:"",cad:"monthly",windowEnd:"",note:""};S.err={};S.stack.push(["perkform",null,b]);render();return}
   if(a==="editperk"){
     const pk=S.data.perks.find(x=>x.id===b);
-    S.form={name:pk.name,value:String(pk.value),cad:pk.cadence,windowEnd:pk.window_end?fmtDate(pk.window_end):"",startsOn:pk.starts_on?fmtDate(pk.starts_on):"",note:pk.note||""};
+    S.form={name:pk.name,value:String(pk.value),cad:pk.cadence,windowEnd:pk.window_end?fmtDate(pk.window_end):"",note:pk.note||""};
     S.err={};S.stack.push(["perkform",b,pk.card_id]);render();return;
   }
   if(a==="saveperk"){await savePerk();return}
