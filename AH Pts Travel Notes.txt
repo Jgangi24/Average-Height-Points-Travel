@@ -19,3 +19,6 @@ Round 3
 Round 4
 - From the Cards >> Card screen, I'm wondering why we have the "Edit card" button? Wouldn't it be easier to edit everything through the caret in "earns" and "update balance"? Please let me know your thoughts before editing
 - Also, please change the language "Update balance" to "Update points/miles"
+
+
+
