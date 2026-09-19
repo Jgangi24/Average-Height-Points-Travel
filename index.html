@@ -752,7 +752,7 @@ function cardDetailScreen(id){
   h+=row("Nickname",esc(c.name),editable?`editcf:${c.id}:n`:null);
   h+=row("Belongs to",ownL(c.owner),editable?`editcf:${c.id}:o`:null);
   h+=row("Annual fee",c.annual_fee==null?"Not entered":c.annual_fee===0?"None":"$"+fmt(c.annual_fee),editable?`editcf:${c.id}:fee`:null);
-  h+=row("Fee posts in",c.fee_month?MON[c.fee_month]:"Not entered",editable?`editcf:${c.id}:mo`:null);
+  h+=row("Fee posts in",c.fee_month?MON[c.fee_month]:c.annual_fee===0?"N/A":"Not entered",editable?`editcf:${c.id}:mo`:null);
   h+=row("Bill due",c.bill_due_day?"The "+ordinal(c.bill_due_day):"Not entered",editable?`editcf:${c.id}:due`:null);
   h+=`</div>`;
   if(c.annual_fee>0&&c.status==="open")h+=`<div class="sec">Before the next fee, the plan is to</div><div style="display:flex;gap:8px;flex-wrap:wrap;margin:0 20px 4px">${["Keep","Downgrade","Cancel"].map(d=>btn(`dec:${c.id}:${d}`,d,"tap pill"+(c.decision_note===d?" on":""))).join("")}</div>`;
@@ -815,13 +815,16 @@ function cardFormScreen(){
   return h;
 }
 function cardFieldScreen(){
-  const v=stackTop(),id=v[1],field=v[2],f=S.form;
+  const v=stackTop(),id=v[1],field=v[2],f=S.form,c=card(id);
   const TITLES={n:"Nickname",o:"Belongs to",fee:"Annual fee",mo:"Fee posts in",due:"Bill due day"};
   let h=hd(TITLES[field]||"Edit",true);
   if(field==="n")h+=`<div style="margin:0 20px 14px"><input id="f-n" name="n" value="${esc(f.n)}" placeholder="Abby's Hyatt card" style="width:100%">${errH("n")}</div>`;
   else if(field==="o")h+=`<div style="margin:0 20px 14px;display:flex;gap:8px">${["Jess","Abby","Both"].map(o=>btn("fo:"+o,o==="Both"?"Both of you":o,"tap pill"+(f.o===o?" on":""))).join("")}</div>`;
   else if(field==="fee")h+=fld("fee","Annual fee in dollars",f.fee,`inputmode="numeric" placeholder="95"`);
-  else if(field==="mo")h+=`<div style="margin:0 20px 14px"><select id="f-mo" name="mo" style="width:100%"><option value="">Not sure yet</option>${MON.slice(1).map((m,i)=>`<option value="${i+1}"${String(f.mo)===String(i+1)?" selected":""}>${m}</option>`).join("")}</select></div>`;
+  else if(field==="mo"){
+    const noneLabel=c&&c.annual_fee===0?"N/A — no annual fee":"Not sure yet";
+    h+=`<div style="margin:0 20px 14px"><select id="f-mo" name="mo" style="width:100%"><option value="">${noneLabel}</option>${MON.slice(1).map((m,i)=>`<option value="${i+1}"${String(f.mo)===String(i+1)?" selected":""}>${m}</option>`).join("")}</select></div>`;
+  }
   else if(field==="due")h+=fld("due","Bill due day of month, 1-31",f.due,`inputmode="numeric" placeholder="15"`);
   h+=`<div style="display:flex;gap:8px;margin:18px 20px 20px;border-top:1px solid var(--line);padding-top:16px">${btn("savecf","Save","tap b1","flex:1")}${btn("back","Cancel","tap b2","flex:1")}</div>`;
   return h;
