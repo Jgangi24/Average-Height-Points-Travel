@@ -1,6 +1,6 @@
 # Points & Travel App: Project Reference Summary
 
-*Created September 10, 2026. Updated September 16, 2026 after the v7 mockup (final splash animation, banner logo, working scroll behavior, bill-due-date field) and the move from design into the build phase. Keep this in Project Files as the starting reference for every chat.*
+*Created September 10, 2026. Updated September 16, 2026 after the v7 mockup (final splash animation, banner logo, working scroll behavior, bill-due-date field) and the move from design into the build phase. Updated again September 19, 2026 after a long live-feedback session on the deployed app (balance editing, per-field card editing, pot naming, Perks tab rework, perk renewal cycles). Keep this in Project Files as the starting reference for every chat.*
 
 ## What we're building
 
@@ -155,4 +155,14 @@ Habits carried over from the league site:
 
 ## Handoff note for the next chat
 
-The iOS status-bar blur and the mobile nav redesign are both done and confirmed working by Jess — no open threads on either. The JWT clock-sync error is the one loose end (happened once, not yet confirmed resolved or recurring). Card editing went through four rounds of live feedback this session and landed on: Points tab fully view-only; every card field (nickname, owner, fee, fee month, due date, balance) is its own tappable row on the card's detail page, each opening a small dedicated edit screen — no more monolithic "Edit card" form. Standalone accounts (no card) get the same pattern via a new "Accounts without a card" section on Cards. Closed-card deletion was also added, and the Perks tab now lists Redeemed last. All changes were verified in the browser with mock in-memory data (this session didn't have Jess's real Supabase login) — the per-row editing rework specifically has **not yet been confirmed by Jess against the real, deployed app.** Otherwise nothing is mid-troubleshoot.
+The iOS status-bar blur and the mobile nav redesign are done and confirmed working — no open threads there. The JWT clock-sync error is still the one unconfirmed loose end (happened once, months ago, never recurred or explicitly resolved).
+
+**This was a long session of live feedback against the real, deployed app** (Jess screenshotting the actual site with real data throughout, not a mockup) — everything below is confirmed working by Jess, not just built-and-assumed:
+
+- **Cards tab is now the home for all editing.** Card detail pages have a tappable row per field (Points, Nickname, Belongs to, Annual fee, Fee posts in, Bill due) — no more single "Edit card" form. "Earns" is plain text (not editable — switching programs means closing the card and adding a new one). "Fee posts in" shows "N/A" instead of "Not entered" for $0-fee cards. Cards auto-group by program (Chase together, Amex together, etc.), and each shows its point balance right in the list.
+- **Points tab is fully view-only.** The only interactive thing on it is "Add an account without a card." Balances are edited from wherever the card lives (its detail page's "Points" row) or, for accounts with no card, from the Cards tab's "Accounts without a card" section — which also now has a delete option. Pot display names are derived live from whichever card(s) feed them (fixed a stale "Platinum and Gold" label bug this way, and it can't happen again).
+- **A program (like Hilton Honors) can have multiple independent balances at once** — e.g., one still tied to a closed card, plus a separate standalone one added via "Add an account without a card" (it lists existing programs in the picker, not just "new program"). Each is edited separately from wherever it lives; the Points tab total just adds them together. Confirmed this already works as Jess wanted, no code changed for it.
+- **Perks tab reworked to 3 sections:** Redeem soon, Open redeemables, Redeemed (dropped "Upcoming redeemables" entirely — it was solving a problem that didn't need solving). Monthly perks are always "Redeem soon" once open; longer-cadence perks move there only within 14 days of their deadline. A perk's renewal cycle can now anchor to its own "Current period closes on" date instead of always assuming the calendar year/quarter — fixes perks like an annual credit that renews in March instead of January.
+- Also: Keep/Downgrade/Cancel decisions now show in the "Fees in the next 3 months" list, and "Monthly statement balance due" was shortened to "Statement balance due."
+
+Nothing is mid-troubleshoot and nothing is known-broken. All commits are pushed to `origin/main` via GitHub Desktop.
