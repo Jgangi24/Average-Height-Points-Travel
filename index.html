@@ -493,6 +493,8 @@ const CADSUF={monthly:"/mo",quarterly:"/qtr",semiannual:"/half-yr",annual:"/yr"}
 const URGENT_DAYS=14;
 const bar=p=>`<div class="bar"><span style="width:${p}%;background:${p>=100?"var(--success)":"var(--warning)"}"></span></div>`;
 const todayStr=()=>new Date().toISOString().slice(0,10);
+// Local calendar date (todayStr is UTC, which rolls over to tomorrow in the evening in US time zones).
+const localToday=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
 function fmtDate(iso){const d=new Date(iso+"T00:00:00");return MON[d.getMonth()+1].slice(0,3)+" "+d.getDate()+", "+d.getFullYear()}
 function parseDateInput(raw){
   const m=(raw||"").trim().match(/([A-Za-z]+)\s+(\d{1,2}),?\s+(\d{4})/);
@@ -643,7 +645,7 @@ async function loadData(){
     sb.from("cards").select("*").order("created_at"),
     sb.from("perks").select("*").order("created_at"),
     sb.from("perk_redemptions").select("*"),
-    sb.from("alerts").select("*").order("created_at",{ascending:false}),
+    sb.from("alerts").select("*").or(`expires_on.is.null,expires_on.gte.${localToday()}`).order("created_at",{ascending:false}),
     sb.from("trips").select("*").order("slot"),
     sb.from("trip_legs").select("*")
   ]);
