@@ -1,7 +1,7 @@
 name: Supabase keep-alive
 
 # Free-tier Supabase projects pause after 7 days without activity.
-# This pings the REST API twice a week so that doesn't happen.
+# This pings the project twice a week so that doesn't happen.
 on:
   schedule:
     - cron: "0 14 * * 1,4"
@@ -12,8 +12,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Query the programs table
+        # Tables are login-only, so the anon key gets a 401 "permission denied"
+        # from Postgres itself. That still means the database answered.
+        run: |
+          body=$(curl --silent --show-error \
+            "https://blrvxncjptaqmgikqzkx.supabase.co/rest/v1/programs?select=id&limit=1" \
+            -H "apikey: sb_publishable_HLfViVp2yb-h5vNLThzOGA_dIBJbdjo")
+          echo "$body"
+          echo "$body" | grep -q '"code":"42501"' || echo "$body" | grep -q '^\['
+      - name: Check the auth service
         run: |
           curl --fail --silent --show-error \
-            "https://blrvxncjptaqmgikqzkx.supabase.co/rest/v1/programs?select=id&limit=1" \
-            -H "apikey: sb_publishable_HLfViVp2yb-h5vNLThzOGA_dIBJbdjo" \
-            -H "Authorization: Bearer sb_publishable_HLfViVp2yb-h5vNLThzOGA_dIBJbdjo"
+            "https://blrvxncjptaqmgikqzkx.supabase.co/auth/v1/settings" \
+            -H "apikey: sb_publishable_HLfViVp2yb-h5vNLThzOGA_dIBJbdjo" > /dev/null
